@@ -16,12 +16,12 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "SOP Management",
-        path: "/users",
-        icon: "material-symbols:group-outline",
+        path: "/admin/sop/mangement",
+        icon: "material-symbols:news-outline-rounded",
       },
       {
         name: "User Management",
-        path: "/profile",
+        path: "/admin/user/management",
         icon: "material-symbols:group",
       },
       {
@@ -77,18 +77,15 @@ export default function Sidebar({ isOpen, onClose }) {
 
   const roleText = {
     Admin: {
-      title: "Farm Check Support",
+      title: "Farm Check ",
       name: "John Anderson",
       subtitle: "Farm Admin",
     },
     Owner: {
-      title: "Farm Check Support",
+      title: "Farm Check",
       subtitle: "Platform Owner",
     },
-    User: {
-      title: "Farm Check Support",
-      subtitle: "User Portal",
-    },
+   
   };
 
   const navLinks = sidebarMenu[role] || [];
