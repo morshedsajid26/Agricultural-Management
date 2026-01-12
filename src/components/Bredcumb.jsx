@@ -22,7 +22,7 @@ const Breadcrumb = () => {
 
   return (
     <div className="flex items-center">
-      <h3 className="font-inter text-[#000000] text-2xl whitespace-nowrap">
+      <h3 className="font-inter text-[#0A0A0A] text-3xl whitespace-nowrap">
         {title}
       </h3>
     </div>
