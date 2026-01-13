@@ -7,6 +7,7 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import { MdOutlineErrorOutline } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -97,19 +98,25 @@ const Home = () => {
         <div className="col-span-12  bg-[#F6A62D]  p-6 rounded-lg ">
           <p className="text-[#ffffff] text-xl">Quick Actions</p>
           <div className="grid grid-cols-12 gap-6 ">
-            <div className="col-span-4 bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
+
+
+            <Link to="/admin/user/management/add/user" className="col-span-4">
+            <div className=" bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
               <button className=" p-3 rounded-lg w-fit">
                 <FiUsers className="w-6 h-6 text-white " />
               </button>
               <span className="text-white">Add New Employee</span>
             </div>
+            </Link>
 
-            <div className="col-span-4 bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
+            <Link to="/admin/sop/management/upload/sop" className="col-span-4">
+            <div className=" bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
               <button className=" p-3 rounded-lg w-fit">
                 <FiFileText className="w-6 h-6 text-white " />
               </button>
               <span className="text-white">Upload SOP</span>
             </div>
+            </Link>
 
             <div className="col-span-4 bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
               <button className=" p-3 rounded-lg w-fit ">

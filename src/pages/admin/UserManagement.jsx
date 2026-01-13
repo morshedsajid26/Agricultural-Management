@@ -255,7 +255,7 @@ const UserManagement = () => {
           </p>
         </div>
 
-        <Link to="/admin/usermanagement/add/user">
+        <Link to="/admin/user/management/add/user">
           <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer">
             <FaPlus />
             Add User

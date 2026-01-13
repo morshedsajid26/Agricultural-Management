@@ -1,9 +1,11 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Image from "../Image";
 
 export default function Sidebar({ isOpen, onClose }) {
-  // 🔐 Role (later backend / auth context / localStorage থেকে আসবে)
+  const location = useLocation();
+
+  // 🔐 Role (later auth/context/localStorage)
   const role = "Admin"; // Admin | Owner
 
   // 🧱 Role-based menu config
@@ -16,7 +18,7 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "SOP Management",
-        path: "/admin/sop/mangement",
+        path: "/admin/sop/management",
         icon: "material-symbols:news-outline-rounded",
       },
       {
@@ -77,7 +79,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
   const roleText = {
     Admin: {
-      title: "Farm Check ",
+      title: "Farm Check",
       name: "John Anderson",
       subtitle: "Farm Admin",
     },
@@ -85,74 +87,84 @@ export default function Sidebar({ isOpen, onClose }) {
       title: "Farm Check",
       subtitle: "Platform Owner",
     },
-   
   };
 
   const navLinks = sidebarMenu[role] || [];
+
+  // 🔥 CUSTOM ACTIVE CHECK (nested route support)
+  const isActivePath = (path) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+    return (
+      location.pathname === path ||
+      location.pathname.startsWith(path + "/")
+    );
+  };
 
   return (
     <>
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-20 bg-black/50 transition-opacity md:hidden"
+          className="fixed inset-0 z-20 bg-black/50 md:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 z-30 w-64 transform bg-[#FFFFFF] text-[#364153] transition-transform duration-300 ease-in-out md:static md:translate-x-0 border-r border-[#E5E7EB] ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 z-30 w-64 bg-white text-[#364153]
+        transition-transform duration-300 ease-in-out border-r border-[#E5E7EB]
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        md:static md:translate-x-0`}
       >
         <div className="flex h-full flex-col">
           {/* Logo Area */}
-          <div className="flex h-16 items-center justify-between px-6 py-25 border-[#E5E7EB]">
-            <div className="py-1  ">
-              <Image src="/logo.png" alt="Company Logo" />
-              <p className="text-sm mt-4 text-[#4A5565]">
-                {roleText[role]?.title}
+          <div className="px-6 py-6 border-b border-[#E5E7EB]">
+            <Image src="/logo.png" alt="Company Logo" />
+            <p className="text-sm mt-4 text-[#4A5565]">
+              {roleText[role]?.title}
+            </p>
+            {roleText[role]?.name && (
+              <p className="text-sm text-[#6A7282] my-2">
+                {roleText[role]?.name}
               </p>
-              <p className="text-sm text-[#6A7282] my-2 ">{roleText[role]?.name}</p>
-              <p className="text-sm text-[#F6A62D] bg-[#FFF6E9] w-30 flex items-center justify-center p-1 ">
-                {roleText[role]?.subtitle}
-              </p>
-            </div>
-            <button
-              onClick={onClose}
-              className="rounded-md p-1 hover:bg-[#1f2d5c] md:hidden"
-            >
-              <Icon icon="material-symbols:close" width="20" height="20" />
-            </button>
+            )}
+            <p className="text-xs text-[#F6A62D] bg-[#FFF6E9] inline-block px-2 py-1 rounded">
+              {roleText[role]?.subtitle}
+            </p>
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1  space-y-2 overflow-y-auto hide-scrollbar px-3 py-4 border-y border-[#E5E7EB]">
-            {navLinks.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
-                    isActive
-                      ? "bg-[#FFF6E9] text-[#F6A62D]"
-                      : "text-[#364153] hover:bg-[#F6A62D]"
-                  }`
-                }
-                onClick={() => {
-                  if (window.innerWidth < 768) onClose();
-                }}
-              >
-                <Icon icon={item.icon} width="20" height="20" />
-                {item.name}
-              </NavLink>
-            ))}
+          <nav className="flex-1 space-y-2 overflow-y-auto px-3 py-4">
+            {navLinks.map((item) => {
+              const active = isActivePath(item.path);
+
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors
+                    ${
+                      active
+                        ? "bg-[#FFF6E9] text-[#F6A62D]"
+                        : "text-[#364153] hover:bg-[#F6A62D]"
+                    }`}
+                  onClick={() => {
+                    if (window.innerWidth < 768) onClose();
+                  }}
+                >
+                  <Icon icon={item.icon} width="20" height="20" />
+                  {item.name}
+                </NavLink>
+              );
+            })}
           </nav>
 
           {/* Bottom Actions */}
-          <div className=" p-4">
-            <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 font-medium text-[#E7000B] transition-colors hover:bg-[#F6A62D] hover:text-white">
+          <div className="p-4 border-t border-[#E5E7EB]">
+            <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 font-medium text-[#E7000B] transition hover:bg-[#F6A62D] hover:text-white">
               <Icon icon="material-symbols:logout" width="20" height="20" />
               Log Out
             </button>
