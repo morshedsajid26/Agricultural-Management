@@ -24,7 +24,7 @@ const AddSOP = () => {
         className="flex items-center gap-2 cursor-pointer"
       >
         <FaArrowLeft className=" text-[#4A5565] " />
-        <p className="text-[#4A5565]">Back to User List</p>
+        <p className="text-[#4A5565]">Back to SOP List</p>
       </div>
       <div className="mt-4">
         <Breadcrumb />
