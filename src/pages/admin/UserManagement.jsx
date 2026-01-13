@@ -3,9 +3,15 @@ import Breadcrumb from "../../components/Bredcumb";
 import { FaPlus } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import Table from "../../components/Table";
+import { Link } from "react-router-dom";
+
+// Action icons
+import { FiEdit, FiUserCheck, FiUserX } from "react-icons/fi";
+import { RiDeleteBinLine } from "react-icons/ri";
+import Pagination from "../../components/Pagination";
 
 const UserManagement = () => {
-  // 🔹 Raw users data
+  // 🔹 Raw users data (API later)
   const users = [
     {
       id: 1,
@@ -21,21 +27,128 @@ const UserManagement = () => {
       email: "jane@gmail.com",
       role: "Employee",
       status: "Inactive",
-    joinDate: "2022-11-22",
+      joinDate: "2022-11-22",
+    },
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john@gmail.com",
+      role: "Manager",
+      status: "Active",
+      joinDate: "2023-01-15",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane@gmail.com",
+      role: "Employee",
+      status: "Inactive",
+      joinDate: "2022-11-22",
+    },
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john@gmail.com",
+      role: "Manager",
+      status: "Active",
+      joinDate: "2023-01-15",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane@gmail.com",
+      role: "Employee",
+      status: "Inactive",
+      joinDate: "2022-11-22",
+    },
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john@gmail.com",
+      role: "Manager",
+      status: "Active",
+      joinDate: "2023-01-15",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane@gmail.com",
+      role: "Employee",
+      status: "Inactive",
+      joinDate: "2022-11-22",
+    },
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john@gmail.com",
+      role: "Manager",
+      status: "Active",
+      joinDate: "2023-01-15",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane@gmail.com",
+      role: "Employee",
+      status: "Inactive",
+      joinDate: "2022-11-22",
+    },
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john@gmail.com",
+      role: "Manager",
+      status: "Active",
+      joinDate: "2023-01-15",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane@gmail.com",
+      role: "Employee",
+      status: "Inactive",
+      joinDate: "2022-11-22",
+    },
+    {
+      id: 1,
+      name: "John Doe",
+      email: "john@gmail.com",
+      role: "Manager",
+      status: "Active",
+      joinDate: "2023-01-15",
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      email: "jane@gmail.com",
+      role: "Employee",
+      status: "Inactive",
+      joinDate: "2022-11-22",
     },
   ];
 
-  // 🔍 Search state
+  // 🔍 Search & pagination state
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // 🔹 Filtered rows (TableRows)
+  const itemsPerPage = 10;
+
+  // 🔹 Filtered data (single source of truth)
   const filteredData = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase())
   );
 
-  // 🔹 TableHeads EXACTLY how Table expects
+  // 🔹 Pagination logic
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = filteredData.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  // 🔹 TableHeads (Table contract respected)
   const TableHeads = [
     {
       Title: "Name",
@@ -79,21 +192,56 @@ const UserManagement = () => {
         </span>
       ),
     },
-
     {
-        Title: "Join Date",
-        key: "joinDate",
-        width: "15%",
+      Title: "Join Date",
+      key: "joinDate",
+      width: "15%",
     },
     {
       Title: "Actions",
       key: "actions",
       width: "15%",
       render: (row) => (
-        <button className="text-blue-600 hover:underline">Edit</button>
+        <div className="flex items-center justify-center gap-4">
+          {/* Edit */}
+          <button
+            title="Edit"
+            className="text-blue-600 hover:text-blue-800"
+            onClick={() => console.log("Edit", row.id)}
+          >
+            <FiEdit />
+          </button>
+
+          {/* Status toggle */}
+          {row.status === "Active" ? (
+            <button
+              title="Deactivate"
+              className="text-[#F54900]"
+              onClick={() => console.log("Deactivate", row.id)}
+            >
+              <FiUserX />
+            </button>
+          ) : (
+            <button
+              title="Activate"
+              className="text-[#00A63E]"
+              onClick={() => console.log("Activate", row.id)}
+            >
+              <FiUserCheck />
+            </button>
+          )}
+
+          {/* Delete */}
+          <button
+            title="Delete"
+            className="text-[#E7000B]"
+            onClick={() => console.log("Delete", row.id)}
+          >
+            <RiDeleteBinLine />
+          </button>
+        </div>
       ),
     },
-      
   ];
 
   return (
@@ -107,10 +255,12 @@ const UserManagement = () => {
           </p>
         </div>
 
-        <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer">
-          <FaPlus />
-          Add User
-        </button>
+        <Link to="/admin/usermanagement/add/user">
+          <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer">
+            <FaPlus />
+            Add User
+          </button>
+        </Link>
       </div>
 
       {/* ===== Search ===== */}
@@ -120,7 +270,10 @@ const UserManagement = () => {
           type="text"
           placeholder="Search users..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1); // reset page on search
+          }}
           className="w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#0A0A0A]/50 placeholder:text-[#0A0A0A]/50"
         />
       </div>
@@ -150,12 +303,21 @@ const UserManagement = () => {
 
         {/* ===== Table ===== */}
         <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black">
-          <Table
-            TableHeads={TableHeads}
-            TableRows={filteredData}
-          />
+          <Table TableHeads={TableHeads} TableRows={paginatedData} />
         </div>
+
+        
       </div>
+
+      {/* ===== Pagination ===== */}
+        <div className="flex justify-center mt-4">
+
+        <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+        </div>
     </div>
   );
 };

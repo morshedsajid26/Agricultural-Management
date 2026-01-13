@@ -26,7 +26,7 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "Task Oversight",
-        path: "/tasks",
+        path: "/admin/task/oversight",
         icon: "material-symbols:select-check-box",
       },
       {
