@@ -173,7 +173,7 @@ const Messaging = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 gap-6 mt-6">
         <div className=" p-4 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-4">
           <p className="text-sm text-gray-500">Total Messages</p>
           <p className={`text-2xl text-[#0A0A0A] font-semibold mt-1 `}>

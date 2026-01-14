@@ -20,7 +20,7 @@ const router = createBrowserRouter([
       { path: "/admin/user/management/add/user", element: <AddUser/> },
       { path: "/admin/task/oversight", element: <TaskOversight/> },
       { path: "/admin/sop/management/upload/sop", element: <AddSOP/> },
-      { path: "/admin/messaging", element: <Messaging/> },
+      { path: "/admin/messaging/oversight", element: <Messaging/> },
       
     ],
   },

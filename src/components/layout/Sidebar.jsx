@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "Messaging",
-        path: "/admin/messaging",
+        path: "/admin/messaging/oversight",
         icon: "material-symbols:chat-bubble-outline",
       },
       {

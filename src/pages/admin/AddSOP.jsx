@@ -14,7 +14,7 @@ const AddSOP = () => {
   const [activeTab, setActiveTab] = useState("upload");
   const handleFileSelect = (file) => {
     console.log("Selected file:", file);
-    // 👉 এখানে API upload করবে
+    
   };
 
   return (
@@ -33,7 +33,7 @@ const AddSOP = () => {
         </p>
       </div>
 
-      <div className="bg-white rounded-lg border-2 border-[#E5E7EB] p-6">
+      <div className="bg-white rounded-lg border-2 border-[#E5E7EB] p-6 mt-6">
         <div className="grid grid-cols-12">
           <InputField
             inputClass={`rounded-lg`}
