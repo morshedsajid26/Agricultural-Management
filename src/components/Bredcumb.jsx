@@ -8,7 +8,7 @@ const Breadcrumb = () => {
 
   // ❌ only remove dashboard root
   const filteredParts = pathParts.filter(
-    (part) => part.toLowerCase() !== "admin"
+    (part) => part.toLowerCase() !== "admin" && part.toLowerCase() !== "owner"
   );
 
   // ✅ always show last two if available

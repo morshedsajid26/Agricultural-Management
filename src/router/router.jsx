@@ -9,6 +9,7 @@ import AddSOP from "../pages/admin/AddSOP";
 import Messaging from "../pages/admin/Messaging";
 import Settings from "../pages/admin/Settings";
 import Subscription from "../pages/admin/Subscription";
+import Dashboard from "../pages/owner/Dashboard";
 // import Home from "../pages/Home";
 
 const router = createBrowserRouter([
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
       { path: "/admin/subscription", element: <Subscription/> },
 
 
-      
+      { path: "/owner/dashboard", element: <Dashboard /> },
     ],
   },
 ]);

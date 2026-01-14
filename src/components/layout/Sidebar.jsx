@@ -6,7 +6,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
 
   // 🔐 Role (later auth/context/localStorage)
-  const role = "Admin"; // Admin | Owner
+  const role = "Owner"; // Admin | Owner
 
   // 🧱 Role-based menu config
   const sidebarMenu = {
@@ -51,7 +51,7 @@ export default function Sidebar({ isOpen, onClose }) {
     Owner: [
       {
         name: "Dashboard",
-        path: "/",
+        path: "/owner/dashboard",
         icon: "material-symbols:dashboard-outline",
       },
       {
@@ -62,7 +62,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {
         name: "Analytics & Report",
         path: "/analytics",
-        icon: "material-symbols:bar-chart-outline",
+        icon: "material-symbols:analytics-outline-rounded",
       },
       {
         name: "Subscription",
