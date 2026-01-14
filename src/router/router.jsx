@@ -6,6 +6,7 @@ import UserManagement from "../pages/admin/UserManagement";
 import AddUser from "../pages/admin/AddUser";
 import TaskOversight from "../pages/admin/TaskOversight";
 import AddSOP from "../pages/admin/AddSOP";
+import Messaging from "../pages/admin/Messaging";
 // import Home from "../pages/Home";
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "/admin/user/management/add/user", element: <AddUser/> },
       { path: "/admin/task/oversight", element: <TaskOversight/> },
       { path: "/admin/sop/management/upload/sop", element: <AddSOP/> },
+      { path: "/admin/messaging", element: <Messaging/> },
       
     ],
   },
