@@ -174,21 +174,21 @@ const Messaging = () => {
       </div>
 
       <div className="grid grid-cols-12 gap-6 mt-6">
-        <div className=" p-4 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-4">
+        <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-4">
           <p className="text-sm text-gray-500">Total Messages</p>
           <p className={`text-2xl text-[#0A0A0A] font-semibold mt-1 `}>
             {totalMessages}
           </p>
         </div>
 
-        <div className=" p-4 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-4">
+        <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-4">
           <p className="text-sm text-gray-500">Unread Messages</p>
           <p className={`text-2xl text-[#F54900] font-semibold mt-1 `}>
             {unreadCount}
           </p>
         </div>
 
-        <div className="bg-white rounded-lg border-2 border-[#E5E7EB] p-4 col-span-4 ">
+        <div className="bg-white rounded-lg border-2 border-[#E5E7EB] p-6 col-span-4 ">
           <div>
             <p className="text-sm text-gray-500">Messaging Status</p>
             <div className="flex items-center gap-2 mt-1">
@@ -233,7 +233,7 @@ const Messaging = () => {
         <div className="col-span-4 flex justify-end items-center">
           <button
             onClick={clearAll}
-            className="bg-[#E7000B] text-white px-4 py-3 rounded-lg whitespace-nowrap flex items-center gap-2 "
+            className="bg-[#E7000B]  text-white px-4 py-3 rounded-lg whitespace-nowrap flex items-center gap-2 cursor-pointer"
           >
             <FiTrash2 size={20} />
             Clear All Messages
@@ -268,7 +268,7 @@ const Messaging = () => {
 
                 <button
                   onClick={() => deleteMessage(msg.id)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 cursor-pointer"
                 >
                   <FiTrash2 size={18} />
                 </button>

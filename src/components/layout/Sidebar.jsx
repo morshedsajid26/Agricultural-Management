@@ -38,12 +38,12 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "Subscription",
-        path: "/subscription",
+        path: "/admin/subscription",
         icon: "material-symbols:credit-card-outline",
       },
       {
         name: "Settings",
-        path: "/settings",
+        path: "/admin/farm/settings",
         icon: "material-symbols:settings-outline",
       },
     ],

@@ -7,6 +7,8 @@ import AddUser from "../pages/admin/AddUser";
 import TaskOversight from "../pages/admin/TaskOversight";
 import AddSOP from "../pages/admin/AddSOP";
 import Messaging from "../pages/admin/Messaging";
+import Settings from "../pages/admin/Settings";
+import Subscription from "../pages/admin/Subscription";
 // import Home from "../pages/Home";
 
 const router = createBrowserRouter([
@@ -21,6 +23,8 @@ const router = createBrowserRouter([
       { path: "/admin/task/oversight", element: <TaskOversight/> },
       { path: "/admin/sop/management/upload/sop", element: <AddSOP/> },
       { path: "/admin/messaging/oversight", element: <Messaging/> },
+      { path: "/admin/farm/settings", element: <Settings/> },
+      { path: "/admin/subscription", element: <Subscription/> },
       
     ],
   },
