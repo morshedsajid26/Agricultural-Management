@@ -1,43 +1,38 @@
-"use client";
-
-// import ToggleButton from "@/src/components/ToggleButton";
 import React, { useState } from "react";
 import ToggleButton from "./ToggleButton";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { FiEdit } from "react-icons/fi";
 
-const Card = ({
-  name,
-  price,
-  isAnnual,
-  features,
-  employees,
-  farms,
-  yearlyPrice,
-  monthlyPrice,
-}) => {
+const Card = ({ name, price, features, employees, farms }) => {
   return (
-    <div className="bg-white rounded-lg border-2 border-[#E5E7EB]  py-8 px-6 flex flex-col  hover:shadow-lg transition-all duration-300 ">
-      {/* Plan Name */}
-      <div>
-        <p className="text-2xl text-[#0A0A0A]">{name}</p>
-        <p className="text-[#4A5565] mt-1">{employees}</p>
+    <div className="bg-white rounded-lg border-2 border-[#E5E7EB] py-8 px-6 flex flex-col hover:shadow-lg transition-all duration-300">
+      {/* Header + Actions */}
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-2xl text-[#0A0A0A]">{name}</p>
+          <p className="text-[#4A5565] mt-1">{employees}</p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <FiEdit className="text-[#667085] cursor-pointer" />
+          <RiDeleteBinLine className="text-red-600 cursor-pointer" />
+        </div>
       </div>
 
       {/* Price */}
-      <div className="flex flex-col my-4">
+      <div className="my-4">
         <div className="flex items-end">
           <p className="text-4xl text-[#0A0A0A]">${price}</p>
-          <span className=" text-[#4A5565] ml-1">
-            /{isAnnual ? "Year" : "Month"}
-          </span>
+          <span className="text-[#4A5565] ml-1">/month</span>
         </div>
-        {!isAnnual && (
-          <p className="text-[#4A5565] mt-1">
-            ${yearlyPrice}/year (save ${monthlyPrice * 2})
-          </p>
-        )}
-      </div>
-      {/* Yearly calculation */}
 
+        {/* Yearly calculation */}
+        <p className="text-sm text-[#4A5565] mt-1">
+          ${price * 10}/year (save ${price * 2})
+        </p>
+      </div>
+
+      {/* Trial */}
       <div className="bg-[#EFF6FF] p-3 rounded-lg">
         <p className="text-[#1447E6]">14 days free trial</p>
       </div>
@@ -46,16 +41,15 @@ const Card = ({
       <ul className="space-y-4 mb-14 mt-8">
         {features.map((feature, idx) => (
           <li key={idx} className="flex items-start">
-            {feature.active ? (
+            {feature.active && (
               <span className="text-[#00A63E] text-lg mr-2">✔</span>
-            ) : (
-              ""
             )}
             <span className="text-[#364153]">{feature.name}</span>
           </li>
         ))}
       </ul>
 
+      {/* Footer */}
       <p className="text-[#101828] border-t border-[#F3F4F6] pt-6">
         {farms}
         <span className="text-[#4A5565] ml-1">farms using this plan</span>
@@ -112,23 +106,11 @@ const plans = [
   },
 ];
 
-const Plan = () => {
+const ManagePlan = () => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   return (
     <div className="">
-      {/* Toggle */}
-
-      <div className="flex items-center justify-center gap-2 mt-10 ">
-        <ToggleButton isAnnual={isAnnual} setIsAnnual={setIsAnnual} />
-
-        <div className="bg-[#FFF6E9] w-max p-1 rounded-lg">
-          <p className="text-[#F6A62D]">Save 17%</p>
-        </div>
-      </div>
-
-      <p className="text-[#0A0A0A] text-xl mt-10 mb-4">Available Plans</p>
-
       {/* Cards */}
       <div className="grid grid-cols-3 gap-6">
         {plans.map((plan, i) => (
@@ -140,8 +122,6 @@ const Plan = () => {
             isAnnual={isAnnual}
             farms={plan.farms}
             features={plan.features}
-            monthlyPrice={plan.monthly}
-            yearlyPrice={plan.yearly}
           />
         ))}
       </div>
@@ -149,4 +129,4 @@ const Plan = () => {
   );
 };
 
-export default Plan;
+export default ManagePlan;

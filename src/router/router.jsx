@@ -11,6 +11,7 @@ import Settings from "../pages/admin/Settings";
 import Subscription from "../pages/admin/Subscription";
 import Dashboard from "../pages/owner/Dashboard";
 import SystemSettings from "../pages/owner/SyetemSettings";
+import SubscriptionPlans from "../pages/owner/SubscriptionPlans";
 // import Home from "../pages/Home";
 
 const router = createBrowserRouter([
@@ -30,7 +31,8 @@ const router = createBrowserRouter([
 
 
       { path: "/owner/dashboard", element: <Dashboard /> },
-      { path: "/owner/system/settings/", element: <SystemSettings /> }
+      { path: "/owner/system/settings/", element: <SystemSettings /> },
+      { path: "/owner/subscription/plans", element: <SubscriptionPlans/> },
     ],
   },
 ]);

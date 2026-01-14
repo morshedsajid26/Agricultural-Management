@@ -66,7 +66,7 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "Subscription",
-        path: "/subscription",
+        path: "/owner/subscription/plans",
         icon: "material-symbols:credit-card-outline",
       },
       {
