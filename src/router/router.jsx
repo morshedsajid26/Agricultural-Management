@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <DashboardLayout />,
     children: [
-      { path: "/", element: <Home /> },
+      { path: "/admin/home", element: <Home /> },
       { path: "/admin/sop/management", element: <SopManagement/> },
       { path: "/admin/user/management", element: <UserManagement/> },
       { path: "/admin/user/management/add/user", element: <AddUser/> },
@@ -25,6 +25,8 @@ const router = createBrowserRouter([
       { path: "/admin/messaging/oversight", element: <Messaging/> },
       { path: "/admin/farm/settings", element: <Settings/> },
       { path: "/admin/subscription", element: <Subscription/> },
+
+
       
     ],
   },

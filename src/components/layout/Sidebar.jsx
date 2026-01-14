@@ -13,7 +13,7 @@ export default function Sidebar({ isOpen, onClose }) {
     Admin: [
       {
         name: "Dashboard",
-        path: "/",
+        path: "/admin/home",
         icon: "material-symbols:dashboard-outline",
       },
       {
