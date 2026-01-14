@@ -10,6 +10,7 @@ import Messaging from "../pages/admin/Messaging";
 import Settings from "../pages/admin/Settings";
 import Subscription from "../pages/admin/Subscription";
 import Dashboard from "../pages/owner/Dashboard";
+import SystemSettings from "../pages/owner/SyetemSettings";
 // import Home from "../pages/Home";
 
 const router = createBrowserRouter([
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
 
 
       { path: "/owner/dashboard", element: <Dashboard /> },
+      { path: "/owner/system/settings/", element: <SystemSettings /> }
     ],
   },
 ]);

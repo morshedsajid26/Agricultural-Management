@@ -71,7 +71,7 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "Settings",
-        path: "/settings",
+        path: "/owner/system/settings",
         icon: "material-symbols:settings-outline",
       },
     ],
