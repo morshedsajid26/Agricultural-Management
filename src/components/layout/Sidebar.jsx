@@ -56,14 +56,14 @@ export default function Sidebar({ isOpen, onClose }) {
       },
       {
         name: "Farm Management",
-        path: "/farms",
+        path: "/owner/farm/management",
         icon: "material-symbols:agriculture-outline",
       },
-      {
-        name: "Analytics & Report",
-        path: "/analytics",
-        icon: "material-symbols:analytics-outline-rounded",
-      },
+      // {
+      //   name: "Analytics & Report",
+      //   path: "/analytics",
+      //   icon: "material-symbols:analytics-outline-rounded",
+      // },
       {
         name: "Subscription",
         path: "/owner/subscription/plans",

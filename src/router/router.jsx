@@ -12,6 +12,9 @@ import Subscription from "../pages/admin/Subscription";
 import Dashboard from "../pages/owner/Dashboard";
 import SystemSettings from "../pages/owner/SyetemSettings";
 import SubscriptionPlans from "../pages/owner/SubscriptionPlans";
+import FarmManagement from "../pages/owner/FarmManagement";
+import FarmDetails from "../pages/owner/FarmDetails";
+import CreateFarm from "../pages/owner/CreateFarm";
 // import Home from "../pages/Home";
 
 const router = createBrowserRouter([
@@ -31,8 +34,11 @@ const router = createBrowserRouter([
 
 
       { path: "/owner/dashboard", element: <Dashboard /> },
-      { path: "/owner/system/settings/", element: <SystemSettings /> },
+      { path: "/owner/farm/management", element: <FarmManagement /> },
+      { path: "/owner/farm/management/details/:id", element: <FarmDetails /> },
+      {path: "/owner/farm/management/create/farm", element: <CreateFarm/>},
       { path: "/owner/subscription/plans", element: <SubscriptionPlans/> },
+      { path: "/owner/system/settings/", element: <SystemSettings /> },
     ],
   },
 ]);
