@@ -1,14 +1,23 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Image from "../Image";
+import { useEffect, useState } from "react";
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // 🔐 Role (later auth/context/localStorage)
-  const role = "Admin"; // Admin | Owner
+  // 🔐 ROLE STATE (default = Owner)
+  const [role, setRole] = useState(() => {
+    return localStorage.getItem("role") || "Owner";
+  });
 
-  // 🧱 Role-based menu config
+  // 💾 persist role
+  useEffect(() => {
+    localStorage.setItem("role", role);
+  }, [role]);
+
+  // 🧱 ROLE-BASED MENU
   const sidebarMenu = {
     Admin: [
       {
@@ -59,11 +68,6 @@ export default function Sidebar({ isOpen, onClose }) {
         path: "/owner/farm/management",
         icon: "material-symbols:agriculture-outline",
       },
-      // {
-      //   name: "Analytics & Report",
-      //   path: "/analytics",
-      //   icon: "material-symbols:analytics-outline-rounded",
-      // },
       {
         name: "Subscription",
         path: "/owner/subscription/plans",
@@ -77,6 +81,7 @@ export default function Sidebar({ isOpen, onClose }) {
     ],
   };
 
+  // 🏷️ ROLE TEXT
   const roleText = {
     Admin: {
       title: "Farm Check",
@@ -91,15 +96,25 @@ export default function Sidebar({ isOpen, onClose }) {
 
   const navLinks = sidebarMenu[role] || [];
 
-  // 🔥 CUSTOM ACTIVE CHECK (nested route support)
+  // 🔥 ACTIVE PATH CHECK (nested routes)
   const isActivePath = (path) => {
-    if (path === "/") {
-      return location.pathname === "/";
-    }
     return (
       location.pathname === path ||
       location.pathname.startsWith(path + "/")
     );
+  };
+
+  // 🔁 ROLE CHANGE HANDLER
+  const handleRoleChange = (newRole) => {
+    setRole(newRole);
+
+    if (newRole === "Admin") {
+      navigate("/");
+    } else {
+      navigate("/");
+    }
+
+    if (window.innerWidth < 768) onClose();
   };
 
   return (
@@ -112,7 +127,7 @@ export default function Sidebar({ isOpen, onClose }) {
         />
       )}
 
-      {/* Sidebar Container */}
+      {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-30 w-64 bg-white text-[#364153]
         transition-transform duration-300 ease-in-out border-r border-[#E5E7EB]
@@ -120,23 +135,53 @@ export default function Sidebar({ isOpen, onClose }) {
         md:static md:translate-x-0`}
       >
         <div className="flex h-full flex-col">
-          {/* Logo Area */}
+          {/* Logo + Role */}
           <div className="px-6 py-6 border-b border-[#E5E7EB]">
             <Image src="/logo.png" alt="Company Logo" />
+
             <p className="text-sm mt-4 text-[#4A5565]">
               {roleText[role]?.title}
             </p>
+
             {roleText[role]?.name && (
               <p className="text-sm text-[#6A7282] my-2">
                 {roleText[role]?.name}
               </p>
             )}
+
             <p className="text-xs text-[#F6A62D] bg-[#FFF6E9] inline-block px-2 py-1 rounded">
               {roleText[role]?.subtitle}
             </p>
+
+            {/* 🔀 ROLE SWITCHER */}
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => handleRoleChange("Owner")}
+                className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition cursor-pointer
+                  ${
+                    role === "Owner"
+                      ? "bg-[#F6A62D] text-white"
+                      : "bg-[#F1F5F9] text-[#364153]"
+                  }`}
+              >
+                Owner
+              </button>
+
+              <button
+                onClick={() => handleRoleChange("Admin")}
+                className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition cursor-pointer
+                  ${
+                    role === "Admin"
+                      ? "bg-[#F6A62D] text-white"
+                      : "bg-[#F1F5F9] text-[#364153]"
+                  }`}
+              >
+                Admin
+              </button>
+            </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation */}
           <nav className="flex-1 space-y-2 overflow-y-auto px-3 py-4">
             {navLinks.map((item) => {
               const active = isActivePath(item.path);
@@ -149,7 +194,7 @@ export default function Sidebar({ isOpen, onClose }) {
                     ${
                       active
                         ? "bg-[#FFF6E9] text-[#F6A62D]"
-                        : "text-[#364153] hover:bg-[#F6A62D]"
+                        : "text-[#364153] hover:bg-[#F6A62D] hover:text-white"
                     }`}
                   onClick={() => {
                     if (window.innerWidth < 768) onClose();
@@ -162,7 +207,7 @@ export default function Sidebar({ isOpen, onClose }) {
             })}
           </nav>
 
-          {/* Bottom Actions */}
+          {/* Logout */}
           <div className="p-4 border-t border-[#E5E7EB]">
             <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 font-medium text-[#E7000B] transition hover:bg-[#F6A62D] hover:text-white">
               <Icon icon="material-symbols:logout" width="20" height="20" />
