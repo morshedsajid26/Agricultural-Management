@@ -7,7 +7,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import farms from "../../data/farms.json";
 
 const StatCard = ({ icon, title, value, sub }) => (
-  <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex gap-4 col-span-3">
+  <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex gap-4 col-span-4">
     <div className="text-indigo-600 mt-1">{icon}</div>
     <div>
       <p className="text-sm text-[#4A5565]">{title}</p>
@@ -110,12 +110,12 @@ const FarmDetails = () => {
           value={farm.plan}
           sub={farm.price}
         />
-        <StatCard
+        {/* <StatCard
           icon={<FaHdd />}
           title="Storage"
           value={farm.storage}
           sub={`of ${farm.storageLimit}`}
-        />
+        /> */}
         <StatCard
           icon={<FaCalendarAlt />}
           title="Created"

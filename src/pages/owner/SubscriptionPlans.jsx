@@ -21,14 +21,14 @@ const SubscriptionPlans = () => {
           </p>
         </div>
 
-        {/* <Link to="/admin/sop/management/upload/sop"> */}
-        <button 
+       
+        {/* <button 
         onClick={() => setAddPlan("true")}
         className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer">
           <FaPlus />
           Upload New Plan
-        </button>
-        {/* </Link> */}
+        </button> */}
+       
       </div>
 
       <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] my-6">

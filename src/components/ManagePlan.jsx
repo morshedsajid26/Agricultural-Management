@@ -13,10 +13,10 @@ const Card = ({ name, price, features, employees, farms }) => {
           <p className="text-[#4A5565] mt-1">{employees}</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
           <FiEdit className="text-[#667085] cursor-pointer" />
           <RiDeleteBinLine className="text-red-600 cursor-pointer" />
-        </div>
+        </div> */}
       </div>
 
       {/* Price */}
