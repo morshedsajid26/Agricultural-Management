@@ -22,7 +22,7 @@ export default function Sidebar({ isOpen, onClose }) {
     Admin: [
       {
         name: "Dashboard",
-        path: "/",
+        path: "/admin/home",
         icon: "material-symbols:dashboard-outline",
       },
       {
@@ -109,7 +109,7 @@ export default function Sidebar({ isOpen, onClose }) {
     setRole(newRole);
 
     if (newRole === "Admin") {
-      navigate("/");
+      navigate("/admin/home");
     } else {
       navigate("/");
     }
