@@ -30,9 +30,10 @@ const Card = ({
             /{isAnnual ? "Year" : "Month"}
           </span>
         </div>
-        {!isAnnual && (
+        {isAnnual && (
           <p className="text-[#4A5565] mt-1">
-            ${yearlyPrice}/year (save ${monthlyPrice * 2})
+            {/* ${yearlyPrice}/year (save ${monthlyPrice * 2}) */}
+             save ${monthlyPrice * 2}
           </p>
         )}
       </div>
