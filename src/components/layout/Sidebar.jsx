@@ -6,7 +6,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
 
   // 🔐 Role (later auth/context/localStorage)
-  const role = "Owner"; // Admin | Owner
+  const role = "Admin"; // Admin | Owner
 
   // 🧱 Role-based menu config
   const sidebarMenu = {
