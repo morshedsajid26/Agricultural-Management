@@ -52,7 +52,7 @@ const LogIn = () => {
 
        
 
-        <Link className="w-full" href="/staff/customer/platform">
+        <Link className="w-full" to="/">
           <button className="bg-[#F6A62D] text-[#ffffff]  w-full py-3 rounded-lg cursor-pointer mt-12 flex items-center justify-center gap-2 ">
             <MdLogin />
           Login as {roleText[role]?.title} 

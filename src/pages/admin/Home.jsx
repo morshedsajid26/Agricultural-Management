@@ -118,12 +118,18 @@ const Home = () => {
             </div>
             </Link>
 
-            <div className="col-span-4 bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
+            <Link to="/admin/messaging/oversight" className="col-span-4">
+            <div className=" bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
               <button className=" p-3 rounded-lg w-fit ">
                 <FiCheckSquare className="w-6 h-6 text-white " />
               </button>
-              <span className="text-white">View All</span>
+              <span className="text-white">View All Messages</span>
             </div>
+            </Link>
+
+            {/* <div className="col-span-4 bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
+             
+            </div> */}
           </div>
         </div>
       </div>

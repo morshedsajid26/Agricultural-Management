@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import Image from "../Image";
 import { useEffect, useState } from "react";
@@ -209,10 +209,13 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {/* Logout */}
           <div className="p-4 border-t border-[#E5E7EB]">
-            <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 font-medium text-[#E7000B] transition hover:bg-[#F6A62D] hover:text-white">
+            <Link to="/auth/login">
+
+            <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 font-medium text-[#E7000B] transition hover:bg-[#F6A62D] hover:text-white cursor-pointer">
               <Icon icon="material-symbols:logout" width="20" height="20" />
               Log Out
             </button>
+            </Link>
           </div>
         </div>
       </aside>
