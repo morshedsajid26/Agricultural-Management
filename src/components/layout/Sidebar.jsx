@@ -13,7 +13,7 @@ export default function Sidebar({ isOpen, onClose }) {
     Admin: [
       {
         name: "Dashboard",
-        path: "/admin/home",
+        path: "/",
         icon: "material-symbols:dashboard-outline",
       },
       {
@@ -51,7 +51,7 @@ export default function Sidebar({ isOpen, onClose }) {
     Owner: [
       {
         name: "Dashboard",
-        path: "/owner/dashboard",
+        path: "/",
         icon: "material-symbols:dashboard-outline",
       },
       {
