@@ -44,7 +44,7 @@ const AddSOP = () => {
 
           <Dropdown
             placeholder={`Category/Area`}
-            options={["Category 1", "Category 2", "Category 3"]}
+            options={["Safety", "Operations", "Compliance","Training"]}
             className={`col-span-9`}
           />
 
@@ -103,7 +103,7 @@ const AddSOP = () => {
           <div className="flex bg-[#FFF4E5] rounded-lg p-1.5 w-fit mt-6 col-span-6">
             <button
               onClick={() => setActiveTab("upload")}
-              className={`px-20 py-2 rounded-md ${
+              className={`px-20 py-2 rounded-md cursor-pointer ${
                 activeTab === "upload"
                   ? "bg-[#F6A62D] text-white"
                   : "text-[#4A5565]"
@@ -114,7 +114,7 @@ const AddSOP = () => {
 
             <button
               onClick={() => setActiveTab("create")}
-              className={`px-20 py-2 rounded-md ${
+              className={`px-20 py-2 rounded-md cursor-pointer ${
                 activeTab === "create"
                   ? "bg-[#F6A62D] text-white"
                   : "text-[#4A5565]"

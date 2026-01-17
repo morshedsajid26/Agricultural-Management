@@ -1,4 +1,3 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 
 const Breadcrumb = () => {
@@ -6,16 +5,37 @@ const Breadcrumb = () => {
 
   const pathParts = pathname.split("/").filter(Boolean);
 
-  // ❌ only remove dashboard root
-  const filteredParts = pathParts.filter(
-    (part) => part.toLowerCase() !== "admin" && part.toLowerCase() !== "owner"
+  // ❌ remove role + ids
+  const cleanedParts = pathParts.filter(
+    (part) =>
+      !["admin", "owner"].includes(part.toLowerCase()) &&
+      !/^\d+$/.test(part)
   );
 
-  // ✅ always show last two if available
-  const displayParts =
-    filteredParts.length >= 2
-      ? filteredParts.slice(-2)
-      : filteredParts;
+  // 🔁 Special route handling
+  let titleParts = [];
+
+  // 👉 SOP Edit page
+  if (
+    cleanedParts.includes("edit") &&
+    cleanedParts.includes("sop")
+  ) {
+    titleParts = ["Edit", "SOP"];
+  }
+  // 👉 SOP Create page
+  else if (
+    cleanedParts.includes("create") &&
+    cleanedParts.includes("sop")
+  ) {
+    titleParts = ["Create", "SOP"];
+  }
+  // 👉 Default: last two segments
+  else {
+    titleParts =
+      cleanedParts.length >= 2
+        ? cleanedParts.slice(-2)
+        : cleanedParts;
+  }
 
   const formatWord = (word) => {
     if (word.toLowerCase() === "sop") return "SOP";
@@ -25,11 +45,11 @@ const Breadcrumb = () => {
       .replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
-  const title = displayParts.map(formatWord).join(" ");
+  const title = titleParts.map(formatWord).join(" ");
 
   return (
     <div className="flex items-center">
-      <h3 className=" text-[#0A0A0A] text-3xl whitespace-nowrap">
+      <h3 className="text-[#0A0A0A] text-3xl whitespace-nowrap">
         {title}
       </h3>
     </div>

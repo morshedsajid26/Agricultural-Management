@@ -4,6 +4,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/Bredcumb";
 import Dropdown from "../../components/Dropdown";
+import Password from "../../components/Password";
 
 const AddUser = () => {
   const navigate = useNavigate();
@@ -37,6 +38,12 @@ const AddUser = () => {
           placeholder={`Select Role`}
           options={["Manager", "Employee"]}
         />
+        <Password
+          label="Password"
+          inputClass={`rounded-lg`}
+          placeholder="Enter your password"
+        />
+        
 
         <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer flex justify-center mt-6">
           Create User

@@ -85,7 +85,7 @@ const SopManagement = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   // ===== TABLE HEADS =====
@@ -105,10 +105,10 @@ const SopManagement = () => {
             row.category === "Safety"
               ? "bg-[#E0EDFF] text-[#0047FF]"
               : row.category === "Operations"
-              ? "bg-[#E6F4EA] text-[#137333]"
-              : row.category === "Compliance"
-              ? "bg-[#FFF4E5] text-[#B54708]"
-              : "bg-[#F3E8FF] text-[#8200DB]"
+                ? "bg-[#E6F4EA] text-[#137333]"
+                : row.category === "Compliance"
+                  ? "bg-[#FFF4E5] text-[#B54708]"
+                  : "bg-[#F3E8FF] text-[#8200DB]"
           }`}
         >
           {row.category}
@@ -147,13 +147,15 @@ const SopManagement = () => {
       width: "10%",
       render: (row) => (
         <div className="flex items-center justify-center gap-4">
-          <button
-            title="Edit"
-            className="text-blue-600 hover:text-blue-800"
-            onClick={() => console.log("Edit SOP", row.id)}
-          >
-            <FiEdit />
-          </button>
+          <Link to={`/admin/sop/management/edit/sop/${row.id}`}>
+            <button
+              title="Edit"
+              className="text-blue-600 hover:text-blue-800 cursor-pointer"
+              onClick={() => console.log("Edit SOP", row.id)}
+            >
+              <FiEdit />
+            </button>
+          </Link>
           <button
             title="Delete"
             className="text-red-600 hover:text-red-800"
@@ -197,7 +199,9 @@ const SopManagement = () => {
           <button
             key={cat.value}
             onClick={() =>
-              setCategoryFilter(categoryFilter === cat.value ? "all" : cat.value)
+              setCategoryFilter(
+                categoryFilter === cat.value ? "all" : cat.value,
+              )
             }
             className={`border px-4 py-2 rounded-lg text-sm cursor-pointer
               ${

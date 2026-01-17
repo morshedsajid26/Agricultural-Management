@@ -137,7 +137,7 @@ const UserManagement = () => {
   const filteredData = users.filter(
     (u) =>
       u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase())
+      u.email.toLowerCase().includes(search.toLowerCase()),
   );
 
   // 🔹 Pagination logic
@@ -145,7 +145,7 @@ const UserManagement = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   // 🔹 TableHeads (Table contract respected)
@@ -204,13 +204,15 @@ const UserManagement = () => {
       render: (row) => (
         <div className="flex items-center justify-center gap-4">
           {/* Edit */}
-          <button
-            title="Edit"
-            className="text-blue-600 hover:text-blue-800"
-            onClick={() => console.log("Edit", row.id)}
-          >
-            <FiEdit />
-          </button>
+          <Link to={`/admin/user/management/edit/user/${row.id}`}>
+            <button
+              title="Edit"
+              className="text-blue-600 hover:text-blue-800 cursor-pointer"
+              onClick={() => console.log("Edit SOP", row.id)}
+            >
+              <FiEdit />
+            </button>
+          </Link>
 
           {/* Status toggle */}
           {row.status === "Active" ? (
@@ -305,19 +307,16 @@ const UserManagement = () => {
         <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black">
           <Table TableHeads={TableHeads} TableRows={paginatedData} />
         </div>
-
-        
       </div>
 
       {/* ===== Pagination ===== */}
-        <div className="flex justify-center mt-4">
-
+      <div className="flex justify-center mt-4">
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
-        </div>
+      </div>
     </div>
   );
 };
