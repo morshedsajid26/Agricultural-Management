@@ -22,6 +22,7 @@ const ResetPassword = () => {
 
         
         <InputField
+          type={`email`}
           inputClass={`rounded-lg`}
           label={`Email Address `}
           placeholder={``}

@@ -5,6 +5,7 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import InputField from "../../components/InputField";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../components/Dropdown";
+import Password from "../../components/Password";
 
 const CreateFarm = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const CreateFarm = () => {
           <h3 className="text-xl text-[#0A0A0A] mt-6">Farm Details</h3>
           <div className="grid grid-cols-12 gap-4 border-b border-[#E5E7EB] py-4">
             <InputField
+            type={`text`}
               inputClass={`rounded-lg`}
               label={`Farm Name`}
               placeholder={`e.g., Farm check`}
@@ -42,35 +44,45 @@ const CreateFarm = () => {
             />
 
             <InputField
+            type={`email`}
               inputClass={`rounded-lg`}
               label={`Admin Email`}
               placeholder={`admin@farm.com`}
               className={`col-span-12`}
             />
             <InputField
+            type={`text`}
               inputClass={`rounded-lg`}
               label={`Country`}
               placeholder={``}
               className={`col-span-6`}
             />
             <InputField
+            type={`text`}
               inputClass={`rounded-lg`}
               label={`Language`}
               placeholder={``}
               className={`col-span-6`}
             />
+
+            <Password
+              label="Password"
+              inputClass={`rounded-lg`}
+              className="col-span-12"
+            />
+           
           </div>
         </div>
 
         <div>
           <h3 className="text-xl text-[#0A0A0A] mt-6">Subscription Details</h3>
-          <div className="grid grid-cols-12 gap-4 border-b border-[#E5E7EB] py-4">
-            <InputField
+          <div className=" gap-4 border-b border-[#E5E7EB] py-4">
+            {/* <InputField
               inputClass={`rounded-lg`}
               label={`Status `}
               placeholder={``}
               className={`col-span-6`}
-            />
+            /> */}
             {/* <InputField
           inputClass={`rounded-lg`}
           label={`Plan`}
@@ -82,14 +94,14 @@ const CreateFarm = () => {
               placeholder={`Select Plan`}
               options={["Basic", "Professional", "Enterprise "]}
               onSelect={(value) => console.log(value)}
-              className={`col-span-6`}
+              className={``}
             />
-            <InputField
+            {/* <InputField
               inputClass={`rounded-lg`}
               label={`Employee Limit`}
               placeholder={``}
               className={`col-span-12`}
-            />
+            /> */}
           </div>
         </div>
 

@@ -7,7 +7,8 @@ const InputField = ({
   inputClass,
   labelClass,
   value,
-  onChange
+  onChange,
+  type
 }) => {
   return (
     <div className={`flex flex-col w-full gap-2 ${className}`}>
@@ -16,7 +17,7 @@ const InputField = ({
       </label>
 
       <input
-        type="text"
+        type={type}
         placeholder={placeholder}
         value={value}           
         onChange={onChange}     

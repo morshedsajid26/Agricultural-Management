@@ -55,7 +55,7 @@ const Home = () => {
           <div className="bg-[#2B7FFF] p-3 rounded-lg w-fit mb-7">
             <FiMessageSquare className="w-6 h-6 text-white " />
           </div>
-          <p className="text-[#4A5565]">Today’s total feedback</p>
+          <p className="text-[#4A5565]">Today’s total Messages</p>
           <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">5</h2>
           <p className="text-[#4A5565]">3 new</p>
         </div>

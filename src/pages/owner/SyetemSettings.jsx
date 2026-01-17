@@ -49,7 +49,7 @@ const SystemSettings = () => {
 
 
       <div className="mt-6">
-      <UploadImage />
+      <UploadImage label={`Platform Logo`} branding={`Platform`} />
 
       </div>
 

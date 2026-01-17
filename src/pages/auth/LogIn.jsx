@@ -38,6 +38,7 @@ const LogIn = () => {
 
         
         <InputField
+          type={`email`}
           inputClass={`rounded-lg`}
           label={`Email Address `}
           placeholder={``}

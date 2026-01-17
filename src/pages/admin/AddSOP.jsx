@@ -14,7 +14,6 @@ const AddSOP = () => {
   const [activeTab, setActiveTab] = useState("upload");
   const handleFileSelect = (file) => {
     console.log("Selected file:", file);
-    
   };
 
   return (
@@ -36,6 +35,7 @@ const AddSOP = () => {
       <div className="bg-white rounded-lg border-2 border-[#E5E7EB] p-6 mt-6">
         <div className="grid grid-cols-12">
           <InputField
+            type={`text`}
             inputClass={`rounded-lg`}
             label={`SOP Title`}
             placeholder={`e.g., Safety Protocols`}
@@ -44,7 +44,7 @@ const AddSOP = () => {
 
           <Dropdown
             placeholder={`Category/Area`}
-            options={["Safety", "Operations", "Compliance","Training"]}
+            options={["Safety", "Operations", "Compliance", "Training"]}
             className={`col-span-9`}
           />
 
@@ -75,6 +75,7 @@ const AddSOP = () => {
                 </div>
 
                 <InputField
+                  type={`text`}
                   inputClass={`rounded-lg`}
                   label={`Category Name`}
                   placeholder={`e.g., Maintenance`}
@@ -132,7 +133,9 @@ const AddSOP = () => {
             {activeTab === "create" && <CreateDigitalModule />}
           </div>
 
-          <p className="col-span-2 text-[#364153] my-6">Allow Managers to view this SOP</p>
+          <p className="col-span-2 text-[#364153] my-6">
+            Allow Managers to view this SOP
+          </p>
 
           <div className="col-span-12 gap-3 flex ">
             <button className="py-3 px-5 font-inet   bg-[#F6A62D] text-white] rounded-lg cursor-pointer">
@@ -142,10 +145,7 @@ const AddSOP = () => {
             <button className="py-3 px-5 font-inet   bg-[#E5E7EB] text-[#364153] rounded-lg cursor-pointer">
               Cancel
             </button>
-
           </div>
-
-
         </div>
       </div>
     </div>

@@ -23,12 +23,14 @@ const AddUser = () => {
       </div>
       <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex flex-col gap-6 mt-6">
         <InputField
+          type={`text`}
           inputClass={`rounded-lg`}
           label={`Full Name`}
           placeholder={`e.g., John Smith`}
         />
 
         <InputField
+          type={`email`}
           inputClass={`rounded-lg`}
           label={`Email Address`}
           placeholder={`john@farm.com`}
@@ -45,7 +47,7 @@ const AddUser = () => {
         />
         
 
-        <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer flex justify-center mt-6">
+        <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md  hover:bg-[#e5942b] cursor-pointer  mt-6">
           Create User
         </button>
       </div>

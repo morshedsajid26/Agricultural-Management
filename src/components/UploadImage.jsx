@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { FiUpload, FiTrash2 } from "react-icons/fi";
 
-const UploadImage = () => {
+const UploadImage = ({label,branding}) => {
   const fileInputRef = useRef(null);
   const [logo, setLogo] = useState(null);
   const [error, setError] = useState("");
@@ -43,12 +43,12 @@ const UploadImage = () => {
           🎨
         </div>
         <h3 className="text-xl  text-[#0A0A0A]">
-          Platform Branding
+         {branding} Branding
         </h3>
       </div>
 
       {/* LOGO LABEL */}
-      <p className="text-sm text-[#364153] mb-2">Platform Logo</p>
+      <p className="text-sm text-[#364153] mb-2">{label}</p>
 
       {/* CONTENT */}
       <div className="flex items-center gap-6">

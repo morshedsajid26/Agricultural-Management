@@ -3,6 +3,7 @@ import Breadcrumb from '../../components/Bredcumb'
 import InputField from '../../components/InputField'
 import { HiOutlineOfficeBuilding } from 'react-icons/hi'
 import { LuSave } from 'react-icons/lu'
+import UploadImage from '../../components/UploadImage'
 
 const Settings = () => {
   return (
@@ -14,6 +15,10 @@ const Settings = () => {
         </p>
       </div>
 
+        <div className="mt-6">
+      <UploadImage label={`Farm Logo`} branding={`Farm`}  />
+
+      </div>
       <div className='bg-white rounded-lg border-2 border-[#E5E7EB] mt-6 p-6'>
         <div className='flex items-center mb-4 gap-2'>
         <HiOutlineOfficeBuilding className='w-6 h-6 text-[#4A5565] ' />
