@@ -24,7 +24,7 @@ const SopManagement = () => {
     {
       id: 1,
       title: "Safety Protocols",
-      category: "Safety",
+      category: "Milking",
       uploadDate: "2026-01-05",
       details: "doc 01",
       fileUrl: "/docs/safety-protocols.pdf",
@@ -32,7 +32,7 @@ const SopManagement = () => {
     {
       id: 2,
       title: "Equipment Maintenance",
-      category: "Operations",
+      category: "Health",
       uploadDate: "2026-01-03",
       details: "doc 02",
       fileUrl: "/docs/equipment-maintenance.pdf",
@@ -40,7 +40,7 @@ const SopManagement = () => {
     {
       id: 3,
       title: "Compliance Checklist",
-      category: "Compliance",
+      category: "Calves",
       uploadDate: "2026-01-04",
       details: "doc 03",
       fileUrl: "/docs/compliance-checklist.pdf",
@@ -48,7 +48,39 @@ const SopManagement = () => {
     {
       id: 4,
       title: "Worker Training Guide",
-      category: "Training",
+      category: "Feeding",
+      uploadDate: "2026-01-06",
+      details: "doc 04",
+      fileUrl: "/docs/training-guide.pdf",
+    },
+    {
+      id: 1,
+      title: "Safety Protocols",
+      category: "Health",
+      uploadDate: "2026-01-05",
+      details: "doc 01",
+      fileUrl: "/docs/safety-protocols.pdf",
+    },
+    {
+      id: 2,
+      title: "Equipment Maintenance",
+      category: "Calves",
+      uploadDate: "2026-01-03",
+      details: "doc 02",
+      fileUrl: "/docs/equipment-maintenance.pdf",
+    },
+    {
+      id: 3,
+      title: "Compliance Checklist",
+      category: "Maintenance",
+      uploadDate: "2026-01-04",
+      details: "doc 03",
+      fileUrl: "/docs/compliance-checklist.pdf",
+    },
+    {
+      id: 4,
+      title: "Worker Training Guide",
+      category: "Emergencies",
       uploadDate: "2026-01-06",
       details: "doc 04",
       fileUrl: "/docs/training-guide.pdf",
@@ -102,13 +134,15 @@ const SopManagement = () => {
       render: (row) => (
         <span
           className={`px-3 py-1 rounded-md text-sm font-medium ${
-            row.category === "Safety"
-              ? "bg-[#E0EDFF] text-[#0047FF]"
-              : row.category === "Operations"
+            row.category === "Milking"
+              ? "bg-[#E6F4EA] text-[#137333]"
+              : row.category === "Feeding"
                 ? "bg-[#E6F4EA] text-[#137333]"
-                : row.category === "Compliance"
-                  ? "bg-[#FFF4E5] text-[#B54708]"
-                  : "bg-[#F3E8FF] text-[#8200DB]"
+                : row.category === "Calves"
+                ? "bg-[#F3E8FF] text-[#8200DB]"
+                : row.category === "Health"
+                ? "bg-[#F3E8FF] text-[#8200DB]"
+                : "bg-[#FFF4E5] text-[#B54708]"
           }`}
         >
           {row.category}
@@ -191,10 +225,12 @@ const SopManagement = () => {
       <div className="flex my-6 gap-4 overflow-x-auto">
         {[
           { label: "All Categories", value: "all" },
-          { label: "Safety", value: "safety" },
-          { label: "Operations", value: "operations" },
-          { label: "Compliance", value: "compliance" },
-          { label: "Training", value: "training" },
+          { label: "Milking", value: "milking" },
+          { label: "Feeding", value: "feeding" },
+          { label: "Health", value: "health" },
+          { label: "Calves", value: "calves" },
+          { label: "Maintenance", value: "maintenance" },
+          { label: "Emergencies", value: "emergencies" },
         ].map((cat) => (
           <button
             key={cat.value}

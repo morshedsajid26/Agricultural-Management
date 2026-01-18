@@ -44,62 +44,11 @@ const AddSOP = () => {
 
           <Dropdown
             placeholder={`Category/Area`}
-            options={["Safety", "Operations", "Compliance", "Training"]}
-            className={`col-span-9`}
+            options={["Milking", "Feeding", "Health", "Calves", "Maintenance","Emergencies"]}
+            className={`col-span-12 `}
           />
 
-          <div className=" col-span-3 flex items-center justify-end  ">
-            <FaPlus
-              onClick={() => setAddCategory("true")}
-              className="text-white bg-[#FB9C0B] text-3xl rounded-full  p-1 cursor-pointer"
-            />{" "}
-          </div>
-          {addCategory === "true" && (
-            <div className="fixed inset-0  bg-[#D9D9D9]/80 flex items-center justify-center z-50 ">
-              <div className="bg-[#EFEFEF] rounded-3xl  pt-10 pb-10 px-10 w-[40%]">
-                <div className="flex  justify-between">
-                  <div>
-                    <h3 className="text-xl font-bold text-[#0A0A0A]">
-                      Create New Category
-                    </h3>
-                    <p className="text-[#717182] mt-2">
-                      Add a new category for your Standard Operating Procedures.
-                    </p>
-                  </div>
-                  <div className="">
-                    <FiX
-                      onClick={() => setAddCategory(false)}
-                      className="w-7 h-7  cursor-pointer text-[#0A0A0A] "
-                    />
-                  </div>
-                </div>
-
-                <InputField
-                  type={`text`}
-                  inputClass={`rounded-lg`}
-                  label={`Category Name`}
-                  placeholder={`e.g., Maintenance`}
-                  className={`mt-8`}
-                />
-
-                <div className="flex gap-2 justify-end mt-8 ">
-                  <button
-                    onClick={() => setAddCategory(false)}
-                    className="py-3 px-5 font-inet   border border-[#000000]/10 text-[#0A0A0A] rounded-lg cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    onClick={() => setAddCategory(false)}
-                    className="py-3 px-5 font-inet   bg-[#030213] text-white] rounded-lg cursor-pointer"
-                  >
-                    Add Category
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+         
 
           <div className="flex bg-[#FFF4E5] rounded-lg p-1.5 w-fit mt-6 col-span-6">
             <button
