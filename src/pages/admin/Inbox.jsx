@@ -63,14 +63,12 @@ export default function Inbox() {
   const [newMessage, setNewMessage] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
 
-  const selectedConversation = conversations.find(
-    (c) => c.id === selectedId
-  );
+  const selectedConversation = conversations.find((c) => c.id === selectedId);
 
   const handleSelectConversation = (id) => {
     setSelectedId(id);
     setConversations((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, unread: false } : c))
+      prev.map((c) => (c.id === id ? { ...c, unread: false } : c)),
     );
   };
 
@@ -93,8 +91,8 @@ export default function Inbox() {
                 },
               ],
             }
-          : c
-      )
+          : c,
+      ),
     );
 
     setNewMessage("");
@@ -183,9 +181,7 @@ export default function Inbox() {
           <p className="font-medium text-sm text-[#0A0A0A]">
             {selectedConversation.name}
           </p>
-          <p className="text-xs text-gray-500">
-            {selectedConversation.role}
-          </p>
+          <p className="text-xs text-gray-500">{selectedConversation.role}</p>
         </div>
       </div>
 
@@ -228,7 +224,7 @@ export default function Inbox() {
                     <img
                       src={msg.image}
                       alt=""
-                      className="mb-2 w-[50%] h-[50%] rounded-md"
+                      className="mb-2 max-w-[350px] rounded-md block ml-auto cursor-pointer hover:opacity-90"
                     />
                   )}
                   {msg.text}
@@ -246,18 +242,13 @@ export default function Inbox() {
       {currentUserRole === "admin" &&
         selectedConversation.role === "Manager" && (
           <div className="p-4 border-t space-y-2">
-            
             {/* IMAGE PREVIEW */}
             {imagePreview && (
-              <div className="relative w-25 h-25 ">
-                <img
-                  src={imagePreview}
-                  alt=""
-                  className="rounded-md border"
-                />
+              <div className="relative w-25 h-25  overflow-hidden">
+                <img src={imagePreview} alt="" className="rounded-md border" />
                 <button
                   onClick={() => setImagePreview(null)}
-                  className="absolute -top-2 -right-2 bg-[#F6A62D] text-white w-5 h-5 rounded-full text-sm flex items-center justify-center cursor-pointer"
+                  className="absolute top-0 right-0 bg-[#F6A62D] text-white w-5 h-5 rounded-full text-sm flex items-center justify-center cursor-pointer"
                 >
                   <FiX className="w-4 h-4" />
                 </button>
@@ -272,13 +263,10 @@ export default function Inbox() {
                   accept="image/*"
                   className="hidden"
                   onChange={(e) =>
-                    setImagePreview(
-                      URL.createObjectURL(e.target.files[0])
-                    )
+                    setImagePreview(URL.createObjectURL(e.target.files[0]))
                   }
                 />
                 <AiFillPicture className="w-5 h-5" />
-
               </label>
 
               {/* TEXT INPUT */}
