@@ -12,15 +12,23 @@ const Subscription = () => {
     id: 1,
     billingDate: "2026-01-01",
     plan: "Basic",
-    pricing: "$20 / month",
+    pricing: "$99 / month",
     status: "paid",
     expireDate: "2026-02-01",
   },
   {
     id: 2,
     billingDate: "2025-12-01",
-    plan: "Pro",
-    pricing: "$50 / month",
+    plan: "Professional",
+    pricing: "$499 / month",
+    status: "unpaid",
+    expireDate: "2026-01-01",
+  },
+   {
+    id: 3,
+    billingDate: "2025-12-01",
+    plan: "Enterprise",
+    pricing: "$999 / month",
     status: "unpaid",
     expireDate: "2026-01-01",
   },
@@ -76,8 +84,8 @@ const Subscription = () => {
   render: (row) => (
     <div className="flex justify-center">
       {row.status === "unpaid" ? (
-        <button className="text-[#F6A62D] font-medium hover:underline">
-          Renew
+        <button className="text-[#0A0A0A] cursor-pointer border border-[#0A0A0A]/10 rounded-lg px-4 py-2">
+          Renew now
         </button>
       ) : (
         <span className="text-gray-400">—</span>
