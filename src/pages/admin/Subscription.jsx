@@ -3,8 +3,90 @@ import Breadcrumb from "../../components/Bredcumb";
 import Plan from "../../components/Plan";
 import PlanList from "../../components/PlanList";
 import { BsWallet2 } from "react-icons/bs";
+import Table from "../../components/Table";
+
 
 const Subscription = () => {
+ const TableRows = [
+  {
+    id: 1,
+    billingDate: "2026-01-01",
+    plan: "Basic",
+    pricing: "$20 / month",
+    status: "paid",
+    expireDate: "2026-02-01",
+  },
+  {
+    id: 2,
+    billingDate: "2025-12-01",
+    plan: "Pro",
+    pricing: "$50 / month",
+    status: "unpaid",
+    expireDate: "2026-01-01",
+  },
+];
+
+
+   // ===== TABLE HEADS =====
+  const TableHeads = [
+    {
+      Title: "Billing Date",
+      key: "billingDate",
+      width: "25%",
+    },
+    {
+      Title: "Plan",
+      key: "plan",
+      width: "15%",
+    },
+    {
+      Title: "Subscription Pricing",
+      key: "pricing",
+      width: "20%",
+    },
+    {
+  Title: "Status",
+  key: "status",
+  width: "15%",
+  render: (row) => (
+    <span
+      className={`px-3 py-1 rounded-full text-sm font-medium
+        ${
+          row.status === "paid"
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+        }
+      `}
+    >
+      {row.status}
+    </span>
+  ),
+},
+
+    {
+      Title: "Expire Date",
+      key: "expireDate",
+      width: "15%",
+    },
+   
+    {
+  Title: "Actions",
+  key: "actions",
+  width: "10%",
+  render: (row) => (
+    <div className="flex justify-center">
+      {row.status === "unpaid" ? (
+        <button className="text-[#F6A62D] font-medium hover:underline">
+          Renew
+        </button>
+      ) : (
+        <span className="text-gray-400">—</span>
+      )}
+    </div>
+  ),
+},
+
+  ];
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -24,7 +106,15 @@ const Subscription = () => {
       </div>
 
       <Plan />
-      <PlanList />
+      {/* <PlanList /> */}
+
+      <div>
+        <h3 className="text-[#0A0A0A] text-xl mt-10 mb-4">Billing History</h3>
+
+        <div className="bg-white rounded-lg border-2 border-[#E5E7EB]">
+          <Table TableHeads={TableHeads} TableRows={TableRows} />
+        </div>
+      </div>
 
       <div className=" mt-12">
         <p className="text-xl text-[#0A0A0A] ">Payment Method</p>
