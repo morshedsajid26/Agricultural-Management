@@ -117,13 +117,13 @@ export default function Sidebar({ isOpen, onClose }) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-2 overflow-y-auto px-3 py-4">
+          <nav className="flex-1 space-y-2 overflow-y-auto hide-scrollbar px-3 py-4">
             {navLinks.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 onClick={() => window.innerWidth < 1536 && onClose()}
-                className={`flex items-center gap-3 rounded-lg px-4 py-3 transition
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 transition 
                   ${
                     isActivePath(item.path)
                       ? "bg-[#FFF6E9] text-[#F6A62D]"

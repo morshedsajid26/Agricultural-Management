@@ -105,7 +105,7 @@ export default function Inbox() {
   if (!selectedConversation) {
     return (
       <>
-        <div className="relative col-span-8 mb-6 bg-white rounded-lg border-2 border-[#E5E7EB] p-6">
+        <div className="relative  mb-6 bg-white rounded-lg border-2 border-[#E5E7EB] p-6">
           <FaSearch className="absolute top-1/2 -translate-y-1/2 left-10 text-[#99A1AF]" />
           <input
             type="text"
@@ -163,7 +163,7 @@ export default function Inbox() {
   // 💬 CONVERSATION VIEW
   // ===============================
   return (
-    <div className="flex flex-col border rounded-lg h-[740px]">
+    <div className="flex flex-col  rounded-lg h-[740px]">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-5 border-b bg-white">
         <button
