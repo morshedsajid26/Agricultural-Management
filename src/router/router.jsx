@@ -34,10 +34,10 @@ const router = createBrowserRouter([
     path: "/auth",
     element: <AuthLayout />,
     children: [
-      { path: "/login", element: <LogIn /> },
-      { path: "/reset/password", element: <ResetPassword /> },
-      { path: "/new/password", element: <NewPassword /> },
-      { path: "/success", element: <Success /> },
+      { path: "login", element: <LogIn /> },
+      { path: "reset/password", element: <ResetPassword /> },
+      { path: "new/password", element: <NewPassword /> },
+      { path: "success", element: <Success /> },
     ],
   },
 
