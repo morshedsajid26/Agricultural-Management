@@ -31,13 +31,13 @@ import Success from "../pages/auth/Success";
 const router = createBrowserRouter([
   //  AUTH ROUTES
   {
-    path: "/auth/",
+    path: "/",
     element: <AuthLayout />,
     children: [
-      { path: "login", element: <LogIn /> },
-      { path: "reset/password", element: <ResetPassword /> },
-      { path: "new/password", element: <NewPassword /> },
-      { path: "success", element: <Success /> },
+      { path: "auth/login", element: <LogIn /> },
+      { path: "auth/reset/password", element: <ResetPassword /> },
+      { path: "auth/new/password", element: <NewPassword /> },
+      { path: "auth/success", element: <Success /> },
     ],
   },
 
