@@ -174,6 +174,7 @@ const SopManagement = () => {
       Title: "Details",
       key: "details",
       width: "15%",
+      
     },
     {
       Title: "Actions",
@@ -208,7 +209,7 @@ const SopManagement = () => {
       <div className="flex items-center justify-between">
         <div>
           <Breadcrumb />
-          <p className="text-[#4A5565] mt-1.5">
+         <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
             Manage all SOP documents in one place
           </p>
         </div>
@@ -262,12 +263,12 @@ const SopManagement = () => {
             setSearch(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#0A0A0A]/50 placeholder:text-[#0A0A0A]/50"
+          className="w-[100%] md:w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#0A0A0A]/50 placeholder:text-[#0A0A0A]/50"
         />
       </div>
 
       {/* ===== TABLE ===== */}
-      <div className="bg-white rounded-lg border-2 border-[#E5E7EB] mt-6">
+      <div className="bg-white rounded-lg border-2 border-[#E5E7EB] mt-6 overflow-x-scroll">
         <Table TableHeads={TableHeads} TableRows={paginatedData} />
       </div>
 

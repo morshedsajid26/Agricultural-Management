@@ -24,7 +24,7 @@ const Home = () => {
       </div>
 
       <div className="grid grid-cols-12 gap-6 mt-8">
-        <div className="col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#2B7FFF] p-3 rounded-lg w-fit mb-7">
             <FiUsers className="w-6 h-6 text-white " />
           </div>
@@ -33,7 +33,7 @@ const Home = () => {
           <p className="text-[#4A5565]">+3 this month</p>
         </div>
 
-        <div className="col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#00C950] p-3 rounded-lg w-fit mb-7">
             <FiFileText className="w-6 h-6 text-white " />
           </div>
@@ -42,7 +42,7 @@ const Home = () => {
           <p className="text-[#4A5565]">2 updated today</p>
         </div>
 
-        <div className="col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#F0B100] p-3 rounded-lg w-fit mb-7">
             <FiCheckSquare className="w-6 h-6 text-white " />
           </div>
@@ -51,7 +51,7 @@ const Home = () => {
           <p className="text-[#4A5565]">8 completed</p>
         </div>
 
-        <div className="col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#2B7FFF] p-3 rounded-lg w-fit mb-7">
             <FiMessageSquare className="w-6 h-6 text-white " />
           </div>
@@ -100,7 +100,7 @@ const Home = () => {
           <div className="grid grid-cols-12 gap-6 ">
 
 
-            <Link to="/admin/user/management/add/user" className="col-span-4">
+            <Link to="/admin/user/management/add/user" className="col-span-12 md:col-span-4">
             <div className=" bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
               <button className=" p-3 rounded-lg w-fit">
                 <FiUsers className="w-6 h-6 text-white " />
@@ -109,7 +109,7 @@ const Home = () => {
             </div>
             </Link>
 
-            <Link to="/admin/sop/management/upload/sop" className="col-span-4">
+            <Link to="/admin/sop/management/upload/sop" className="col-span-12 md:col-span-4">
             <div className=" bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
               <button className=" p-3 rounded-lg w-fit">
                 <FiFileText className="w-6 h-6 text-white " />
@@ -118,7 +118,7 @@ const Home = () => {
             </div>
             </Link>
 
-            <Link to="/admin/messaging/oversight" className="col-span-4">
+            <Link to="/admin/messaging/oversight" className="col-span-12 md:col-span-4">
             <div className=" bg-white/20 gap-2 flex flex-col justify-center items-center rounded-lg p-4 mt-4 cursor-pointer">
               <button className=" p-3 rounded-lg w-fit ">
                 <FiCheckSquare className="w-6 h-6 text-white " />

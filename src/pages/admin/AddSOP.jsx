@@ -27,7 +27,7 @@ const AddSOP = () => {
       </div>
       <div className="mt-4">
         <Breadcrumb />
-        <p className="text-[#4A5565] mt-1.5">
+       <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
           Add a new standard operating procedure document
         </p>
       </div>

@@ -101,9 +101,9 @@ const Subscription = () => {
         <div>
           <div className="flex  items-center gap-2">
             <Breadcrumb />
-            <p className="text-[#0A0A0A] text-3xl">& Biiling</p>
+            {/* <p className="text-[#0A0A0A] text-3xl">& Biiling</p> */}
           </div>
-          <p className="text-[#4A5565] mt-1.5">
+         <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
             Manage your farm's subscription and payment details
           </p>
         </div>
@@ -119,7 +119,7 @@ const Subscription = () => {
       <div>
         <h3 className="text-[#0A0A0A] text-xl mt-10 mb-4">Billing History</h3>
 
-        <div className="bg-white rounded-lg border-2 border-[#E5E7EB]">
+        <div className="bg-white rounded-lg border-2 border-[#E5E7EB] overflow-x-scroll">
           <Table TableHeads={TableHeads} TableRows={TableRows} />
         </div>
       </div>

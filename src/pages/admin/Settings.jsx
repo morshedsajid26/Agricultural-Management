@@ -10,7 +10,7 @@ const Settings = () => {
     <div>
         <div>
         <Breadcrumb />
-        <p className="text-[#4A5565] mt-1.5">
+       <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
          Configure settings for Farm check
         </p>
       </div>

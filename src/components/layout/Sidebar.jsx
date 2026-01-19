@@ -25,7 +25,7 @@ export default function Sidebar({ isOpen, onClose }) {
       { name: "User Management", path: "/admin/user/management", icon: "material-symbols:group" },
       { name: "Task Oversight", path: "/admin/task/oversight", icon: "material-symbols:select-check-box" },
       { name: "Messaging", path: "/admin/messaging/oversight", icon: "material-symbols:chat-bubble-outline" },
-      { name: "Subscription", path: "/admin/subscription", icon: "material-symbols:credit-card-outline" },
+      { name: "Subscription", path: "/admin/subscription/billing", icon: "material-symbols:credit-card-outline" },
       { name: "Settings", path: "/admin/farm/settings", icon: "material-symbols:settings-outline" },
     ],
     Owner: [

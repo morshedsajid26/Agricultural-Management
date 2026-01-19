@@ -252,13 +252,13 @@ const UserManagement = () => {
       <div className="flex items-center justify-between">
         <div>
           <Breadcrumb />
-          <p className="text-[#4A5565] mt-1.5">
+         <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
             Manage employees and managers for Farm check
           </p>
         </div>
 
         <Link to="/admin/user/management/add/user">
-          <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer">
+          <button className="bg-[#F6A62D] text-white px-1 md:px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer">
             <FaPlus />
             Add User
           </button>
@@ -282,21 +282,21 @@ const UserManagement = () => {
 
       {/* ===== Stats + Table ===== */}
       <div className="grid grid-cols-12 gap-4 mt-6">
-        <div className="col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-12 md:col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Total Users</p>
           <p className="text-xl font-semibold text-[#0A0A0A] my-1">
             {users.length}
           </p>
         </div>
 
-        <div className="col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-12 md:col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Active Users</p>
           <p className="text-xl font-semibold text-[#00A63E] my-1">
             {users.filter((u) => u.status === "Active").length}
           </p>
         </div>
 
-        <div className="col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-12 md:col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Managers</p>
           <p className="text-xl font-semibold text-[#155DFC] my-1">
             {users.filter((u) => u.role === "Manager").length}
@@ -304,7 +304,7 @@ const UserManagement = () => {
         </div>
 
         {/* ===== Table ===== */}
-        <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black">
+        <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black overflow-x-scroll">
           <Table TableHeads={TableHeads} TableRows={paginatedData} />
         </div>
       </div>

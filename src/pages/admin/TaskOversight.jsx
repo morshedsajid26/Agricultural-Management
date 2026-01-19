@@ -147,35 +147,35 @@ const TaskOversight = () => {
       {/* ===== Header ===== */}
       <div>
         <Breadcrumb />
-        <p className="text-[#4A5565] mt-1.5">
+       <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
           Monitor all tasks across your farm operations
         </p>
       </div>
 
       {/* ===== Stats ===== */}
       <div className="grid grid-cols-12 gap-6 mt-6">
-        <div className="col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-6 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Total Tasks</p>
           <p className="text-xl font-semibold text-[#0A0A0A] my-1">
             {tasks.length}
           </p>
         </div>
 
-        <div className="col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-6 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Completed</p>
           <p className="text-xl font-semibold text-[#00A63E] my-1">
             {tasks.filter((t) => t.status === "Completed").length}
           </p>
         </div>
 
-        <div className="col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-6 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Pending</p>
           <p className="text-xl font-semibold text-[#F59E0B] my-1">
             {tasks.filter((t) => t.status === "Pending").length}
           </p>
         </div>
 
-        <div className="col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+        <div className="col-span-6 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">In Progress</p>
           <p className="text-xl font-semibold text-[#3B82F6] my-1">
             {tasks.filter((t) => t.status === "Progress").length}
@@ -195,7 +195,7 @@ const TaskOversight = () => {
         </div>
 
         {/* ===== Table ===== */}
-        <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black">
+        <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black overflow-x-scroll">
           <Table TableHeads={TableHeads} TableRows={paginatedData} />
         </div>
       </div>

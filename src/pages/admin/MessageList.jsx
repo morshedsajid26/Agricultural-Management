@@ -53,7 +53,7 @@ const MessageList = ({ messages, setMessages }) => {
         <div className="col-span-4 flex justify-end items-center">
           <button
             onClick={clearAll}
-            className="bg-[#E7000B] text-white px-4 py-3 rounded-lg flex items-center gap-2"
+            className="bg-[#E7000B] text-white px-4 md:py-4 py-1 rounded-lg flex items-center gap-2"
           >
             <FiTrash2 size={20} />
             Clear All Messages

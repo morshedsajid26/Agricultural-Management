@@ -57,7 +57,7 @@ const router = createBrowserRouter([
       { path: "admin/sop/management/edit/sop/:id", element: <AddSOP /> },
       { path: "admin/messaging/oversight", element: <Messaging /> },
       { path: "admin/farm/settings", element: <Settings /> },
-      { path: "admin/subscription", element: <Subscription /> },
+      { path: "admin/subscription/billing", element: <Subscription /> },
 
       // owner
       { path: "/", element: <Dashboard /> },

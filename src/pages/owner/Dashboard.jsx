@@ -38,7 +38,7 @@ const Dashboard = () => {
       <h3 className=" text-[#0A0A0A] text-3xl whitespace-nowrap">
         Dashboard
       </h3>
-        <p className="text-[#4A5565] mt-1.5">
+       <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
           Complete system health at a glance
         </p>
       </div>

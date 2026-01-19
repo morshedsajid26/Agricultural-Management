@@ -22,7 +22,7 @@ export default function ToggleButton({ isAnnual, setIsAnnual }) {
       >
         <span
           className={`absolute w-5 h-5 rounded-full transition-transform duration-300 ${
-            isAnnual ? "md:translate-x-7 bg-white" : "md:translate-x-1 bg-white"
+            isAnnual ? "md:translate-x-7 translate-x-7 bg-white" : "md:translate-x-1 translate-x-1 bg-white"
           }`}
         ></span>
       </button>

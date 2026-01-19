@@ -19,7 +19,7 @@ const AddUser = () => {
       </div>
       <div className="mt-4">
         <Breadcrumb />
-        <p className="text-[#4A5565] mt-1.5">Create a new employee or manager account</p>
+       <p className="text-[#4A5565] text-sm md:text-base mt-1.5">Create a new employee or manager account</p>
       </div>
       <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex flex-col gap-6 mt-6">
         <InputField

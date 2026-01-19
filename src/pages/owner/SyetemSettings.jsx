@@ -42,7 +42,7 @@ const SystemSettings = () => {
     <div>
       <div>
         <Breadcrumb />
-        <p className="text-[#4A5565] mt-1.5">
+       <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
           Global platform configuration and controls
         </p>
       </div>

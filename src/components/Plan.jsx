@@ -15,7 +15,7 @@ const Card = ({
   monthlyPrice,
 }) => {
   return (
-    <div className="bg-white rounded-lg border-2 border-[#E5E7EB]  py-8 px-6 flex flex-col  hover:shadow-lg transition-all duration-300 ">
+    <div className="bg-white rounded-lg border-2 border-[#E5E7EB]  py-8 px-6 flex flex-col  hover:shadow-lg transition-all duration-300 col-span-12 md:col-span-4 ">
       {/* Plan Name */}
       <div>
         <p className="text-2xl text-[#0A0A0A]">{name}</p>
@@ -131,7 +131,7 @@ const Plan = () => {
       <p className="text-[#0A0A0A] text-xl mt-10 mb-4">Available Plans</p>
 
       {/* Cards */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-12 gap-6">
         {plans.map((plan, i) => (
           <Card
             key={i}

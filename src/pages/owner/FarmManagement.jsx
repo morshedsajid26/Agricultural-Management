@@ -36,7 +36,7 @@ const FarmManagement = () => {
       <div className="flex items-center justify-between">
         <div>
           <Breadcrumb />
-          <p className="text-[#4A5565] mt-1.5">
+         <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
             Manage all farms across the platform
           </p>
         </div>

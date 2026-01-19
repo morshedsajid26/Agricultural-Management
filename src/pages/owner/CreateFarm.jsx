@@ -26,7 +26,7 @@ const CreateFarm = () => {
           </div>
           <div className="">
             <Breadcrumb />
-            <p className="text-[#4A5565] mt-1.5">
+           <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
               Add a new farm to the platform
             </p>
           </div>
