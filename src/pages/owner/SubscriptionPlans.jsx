@@ -35,17 +35,17 @@ const SubscriptionPlans = () => {
         <p className="text-[#0A0A0A] text-xl mb-4">Pricing Model</p>
 
         <div className="grid grid-cols-12 gap-6">
-          <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] col-span-4">
+          <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] col-span-12 md:col-span-4">
             <p className="text-sm text-[#4A5565]">Pricing Based On</p>
             <p className="text-[#0A0A0A] text-lg mt-2">Employee Count</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] col-span-4">
+          <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] col-span-12  md:col-span-4">
             <p className="text-sm text-[#4A5565]">Default Trial Period</p>
             <p className="text-[#0A0A0A] text-lg mt-2">14 Days</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] col-span-4">
+          <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] col-span-12  md:col-span-4">
             <p className="text-sm text-[#4A5565]">Total Active Plans</p>
             <p className="text-[#0A0A0A] text-lg mt-2">3</p>
           </div>

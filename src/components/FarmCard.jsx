@@ -15,7 +15,7 @@ function FarmCard({ farm, onStatusChange }) {
     statusConfig[farm.status] ?? "bg-gray-100 text-gray-600";
 
   return (
-    <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex flex-col gap-4 shadow-sm hover:shadow-md transition col-span-4">
+    <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex flex-col gap-4 shadow-sm hover:shadow-md transition col-span-12 md:col-span-4">
       
       {/* Header */}
       <div className="flex items-start justify-between">

@@ -7,7 +7,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import farms from "../../data/farms.json";
 
 const StatCard = ({ icon, title, value, sub }) => (
-  <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex gap-4 col-span-4">
+  <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex gap-4 col-span-12 md:col-span-4">
     <div className="text-indigo-600 mt-1">{icon}</div>
     <div>
       <p className="text-sm text-[#4A5565]">{title}</p>
@@ -65,8 +65,9 @@ const FarmDetails = () => {
       </div>
 
       {/* Header */}
-      <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] md:flex items-center md:justify-between gap-5  ">
+
+      <div className="flex items-center gap-4">
           <div className="p-3 bg-orange-100 rounded-lg text-orange-600">
             <HiOfficeBuilding size={22} />
           </div>
@@ -83,14 +84,14 @@ const FarmDetails = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button className="px-4 py-2 rounded-md border border-[#D08700] text-[#D08700] hover:bg-orange-50">
+        <div className="flex items-center gap-3 mt-3 md:mt-0 justify-center">
+          <button className="md:px-4 px-2 py-2 rounded-md border border-[#D08700] text-[#D08700] hover:bg-orange-50">
             Suspend Farm
           </button>
-          <button className="px-4 py-2 rounded-md border border-[#D1D5DC] text-[#0A0A0A] hover:bg-gray-50 flex items-center gap-2">
+          <button className="md:px-4 px-2 py-2 rounded-md border border-[#D1D5DC] text-[#0A0A0A] hover:bg-gray-50 flex items-center gap-2">
             <MdRestartAlt /> Reset Access
           </button>
-          <button className="px-4 py-2 rounded-md border border-[#E7000B] text-[#E7000B] hover:bg-red-50 flex items-center gap-2">
+          <button className="md:px-4 px-2 py-2 rounded-md border border-[#E7000B] text-[#E7000B] hover:bg-red-50 flex items-center gap-2">
             <MdDelete /> Delete
           </button>
         </div>

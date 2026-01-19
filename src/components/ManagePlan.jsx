@@ -5,7 +5,7 @@ import { FiEdit } from "react-icons/fi";
 
 const Card = ({ name, price, features, employees, farms }) => {
   return (
-    <div className="bg-white rounded-lg border-2 border-[#E5E7EB] py-8 px-6 flex flex-col hover:shadow-lg transition-all duration-300">
+    <div className="bg-white rounded-lg border-2 border-[#E5E7EB] py-8 px-6 flex flex-col hover:shadow-lg transition-all duration-300 md:col-span-4">
       {/* Header + Actions */}
       <div className="flex items-start justify-between">
         <div>
@@ -112,7 +112,7 @@ const ManagePlan = () => {
   return (
     <div className="">
       {/* Cards */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-12  gap-6">
         {plans.map((plan, i) => (
           <Card
             key={i}

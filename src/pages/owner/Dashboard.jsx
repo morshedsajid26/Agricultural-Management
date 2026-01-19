@@ -44,7 +44,7 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-12 gap-6 mt-6">
-        <div className="col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Total Farms</p>
@@ -65,7 +65,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Active Subscriptions</p>
@@ -86,7 +86,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Trial Farms</p>
@@ -107,7 +107,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Total Users</p>
@@ -128,7 +128,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Monthly Revenue</p>
@@ -149,7 +149,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">System Alerts</p>
@@ -170,14 +170,14 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="col-span-8 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-8 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6 overflow-x-scroll hide-scrollbar">
           <h3 className="text-2xl mb-4 text-[#0A0A0A]">
            Recent Farms
           </h3>
           <RecentFarms />
         </div>
 
-        <div className="col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
+        <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
           <h3 className="text-2xl mb-4 text-[#0A0A0A]">
             System Alerts
           </h3>
