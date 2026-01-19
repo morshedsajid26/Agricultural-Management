@@ -31,7 +31,7 @@ import Success from "../pages/auth/Success";
 const router = createBrowserRouter([
   //  AUTH ROUTES
   {
-    path: "/auth",
+    path: "auth",
     element: <AuthLayout />,
     children: [
       { path: "login", element: <LogIn /> },
