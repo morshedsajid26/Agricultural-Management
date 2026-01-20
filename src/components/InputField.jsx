@@ -21,7 +21,7 @@ const InputField = ({
         placeholder={placeholder}
         value={value}           
         onChange={onChange}     
-        className={`border border-[#D1D5DC]  outline-none p-4 text-[#0A0A0A]/50  placeholder:text-[#0A0A0A]/50 rounded-2xl ${inputClass}`}
+        className={`border border-[#D1D5DC]  outline-none p-4 text-[#364153] placeholder:text-[#0A0A0A]/50 rounded-2xl ${inputClass}`}
       />
     </div>
   );

@@ -268,7 +268,7 @@ const SopManagement = () => {
       </div>
 
       {/* ===== TABLE ===== */}
-      <div className="bg-white rounded-lg border-2 border-[#E5E7EB] mt-6 overflow-x-scroll">
+      <div className="bg-white rounded-lg border-2 border-[#E5E7EB] mt-6 overflow-x-scroll md:overflow-hidden">
         <Table TableHeads={TableHeads} TableRows={paginatedData} />
       </div>
 

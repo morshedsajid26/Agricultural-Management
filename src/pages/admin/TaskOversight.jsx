@@ -195,7 +195,7 @@ const TaskOversight = () => {
         </div>
 
         {/* ===== Table ===== */}
-        <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black overflow-x-scroll">
+        <div className="col-span-12 bg-white rounded-lg border-2 border-[#E5E7EB] text-black overflow-x-scroll md:overflow-hidden">
           <Table TableHeads={TableHeads} TableRows={paginatedData} />
         </div>
       </div>
