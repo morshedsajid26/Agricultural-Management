@@ -276,7 +276,7 @@ const UserManagement = () => {
             setSearch(e.target.value);
             setCurrentPage(1); // reset page on search
           }}
-          className="w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#0A0A0A]/50 placeholder:text-[#0A0A0A]/50"
+          className="md:w-[40%] w-full pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#0A0A0A]/50 placeholder:text-[#0A0A0A]/50"
         />
       </div>
 
