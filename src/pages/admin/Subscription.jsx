@@ -119,7 +119,7 @@ const Subscription = () => {
       <div>
         <h3 className="text-[#0A0A0A] text-xl mt-10 mb-4">Billing History</h3>
 
-        <div className="bg-white rounded-lg border-2 border-[#E5E7EB] overflow-x-scroll">
+        <div className="bg-white rounded-lg border-2 border-[#E5E7EB] overflow-x-scroll md:overflow-x-hidden">
           <Table TableHeads={TableHeads} TableRows={TableRows} />
         </div>
       </div>

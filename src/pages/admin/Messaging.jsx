@@ -177,21 +177,21 @@ const Messaging = () => {
         {activeTab === "oversight" && (
           <div>
             <div className="grid grid-cols-12 gap-6 mt-6">
-              <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-12 md:col-span-12">
+              <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-12 md:col-span-4">
                 <p className="text-sm text-gray-500">Total Messages</p>
                 <p className={`text-2xl text-[#0A0A0A] font-semibold mt-1 `}>
                   {totalMessages}
                 </p>
               </div>
 
-              <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-12 md:col-span-12">
+              <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-12 md:col-span-4">
                 <p className="text-sm text-gray-500">Unread Messages</p>
                 <p className={`text-2xl text-[#F54900] font-semibold mt-1 `}>
                   {unreadCount}
                 </p>
               </div>
 
-              <div className="bg-white rounded-lg border-2 border-[#E5E7EB] p-6 col-span-12 md:col-span-12 ">
+              <div className="bg-white rounded-lg border-2 border-[#E5E7EB] p-6 col-span-12 md:col-span-4 ">
                 <div>
                   <p className="text-sm text-gray-500">Messaging Status</p>
                   <div className="flex items-center gap-2 mt-1">

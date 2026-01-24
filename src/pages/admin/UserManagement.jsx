@@ -10,9 +10,9 @@ import { FiEdit, FiUserCheck, FiUserX } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import Pagination from "../../components/Pagination";
 
-const UserManagement = () => {
+const UserManagement = ({ user, setUser }) => {
   // 🔹 Raw users data (API later)
-  const users = [
+  const [users, setUsers] = useState([
     {
       id: 1,
       name: "John Doe",
@@ -30,7 +30,7 @@ const UserManagement = () => {
       joinDate: "2022-11-22",
     },
     {
-      id: 1,
+      id: 3,
       name: "John Doe",
       email: "john@gmail.com",
       role: "Manager",
@@ -38,7 +38,7 @@ const UserManagement = () => {
       joinDate: "2023-01-15",
     },
     {
-      id: 2,
+      id: 4,
       name: "Jane Smith",
       email: "jane@gmail.com",
       role: "Employee",
@@ -46,7 +46,7 @@ const UserManagement = () => {
       joinDate: "2022-11-22",
     },
     {
-      id: 1,
+      id: 5,
       name: "John Doe",
       email: "john@gmail.com",
       role: "Manager",
@@ -54,7 +54,7 @@ const UserManagement = () => {
       joinDate: "2023-01-15",
     },
     {
-      id: 2,
+      id: 6,
       name: "Jane Smith",
       email: "jane@gmail.com",
       role: "Employee",
@@ -62,7 +62,7 @@ const UserManagement = () => {
       joinDate: "2022-11-22",
     },
     {
-      id: 1,
+      id: 7,
       name: "John Doe",
       email: "john@gmail.com",
       role: "Manager",
@@ -70,7 +70,7 @@ const UserManagement = () => {
       joinDate: "2023-01-15",
     },
     {
-      id: 2,
+      id: 8,
       name: "Jane Smith",
       email: "jane@gmail.com",
       role: "Employee",
@@ -78,7 +78,7 @@ const UserManagement = () => {
       joinDate: "2022-11-22",
     },
     {
-      id: 1,
+      id: 9,
       name: "John Doe",
       email: "john@gmail.com",
       role: "Manager",
@@ -86,7 +86,7 @@ const UserManagement = () => {
       joinDate: "2023-01-15",
     },
     {
-      id: 2,
+      id: 10,
       name: "Jane Smith",
       email: "jane@gmail.com",
       role: "Employee",
@@ -94,7 +94,7 @@ const UserManagement = () => {
       joinDate: "2022-11-22",
     },
     {
-      id: 1,
+      id: 11,
       name: "John Doe",
       email: "john@gmail.com",
       role: "Manager",
@@ -102,7 +102,7 @@ const UserManagement = () => {
       joinDate: "2023-01-15",
     },
     {
-      id: 2,
+      id: 12,
       name: "Jane Smith",
       email: "jane@gmail.com",
       role: "Employee",
@@ -110,7 +110,7 @@ const UserManagement = () => {
       joinDate: "2022-11-22",
     },
     {
-      id: 1,
+      id: 13,
       name: "John Doe",
       email: "john@gmail.com",
       role: "Manager",
@@ -118,14 +118,14 @@ const UserManagement = () => {
       joinDate: "2023-01-15",
     },
     {
-      id: 2,
+      id: 14,
       name: "Jane Smith",
       email: "jane@gmail.com",
       role: "Employee",
       status: "Inactive",
       joinDate: "2022-11-22",
     },
-  ];
+  ]);
 
   // 🔍 Search & pagination state
   const [search, setSearch] = useState("");
@@ -139,6 +139,23 @@ const UserManagement = () => {
       u.name.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const deleteUser = (id) => {
+    setUsers((prev) => prev.filter((u) => u.id !== id));
+  };
+
+  const toggleUserStatus = (id) => {
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === id
+          ? {
+              ...u,
+              status: u.status === "Active" ? "Inactive" : "Active",
+            }
+          : u,
+      ),
+    );
+  };
 
   // 🔹 Pagination logic
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -214,30 +231,22 @@ const UserManagement = () => {
             </button>
           </Link>
 
-          {/* Status toggle */}
-          {row.status === "Active" ? (
-            <button
-              title="Deactivate"
-              className="text-[#F54900]"
-              onClick={() => console.log("Deactivate", row.id)}
-            >
-              <FiUserX />
-            </button>
-          ) : (
-            <button
-              title="Activate"
-              className="text-[#00A63E]"
-              onClick={() => console.log("Activate", row.id)}
-            >
-              <FiUserCheck />
-            </button>
-          )}
+          <button
+            title={row.status === "Active" ? "Deactivate" : "Activate"}
+            className={`cursor-pointer ${
+              row.status === "Active" ? "text-[#F54900]" : "text-[#00A63E]"
+            }`}
+            onClick={() => toggleUserStatus(row.id)}
+          >
+            {row.status === "Active" ? <FiUserX /> : <FiUserCheck />}
+          </button>
 
           {/* Delete */}
           <button
             title="Delete"
-            className="text-[#E7000B]"
-            onClick={() => console.log("Delete", row.id)}
+            className="text-[#E7000B] cursor-pointer"
+            // onClick={() => console.log("Delete", row.id)}
+            onClick={() => deleteUser(row.id)}
           >
             <RiDeleteBinLine />
           </button>
@@ -252,7 +261,7 @@ const UserManagement = () => {
       <div className="flex items-center justify-between">
         <div>
           <Breadcrumb />
-         <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
+          <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
             Manage employees and managers for Farm check
           </p>
         </div>
