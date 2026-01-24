@@ -1,65 +1,102 @@
-
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import InputField from "../../components/InputField";
 import Password from "../../components/Password";
-import { Link } from "react-router-dom";
 import Image from "../../components/Image";
+
 import { MdLogin } from "react-icons/md";
 
 const LogIn = () => {
-     // 🔐 Role (later auth/context/localStorage)
-  const role = "Admin"; // Admin | Owner
+  // 🔐 ROLE STATE
+  const [role, setRole] = useState("Admin"); // Admin | Owner
 
+  // 🔹 Role based text
   const roleText = {
     Admin: {
       title: "Farm Admin",
-      subtitle:"Access your farm management dashboard"
+      subtitle: "Access your farm management dashboard",
     },
     Owner: {
       title: "System Owner",
-      subtitle:"Secure access to farm management platform"
+      subtitle: "Secure access to farm management platform",
     },
   };
 
+  // 🔀 Role change handler
+  const handleRoleChange = (newRole) => {
+    setRole(newRole);
+  };
 
   return (
-    <main className="bg-white grid justify-center items-center overflow-y-auto hide-scrollbar py-10 px-11 rounded-3xl  ">
-      <form className="gap-5 flex flex-col items-center w-[450px] ">
-
+    <main className="bg-white grid justify-center items-center overflow-y-auto hide-scrollbar py-10 px-11 rounded-3xl">
+      <form className="gap-5 flex flex-col items-center w-[450px]">
+        {/* Logo */}
         <Image src="/authLogo.png" alt="logo" />
-        <h3 className="font-inter font-medium text-[32px] text-[#333333] ">
-          {roleText[role]?.title}  Login 
+
+        {/* Title */}
+        <h3 className="font-inter font-medium text-[32px] text-[#333333]">
+          {roleText[role].title} Login
         </h3>
 
-        <p className="font-inter  text-[#333333]">
-          {roleText[role]?.subtitle}
+        {/* Subtitle */}
+        <p className="font-inter text-[#333333]">
+          {roleText[role].subtitle}
         </p>
 
-        
+        {/* Email */}
         <InputField
-          type={`email`}
-          inputClass={`rounded-lg`}
-          label={`Email Address `}
-          placeholder={``}
+          type="email"
+          label="Email Address"
+          inputClass="rounded-lg"
         />
+
+        {/* Password */}
         <Password
           label="Password"
-          inputClass={`rounded-lg`}
-          // placeholder="Enter your password"
+          inputClass="rounded-lg"
         />
 
-        <a href="/auth/reset/password" className='text-[#F6A62D]'>Forgot Password?</a>
-
-       
-
-        <Link className="w-full" to="/">
-          <button className="bg-[#F6A62D] text-[#ffffff]  w-full py-3 rounded-lg cursor-pointer mt-12 flex items-center justify-center gap-2 ">
-            <MdLogin />
-          Login as {roleText[role]?.title} 
-          </button>
+        {/* Forgot password */}
+        <Link
+          to="/auth/reset/password"
+          className="text-[#F6A62D] self-end text-sm"
+        >
+          Forgot Password?
         </Link>
 
+        {/* 🔀 ROLE SWITCH */}
+        <div className="mt-4 flex gap-2 w-full">
+          {["Owner", "Admin"].map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => handleRoleChange(r)}
+              className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition cursor-pointer
+                ${
+                  role === r
+                    ? "bg-[#F6A62D] text-white"
+                    : "bg-[#F1F5F9] text-[#364153]"
+                }`}
+            >
+              {r}
+            </button>
+          ))}
+        </div>
+
+        {/* LOGIN BUTTON */}
+        <Link
+          to={role === "Owner" ? "/" : "/admin/home"}
+          className="w-full"
+        >
+          <button
+            type="button"
+            className="bg-[#F6A62D] text-white w-full py-3 rounded-lg cursor-pointer mt-8 flex items-center justify-center gap-2"
+          >
+            <MdLogin />
+            Login as {roleText[role].title}
+          </button>
+        </Link>
       </form>
     </main>
   );
