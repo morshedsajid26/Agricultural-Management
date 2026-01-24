@@ -20,7 +20,7 @@ const SopManagement = () => {
   const itemsPerPage = 10;
 
   // ===== SOP DATA =====
-  const sopData = [
+const [sopData, setSopData] = useState([
     {
       id: 1,
       title: "Safety Protocols",
@@ -54,7 +54,7 @@ const SopManagement = () => {
       fileUrl: "/docs/training-guide.pdf",
     },
     {
-      id: 1,
+      id: 5,
       title: "Safety Protocols",
       category: "Health",
       uploadDate: "2026-01-05",
@@ -62,7 +62,7 @@ const SopManagement = () => {
       fileUrl: "/docs/safety-protocols.pdf",
     },
     {
-      id: 2,
+      id: 6,
       title: "Equipment Maintenance",
       category: "Calves",
       uploadDate: "2026-01-03",
@@ -70,7 +70,7 @@ const SopManagement = () => {
       fileUrl: "/docs/equipment-maintenance.pdf",
     },
     {
-      id: 3,
+      id: 7,
       title: "Compliance Checklist",
       category: "Maintenance",
       uploadDate: "2026-01-04",
@@ -78,14 +78,14 @@ const SopManagement = () => {
       fileUrl: "/docs/compliance-checklist.pdf",
     },
     {
-      id: 4,
+      id: 8,
       title: "Worker Training Guide",
       category: "Emergencies",
       uploadDate: "2026-01-06",
       details: "doc 04",
       fileUrl: "/docs/training-guide.pdf",
     },
-  ];
+  ]);
 
   // ===== DOWNLOAD HANDLER =====
   const handleDownload = (fileUrl, title) => {
@@ -95,6 +95,10 @@ const SopManagement = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+   const deleteSOP = (id) => {
+    setSopData((prev) => prev.filter((u) => u.id !== id));
   };
 
   // ===== FILTER LOGIC (SEARCH + CATEGORY) =====
@@ -194,7 +198,8 @@ const SopManagement = () => {
           <button
             title="Delete"
             className="text-red-600 hover:text-red-800"
-            onClick={() => console.log("Delete SOP", row.id)}
+            // onClick={() => console.log("Delete", row.id)}
+            onClick={() => deleteSOP(row.id)}
           >
             <RiDeleteBinLine />
           </button>
