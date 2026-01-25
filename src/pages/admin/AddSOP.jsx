@@ -50,10 +50,10 @@ const AddSOP = () => {
 
          
 
-          <div className="flex bg-[#FFF4E5] rounded-lg p-1.5 w-fit mt-6 col-span-6">
+          <div className="flex bg-[#FFF4E5] rounded-lg p-1.5 w-fit mt-6 md:col-span-6 col-span-12">
             <button
               onClick={() => setActiveTab("upload")}
-              className={`px-20 py-2 rounded-md cursor-pointer ${
+              className={`md:px-20 px-[38px] py-2 rounded-md cursor-pointer ${
                 activeTab === "upload"
                   ? "bg-[#F6A62D] text-white"
                   : "text-[#4A5565]"
@@ -64,7 +64,7 @@ const AddSOP = () => {
 
             <button
               onClick={() => setActiveTab("create")}
-              className={`px-20 py-2 rounded-md cursor-pointer ${
+              className={`md:px-20 px-[38px] py-2 rounded-md cursor-pointer ${
                 activeTab === "create"
                   ? "bg-[#F6A62D] text-white"
                   : "text-[#4A5565]"
