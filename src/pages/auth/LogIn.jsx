@@ -67,7 +67,7 @@ const LogIn = () => {
         <button
           type="button"
           onClick={handleLogin}
-          className="bg-[#F6A62D] text-white w-full py-3 rounded-lg mt-6 flex justify-center gap-2 cursor-pointer"
+          className="bg-[#F6A62D] text-white w-full py-3 rounded-lg mt-6 flex items-center justify-center gap-2 cursor-pointer"
         >
           <MdLogin />
           Login as {roleText[role].title}
