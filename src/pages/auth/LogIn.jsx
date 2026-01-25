@@ -3,6 +3,7 @@ import InputField from "../../components/InputField";
 import Password from "../../components/Password";
 import Image from "../../components/Image";
 import { MdLogin } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const LogIn = () => {
   const [role, setRole] = useState("Owner");
@@ -46,6 +47,14 @@ const LogIn = () => {
           inputClass="rounded-lg"
         />
         <Password label="Password" inputClass="rounded-lg" />
+
+        {/* Forgot password */}
+        <Link
+          to="/auth/reset/password"
+          className="text-[#F6A62D] self-end text-sm"
+        >
+          Forgot Password?
+        </Link>
 
         {/* ROLE SWITCH */}
         <div className="flex gap-2 w-full">
