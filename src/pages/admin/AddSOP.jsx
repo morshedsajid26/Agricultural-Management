@@ -82,7 +82,7 @@ const AddSOP = () => {
             {activeTab === "create" && <CreateDigitalModule />}
           </div>
 
-          <p className="col-span-2 text-[#364153] my-6">
+          <p className="col-span-12 text-[#364153] my-6">
             Allow Managers to view this SOP
           </p>
 
