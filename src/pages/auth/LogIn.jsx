@@ -31,8 +31,8 @@ const LogIn = () => {
   };
 
   return (
-    <main className="bg-white grid justify-center items-center py-10 px-11 rounded-3xl">
-      <form className="gap-5 flex flex-col items-center w-[450px]">
+    <main className="bg-white grid justify-center items-center py-10 md:px-11 px-15 rounded-3xl">
+      <form className="gap-5 flex flex-col items-center md:w-[450px] w-full">
         <Image src="/authLogo.png" alt="logo" />
 
         <h3 className="text-[32px] font-medium">
