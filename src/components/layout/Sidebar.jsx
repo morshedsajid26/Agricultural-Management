@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import Image from "../Image";
 import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
@@ -53,7 +54,13 @@ export default function Sidebar({ isOpen, onClose }) {
   const handleLogout = () => {
     localStorage.removeItem("userRole");
     localStorage.removeItem("isLoggedIn");
-    navigate("/auth/login");
+
+    
+    setTimeout(() => {
+      navigate("/auth/login");
+      toast.success('Logged out successfully!')
+    
+  }, 1000);
   };
 
   if (!role) return null; // prevent flicker
@@ -67,6 +74,7 @@ export default function Sidebar({ isOpen, onClose }) {
           onClick={onClose}
         />
       )}
+      
 
       {/* Sidebar */}
       <aside

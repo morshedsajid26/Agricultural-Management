@@ -4,9 +4,11 @@ import Password from "../../components/Password";
 import Image from "../../components/Image";
 import { MdLogin } from "react-icons/md";
 import { Link } from "react-router-dom";
+import toast, {  Toaster } from "react-hot-toast";
 
 const LogIn = () => {
   const [role, setRole] = useState("Owner");
+    const [loading, setLoading] = useState(false);
 
   const roleText = {
     Admin: {
@@ -26,12 +28,17 @@ const LogIn = () => {
     localStorage.setItem("userRole", role);
     localStorage.setItem("isLoggedIn", "true");
 
+    toast.success('Logged in successfully!')
+    
     //  Redirect
+    setTimeout(() => {
     window.location.href = roleText[role].redirect;
+  }, 1000);
   };
 
   return (
     <main className="bg-white grid justify-center items-center py-10 md:px-11 px-15 rounded-3xl">
+      <div><Toaster position="top-center"  /></div>
       <form className="gap-5 flex flex-col items-center md:w-[450px] w-full">
         <Image src="/authLogo.png" alt="logo" />
 
