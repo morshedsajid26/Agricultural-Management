@@ -106,11 +106,11 @@ const CreateFarm = () => {
         </div>
 
         <div className="grid grid-cols-12  gap-4 mt-4  ">
-          <button className="py-3 px-5 col-span-10  bg-[#F6A62D] text-white] rounded-lg cursor-pointer">
+          <button className="py-3 px-5 col-span-8 md:col-span-10  bg-[#F6A62D] text-white] rounded-lg cursor-pointer">
             Create Farm
           </button>
 
-          <button className="py-3 px-5 col-span-2   bg-[#E5E7EB] text-[#364153] rounded-lg cursor-pointer">
+          <button className="py-3 px-5 col-span-4 md:col-span-2   bg-[#E5E7EB] text-[#364153] rounded-lg cursor-pointer">
             Cancel
           </button>
         </div>
