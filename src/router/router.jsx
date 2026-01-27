@@ -27,6 +27,7 @@ import LogIn from "../pages/auth/LogIn";
 import ResetPassword from "../pages/auth/ResetPassword";
 import NewPassword from "../pages/auth/NewPassword";
 import Success from "../pages/auth/Success";
+import OTP from "../pages/auth/OTP";
 
 const router = createBrowserRouter([
   //  AUTH ROUTES
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
     children: [
       { path: "login", element: <LogIn /> },
       { path: "reset/password", element: <ResetPassword /> },
+      { path: "verify/otp", element: <OTP /> },
       { path: "new/password", element: <NewPassword /> },
       { path: "success", element: <Success /> },
     ],

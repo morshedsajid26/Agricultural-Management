@@ -17,7 +17,7 @@ const ResetPassword = () => {
         </p>
 
         <p className="font-inter  text-[#333333] mb-5">
-         Enter your email to receive a reset link
+         Enter your email to receive a OTP
         </p>
 
         
@@ -31,7 +31,7 @@ const ResetPassword = () => {
 
        
 
-        <Link className="w-full" to="/auth/new/password">
+        <Link className="w-full" to="/auth/verify/otp">
           <button className="bg-[#F6A62D] text-[#ffffff]  w-full py-3 rounded-lg cursor-pointer mt-12">
            Send
           </button>
