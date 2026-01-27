@@ -50,10 +50,10 @@ const MessageList = ({ messages, setMessages }) => {
           />
         </div>
 
-        <div className="col-span-4 flex justify-end items-center">
+        <div className="col-span-4 flex justify-end items-center ">
           <button
             onClick={clearAll}
-            className="bg-[#E7000B] text-white px-4 md:py-4 py-1 rounded-lg flex items-center gap-2"
+            className="bg-[#E7000B] text-white px-4 md:py-4 py-1 rounded-lg flex items-center gap-2 cursor-pointer"
           >
             <FiTrash2 size={20} />
             Clear All Messages
@@ -91,7 +91,7 @@ const MessageList = ({ messages, setMessages }) => {
 
               <button
                 onClick={() => deleteMessage(msg.id)}
-                className="text-red-500 hover:text-red-700"
+                className="text-red-500 hover:text-red-700 cursor-pointer"
               >
                 <FiTrash2 size={18} />
               </button>
