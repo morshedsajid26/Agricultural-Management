@@ -45,6 +45,8 @@ const LogIn = () => {
       Cookies.set("token", userData.accessToken);
       Cookies.set("refreshToken", userData.refreshToken);
       Cookies.set("userRole", userRole);
+      Cookies.set("userName", userData.user.name);
+
 
       toast.success("Logged in successfully!");
       console.log("Navigating now...");

@@ -10,9 +10,10 @@ export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { logOutUser, user } = useAuth();
-  
+
   // Use role from auth context or cookie as fallback
   const role = user?.role || Cookies.get("userRole");
+  const userName = user?.name || Cookies.get("userName");
 
   useEffect(() => {
     if (!role) {
@@ -23,24 +24,68 @@ export default function Sidebar({ isOpen, onClose }) {
   //  ROLE-BASED MENU
   const sidebarMenu = {
     FARM_ADMIN: [
-      { name: "Dashboard", path: "/admin/home", icon: "material-symbols:dashboard-outline" },
-      { name: "SOP Management", path: "/admin/sop/management", icon: "material-symbols:news-outline-rounded" },
-      { name: "User Management", path: "/admin/user/management", icon: "material-symbols:group" },
-      { name: "Task Oversight", path: "/admin/task/oversight", icon: "material-symbols:select-check-box" },
-      { name: "Messaging", path: "/admin/messaging/oversight", icon: "material-symbols:chat-bubble-outline" },
-      { name: "Subscription", path: "/admin/subscription/billing", icon: "material-symbols:credit-card-outline" },
-      { name: "Settings", path: "/admin/farm/settings", icon: "material-symbols:settings-outline" },
+      {
+        name: "Dashboard",
+        path: "/admin/home",
+        icon: "material-symbols:dashboard-outline",
+      },
+      {
+        name: "SOP Management",
+        path: "/admin/sop/management",
+        icon: "material-symbols:news-outline-rounded",
+      },
+      {
+        name: "User Management",
+        path: "/admin/user/management",
+        icon: "material-symbols:group",
+      },
+      {
+        name: "Task Oversight",
+        path: "/admin/task/oversight",
+        icon: "material-symbols:select-check-box",
+      },
+      {
+        name: "Messaging",
+        path: "/admin/messaging/oversight",
+        icon: "material-symbols:chat-bubble-outline",
+      },
+      {
+        name: "Subscription",
+        path: "/admin/subscription/billing",
+        icon: "material-symbols:credit-card-outline",
+      },
+      {
+        name: "Settings",
+        path: "/admin/farm/settings",
+        icon: "material-symbols:settings-outline",
+      },
     ],
     SYSTEM_OWNER: [
-      { name: "Dashboard", path: "/", icon: "material-symbols:dashboard-outline" },
-      { name: "Farm Management", path: "/owner/farm/management", icon: "material-symbols:agriculture-outline" },
-      { name: "Subscription", path: "/owner/subscription/plans", icon: "material-symbols:credit-card-outline" },
-      { name: "Settings", path: "/owner/system/settings", icon: "material-symbols:settings-outline" },
+      {
+        name: "Dashboard",
+        path: "/",
+        icon: "material-symbols:dashboard-outline",
+      },
+      {
+        name: "Farm Management",
+        path: "/owner/farm/management",
+        icon: "material-symbols:agriculture-outline",
+      },
+      {
+        name: "Subscription",
+        path: "/owner/subscription/plans",
+        icon: "material-symbols:credit-card-outline",
+      },
+      {
+        name: "Settings",
+        path: "/owner/system/settings",
+        icon: "material-symbols:settings-outline",
+      },
     ],
   };
 
   const roleText = {
-    FARM_ADMIN: { title: "Farm Check", name: "John Anderson", subtitle: "Farm Admin" },
+    FARM_ADMIN: { title: "Farm Check", subtitle: "Farm Admin" },
     SYSTEM_OWNER: { title: "Farm Check", subtitle: "Platform Owner" },
   };
 
@@ -51,8 +96,8 @@ export default function Sidebar({ isOpen, onClose }) {
 
   //  LOGOUT
   const handleLogout = async () => {
-      await logOutUser();
-      navigate("/auth/login");
+    await logOutUser();
+    navigate("/auth/login");
   };
 
   if (!role) return null; // prevent flicker
@@ -66,7 +111,6 @@ export default function Sidebar({ isOpen, onClose }) {
           onClick={onClose}
         />
       )}
-      
 
       {/* Sidebar */}
       <aside
@@ -91,10 +135,13 @@ export default function Sidebar({ isOpen, onClose }) {
 
             <p className="text-sm mt-4">{roleText[role]?.title}</p>
 
-            {roleText[role]?.name && (
+            {/* {roleText[role]?.name && (
               <p className="text-sm text-gray-500 mt-1">
                 {roleText[role]?.name}
               </p>
+            )} */}
+            {userName && (
+              <p className="text-sm text-gray-500 mt-1">{userName}</p>
             )}
 
             <p className="text-xs mt-2 px-2 py-1 rounded bg-[#FFF6E9] text-[#F6A62D] inline-block">
