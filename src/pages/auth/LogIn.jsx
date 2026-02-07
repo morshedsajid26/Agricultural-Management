@@ -60,9 +60,7 @@ const LogIn = () => {
     },
 
     onError: (error) => {
-      console.log("LOGIN ERROR:", error);
       toast.error(
-        console.log(error),
         error.response?.data?.message || "Login failed!"
       );
     },
