@@ -10,6 +10,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../config/api";
 
+
 const LogIn = () => {
   const navigate = useNavigate();
 
@@ -20,10 +21,12 @@ const LogIn = () => {
   const roleText = {
     FARM_ADMIN: {
       title: "Farm Admin",
+      Subtitle: "Access your farm management dashboard",
       redirect: "/admin/home",
     },
     SYSTEM_OWNER: {
       title: "System Owner",
+      Subtitle: "Secure access to farm management platform",
       redirect: "/",
     },
   };
@@ -89,6 +92,12 @@ const LogIn = () => {
         <h3 className="text-[32px] font-medium">
           {roleText[role].title} Login
         </h3>
+
+        <p className="text-[#4A5565]">
+          {roleText[role].Subtitle}
+        </p>
+
+
 
         <InputField
           type="email"

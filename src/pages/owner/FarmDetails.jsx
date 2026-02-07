@@ -55,7 +55,7 @@ const FarmDetails = () => {
     mutationFn: async () => {
       const newStatus =
         farm.status === "ACTIVE"
-          ? "SUSPENDED"
+          ? "INACTIVE"
           : "ACTIVE";
 
       return await axiosSecure.patch(
@@ -100,7 +100,7 @@ const FarmDetails = () => {
 
   const statusStyles = {
     ACTIVE: "bg-green-100 text-green-600",
-    SUSPENDED: "bg-red-100 text-red-600",
+    INACTIVE: "bg-red-100 text-red-600",
     TRIAL: "bg-yellow-100 text-yellow-600",
   };
 
