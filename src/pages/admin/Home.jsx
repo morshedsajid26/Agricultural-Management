@@ -163,7 +163,7 @@ const Home = () => {
               <button className=" p-3 rounded-lg w-fit">
                 <FiUsers className="w-6 h-6 text-white " />
               </button>
-              <span className="text-white">Add New Employee</span>
+              <span className="text-white">Add New User</span>
             </div>
             </Link>
 
