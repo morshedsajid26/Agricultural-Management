@@ -1,52 +1,16 @@
 import React from "react";
 import Table from "./Table";
-import { FiEdit } from "react-icons/fi";
-import { RiDeleteBinLine } from "react-icons/ri";
 
-const RecentFarms = () => {
-  // ✅ unique ids
-  const TableRows = [
-    {
-      id: 1,
-      name: "Green Valley Farm",
-      status: "Active",
-      users: "45",
-      plan: "Professional",
-      revenue: "$499",
-    },
-    {
-      id: 2,
-      name: "Sunrise Agriculture",
-      status: "Trial",
-      users: "12",
-      plan: "Basic",
-      revenue: "$0",
-    },
-    {
-      id: 3,
-      name: "Ocean Breze Farms",
-      status: "Active",
-      users: "30",
-      plan: "Enterprise",
-      revenue: "$999",
-    },
-    {
-      id: 4,
-        name: "Mountain View Farm",
-        status: "Active",
-        users: "18",
-        plan: "Professional",
-        revenue: "$499",
-    },
-    {
-      id: 5,
-      name: "Riverdale Farms",
-      status: "Trail",
-      users: "10",
-      plan: "Basic",
-      revenue: "$0",
-    },
-  ];
+const RecentFarms = ({ farms = [] }) => {
+
+  const TableRows = farms.map((farm) => ({
+    id: farm.id,
+    name: farm.name,
+    status: farm.status, // ACTIVE / TRIAL
+    users: farm.users,
+    plan: farm.plan,
+    revenue: `$${farm.revenue}`,
+  }));
 
   const TableHeads = [
     {
@@ -61,9 +25,9 @@ const RecentFarms = () => {
       render: (row) => (
         <span
           className={`px-3 py-1 rounded-md text-sm font-medium ${
-            row.status === "Active"
+            row.status === "ACTIVE"
               ? "bg-green-100 text-green-700"
-              : "bg-[#FEF9C2] text-[#A65F00]"
+              : "bg-yellow-100 text-yellow-700"
           }`}
         >
           {row.status}
@@ -80,13 +44,16 @@ const RecentFarms = () => {
       key: "plan",
       width: "25%",
     },
-
     {
       Title: "Revenue",
       key: "revenue",
       width: "20%",
     },
   ];
+
+  if (!farms.length) {
+    return <div>No farms found</div>;
+  }
 
   return (
     <div>

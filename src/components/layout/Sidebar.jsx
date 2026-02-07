@@ -3,27 +3,26 @@ import { Icon } from "@iconify/react";
 import Image from "../Image";
 import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
-import toast, { Toaster } from "react-hot-toast";
+import useAuth from "../../hooks/useAuth";
+import Cookies from "js-cookie";
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
-
-  // ROLE (ONLY READ FROM LOCALSTORAGE)
-  const [role, setRole] = useState(null);
+  const { logOutUser, user } = useAuth();
+  
+  // Use role from auth context or cookie as fallback
+  const role = user?.role || Cookies.get("userRole");
 
   useEffect(() => {
-    const savedRole = localStorage.getItem("userRole");
-    if (!savedRole) {
+    if (!role) {
       navigate("/auth/login");
-    } else {
-      setRole(savedRole);
     }
-  }, [navigate]);
+  }, [role, navigate]);
 
   //  ROLE-BASED MENU
   const sidebarMenu = {
-    Admin: [
+    FARM_ADMIN: [
       { name: "Dashboard", path: "/admin/home", icon: "material-symbols:dashboard-outline" },
       { name: "SOP Management", path: "/admin/sop/management", icon: "material-symbols:news-outline-rounded" },
       { name: "User Management", path: "/admin/user/management", icon: "material-symbols:group" },
@@ -32,7 +31,7 @@ export default function Sidebar({ isOpen, onClose }) {
       { name: "Subscription", path: "/admin/subscription/billing", icon: "material-symbols:credit-card-outline" },
       { name: "Settings", path: "/admin/farm/settings", icon: "material-symbols:settings-outline" },
     ],
-    Owner: [
+    SYSTEM_OWNER: [
       { name: "Dashboard", path: "/", icon: "material-symbols:dashboard-outline" },
       { name: "Farm Management", path: "/owner/farm/management", icon: "material-symbols:agriculture-outline" },
       { name: "Subscription", path: "/owner/subscription/plans", icon: "material-symbols:credit-card-outline" },
@@ -41,8 +40,8 @@ export default function Sidebar({ isOpen, onClose }) {
   };
 
   const roleText = {
-    Admin: { title: "Farm Check", name: "John Anderson", subtitle: "Farm Admin" },
-    Owner: { title: "Farm Check", subtitle: "Platform Owner" },
+    FARM_ADMIN: { title: "Farm Check", name: "John Anderson", subtitle: "Farm Admin" },
+    SYSTEM_OWNER: { title: "Farm Check", subtitle: "Platform Owner" },
   };
 
   const navLinks = sidebarMenu[role] || [];
@@ -51,16 +50,9 @@ export default function Sidebar({ isOpen, onClose }) {
     location.pathname === path || location.pathname.startsWith(path + "/");
 
   //  LOGOUT
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("isLoggedIn");
-
-    
-    setTimeout(() => {
+  const handleLogout = async () => {
+      await logOutUser();
       navigate("/auth/login");
-      toast.success('Logged out successfully!')
-    
-  }, 1000);
   };
 
   if (!role) return null; // prevent flicker

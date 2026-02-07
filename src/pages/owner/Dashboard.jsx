@@ -9,8 +9,11 @@ import { LuDollarSign } from "react-icons/lu";
 import Table from "../../components/Table";
 import RecentFarms from "../../components/RecentFarms";
 import SystemAlerts from "../../components/SystemAlerts";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const Dashboard = () => {
+  const axiosSecure = useAxiosSecure();
   const alerts = [
     {
       id: 1,
@@ -31,6 +34,27 @@ const Dashboard = () => {
       time: "1 day ago",
     },
   ];
+  
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["systemOwnerDashboard"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/system-owner/dashboard");
+      return res.data.data; // directly data object return
+    },
+  });
+
+  if (isLoading) {
+    return <div className="p-10">Loading dashboard...</div>;
+  }
+
+  if (isError) {
+    return <div className="p-10 text-red-500">Failed to load dashboard</div>;
+  }
+
+  const metrics = data.metrics;
+  const farms = data.recentFarms;
+
 
   return (
     <div>
@@ -48,7 +72,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Total Farms</p>
-              <h2 className="text-3xl text-[#0A0A0A] my-1">5</h2>
+              <h2 className="text-3xl text-[#0A0A0A] my-1">{metrics.totalFarms}</h2>
             </div>
 
             <div className="bg-[#2B7FFF] p-3 rounded-lg w-fit">
@@ -69,7 +93,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Active Subscriptions</p>
-              <h2 className="text-3xl text-[#0A0A0A] my-1">38</h2>
+              <h2 className="text-3xl text-[#0A0A0A] my-1">{metrics.activeSubscriptions}</h2>
             </div>
 
             <div className="bg-[#00C950] p-3 rounded-lg w-fit">
@@ -90,7 +114,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Trial Farms</p>
-              <h2 className="text-3xl text-[#0A0A0A] my-1">9</h2>
+              <h2 className="text-3xl text-[#0A0A0A] my-1">{metrics.trialFarms}</h2>
             </div>
 
             <div className="bg-[#F0B100] p-3 rounded-lg w-fit">
@@ -111,7 +135,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Total Users</p>
-              <h2 className="text-3xl text-[#0A0A0A] my-1">1247</h2>
+              <h2 className="text-3xl text-[#0A0A0A] my-1">{metrics.totalUsers}</h2>
             </div>
 
             <div className="bg-[#AD46FF] p-3 rounded-lg w-fit">
@@ -132,7 +156,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">Monthly Revenue</p>
-              <h2 className="text-3xl text-[#0A0A0A] my-1">$24,850</h2>
+              <h2 className="text-3xl text-[#0A0A0A] my-1">{metrics.monthlyRevenue}</h2>
             </div>
 
             <div className="bg-[#00BC7D] p-3 rounded-lg w-fit">
@@ -153,7 +177,7 @@ const Dashboard = () => {
           <div className="flex justify-between items-center">
             <div>
               <p className="text-[#4A5565] ">System Alerts</p>
-              <h2 className="text-3xl text-[#0A0A0A] my-1">5</h2>
+              <h2 className="text-3xl text-[#0A0A0A] my-1">{metrics.systemAlerts}</h2>
             </div>
 
             <div className="bg-[#FB2C36] p-3 rounded-lg w-fit">
@@ -174,7 +198,7 @@ const Dashboard = () => {
           <h3 className="text-2xl mb-4 text-[#0A0A0A]">
            Recent Farms
           </h3>
-          <RecentFarms />
+          <RecentFarms farms={farms} />
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">

@@ -3,42 +3,86 @@ import InputField from "../../components/InputField";
 import Password from "../../components/Password";
 import Image from "../../components/Image";
 import { MdLogin } from "react-icons/md";
-import { Link } from "react-router-dom";
-import toast, {  Toaster } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { BASE_URL } from "../../config/api";
 
 const LogIn = () => {
-  const [role, setRole] = useState("Owner");
-    const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const [role, setRole] = useState("SYSTEM_OWNER");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const roleText = {
-    Admin: {
+    FARM_ADMIN: {
       title: "Farm Admin",
-      subtitle: "Access your farm management dashboard",
       redirect: "/admin/home",
     },
-    Owner: {
+    SYSTEM_OWNER: {
       title: "System Owner",
-      subtitle: "Secure access to farm management platform",
       redirect: "/",
     },
   };
 
-  const handleLogin = () => {
-    //  Save role
-    localStorage.setItem("userRole", role);
-    localStorage.setItem("isLoggedIn", "true");
+  const loginMutation = useMutation({
+    mutationFn: async (credentials) => {
+      const res = await axios.post(
+        `${BASE_URL}/auth/login`,
+        credentials
+      );
+      return res.data;
+    },
 
-    toast.success('Logged in successfully!')
-    
-    //  Redirect
-    setTimeout(() => {
-    window.location.href = roleText[role].redirect;
-  }, 1000);
+    onSuccess: (response) => {
+      const userData = response.data;
+      const userRole = userData.user.role;
+
+      // Save tokens
+      Cookies.set("token", userData.accessToken);
+      Cookies.set("refreshToken", userData.refreshToken);
+      Cookies.set("userRole", userRole);
+
+      toast.success("Logged in successfully!");
+      console.log("Navigating now...");
+
+      // Redirect based on backend role
+      setTimeout(() => {
+        if (userRole === "SYSTEM_OWNER") {
+          navigate("/");
+        } else if (userRole === "FARM_ADMIN") {
+          navigate("/admin/home");
+        }
+      }, 500);
+    },
+
+    onError: (error) => {
+      console.log("LOGIN ERROR:", error);
+      toast.error(
+        console.log(error),
+        error.response?.data?.message || "Login failed!"
+      );
+    },
+  });
+
+  const handleLogin = () => {
+    if (!email || !password) {
+      return toast.error("All fields are required");
+    }
+
+    // Only send email & password
+    loginMutation.mutate({
+      email,
+      password,
+    });
   };
+
 
   return (
     <main className="bg-white grid justify-center items-center py-10 md:px-11 px-15 rounded-3xl">
-      <div><Toaster position="top-center"  /></div>
       <form className="gap-5 flex flex-col items-center md:w-[450px] w-full">
         <Image src="/authLogo.png" alt="logo" />
 
@@ -46,16 +90,21 @@ const LogIn = () => {
           {roleText[role].title} Login
         </h3>
 
-        <p>{roleText[role].subtitle}</p>
-
         <InputField
           type="email"
           label="Email Address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           inputClass="rounded-lg"
         />
-        <Password label="Password" inputClass="rounded-lg" />
 
-        {/* Forgot password */}
+        <Password
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          inputClass="rounded-lg"
+        />
+
         <Link
           to="/auth/reset/password"
           className="text-[#F6A62D] self-end text-sm"
@@ -63,15 +112,17 @@ const LogIn = () => {
           Forgot Password?
         </Link>
 
-        {/* ROLE SWITCH */}
-        <div className="flex gap-2 w-full">
-          {["Owner", "Admin"].map((r) => (
+        {/* ROLE SWITCH (UI Only) */}
+        <div className="flex gap-5 w-full">
+          {["SYSTEM_OWNER", "FARM_ADMIN"].map((r) => (
             <button
               key={r}
               type="button"
               onClick={() => setRole(r)}
-              className={`flex-1 py-2 rounded-lg cursor-pointer ${
-                role === r ? "bg-[#F6A62D] text-white" : "bg-[#F1F5F9]"
+              className={`flex-1 py-2 rounded-lg ${
+                role === r
+                  ? "bg-[#F6A62D] text-white"
+                  : "bg-[#F1F5F9]"
               }`}
             >
               {r}
@@ -79,14 +130,20 @@ const LogIn = () => {
           ))}
         </div>
 
-        {/* LOGIN */}
         <button
           type="button"
           onClick={handleLogin}
-          className="bg-[#F6A62D] text-white w-full py-3 rounded-lg mt-6 flex items-center justify-center gap-2 cursor-pointer"
+          disabled={loginMutation.isPending}
+          className="bg-[#F6A62D] text-white w-full py-3 rounded-lg mt-6 flex items-center justify-center gap-2"
         >
-          <MdLogin />
-          Login as {roleText[role].title}
+          {loginMutation.isPending ? (
+            "Logging in..."
+          ) : (
+            <>
+              <MdLogin />
+              Login
+            </>
+          )}
         </button>
       </form>
     </main>

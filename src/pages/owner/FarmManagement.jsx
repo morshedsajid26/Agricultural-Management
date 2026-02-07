@@ -3,43 +3,62 @@ import Breadcrumb from "../../components/Bredcumb";
 import { FaPlus } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import FarmCard from "../../components/FarmCard";
-import farmsData from "../../data/farms.json";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const FarmManagement = () => {
-  const [farms, setFarms] = useState(farmsData);
   const [search, setSearch] = useState("");
+  const axiosSecure = useAxiosSecure();
+
+  const {
+    data: farms = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["farms"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/system-owner/farm");
+      return res.data.data.farms; // 🔥 correct response path
+    },
+  });
 
   const handleStatusChange = (id) => {
-    setFarms((prev) =>
-      prev.map((farm) =>
-        farm.id === id
-          ? {
-              ...farm,
-              status: farm.status === "Active" ? "Suspended" : "Active",
-            }
-          : farm
-      )
-    );
+    console.log("Status change clicked for:", id);
+    // Backend integration করলে এখানে mutation হবে
   };
 
   const filteredFarms = farms.filter((farm) => {
     const query = search.toLowerCase();
     return (
-      farm.name.toLowerCase().includes(query) ||
-      farm.email.toLowerCase().includes(query)
+      farm.name?.toLowerCase().includes(query) ||
+      farm.adminEmail?.toLowerCase().includes(query)
     );
   });
+
+  if (isLoading) {
+    return <div className="p-10">Loading farms...</div>;
+  }
+
+  if (isError) {
+    return (
+      <div className="p-10 text-red-500">
+        Failed to load farms
+      </div>
+    );
+  }
+  
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <div>
           <Breadcrumb />
-         <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
+          <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
             Manage all farms across the platform
           </p>
         </div>
+
         <Link to="/owner/farm/management/create/farm">
           <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer">
             <FaPlus />
