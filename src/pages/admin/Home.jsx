@@ -8,93 +8,151 @@ import {
 } from "react-icons/fi";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Home = () => {
+  const axiosSecure = useAxiosSecure();
+
+  const formatDate = (dateString) =>
+    new Date(dateString).toISOString().split("T")[0];
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["farmAdminDashboard"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/farm-admin/dashboard");
+      return res.data.data;
+    },
+  });
+
+  if (isLoading) {
+    return <div className="p-10">Loading dashboard...</div>;
+  }
+
+  if (isError || !data) {
+    return (
+      <div className="p-10 text-red-500">
+        Failed to load dashboard
+      </div>
+    );
+  }
+
+  const { user, stats, subscription } = data;
+
   return (
     <div>
+      {/* Header */}
       <div>
-        <div>
-          <h1 className="text-2xl text-[#0A0A0A] mb-2">
-            Welcome back, John Anderson
-          </h1>
-          <p className="text-[#4A5565]">
-            Here's what's happening with your farm today
-          </p>
-        </div>
+        <h1 className="text-2xl text-[#0A0A0A] mb-2">
+          Welcome back, {user.name}
+        </h1>
+        <p className="text-[#4A5565]">
+          Here's what's happening with your farm today
+        </p>
       </div>
 
       <div className="grid grid-cols-12 gap-6 mt-8">
-        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+
+        {/* Employees */}
+        <div className="col-span-12 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#2B7FFF] p-3 rounded-lg w-fit mb-7">
-            <FiUsers className="w-6 h-6 text-white " />
+            <FiUsers className="w-6 h-6 text-white" />
           </div>
           <p className="text-[#4A5565]">Total Employees</p>
-          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">24</h2>
-          <p className="text-[#4A5565]">+3 this month</p>
+          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">
+            {stats.employees.total}
+          </h2>
+          <p className="text-[#4A5565]">
+            +{stats.employees.addedThisMonth} this month
+          </p>
         </div>
 
-        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+        {/* SOPs */}
+        <div className="col-span-12 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#00C950] p-3 rounded-lg w-fit mb-7">
-            <FiFileText className="w-6 h-6 text-white " />
+            <FiFileText className="w-6 h-6 text-white" />
           </div>
           <p className="text-[#4A5565]">SOP Modules</p>
-          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">18</h2>
-          <p className="text-[#4A5565]">2 updated today</p>
+          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">
+            {stats.sops.total}
+          </h2>
+          <p className="text-[#4A5565]">
+            {stats.sops.updatedToday} updated today
+          </p>
         </div>
 
-        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+        {/* Tasks */}
+        <div className="col-span-12 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#F0B100] p-3 rounded-lg w-fit mb-7">
-            <FiCheckSquare className="w-6 h-6 text-white " />
+            <FiCheckSquare className="w-6 h-6 text-white" />
           </div>
           <p className="text-[#4A5565]">Tasks</p>
-          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">12</h2>
-          <p className="text-[#4A5565]">8 completed</p>
+          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">
+            {stats.tasks.total}
+          </h2>
+          <p className="text-[#4A5565]">
+            {stats.tasks.completed} completed
+          </p>
         </div>
 
-        <div className="col-span-12 md:col-span-3 bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
+        {/* Messages */}
+        <div className="col-span-12 md:col-span-3 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <div className="bg-[#2B7FFF] p-3 rounded-lg w-fit mb-7">
-            <FiMessageSquare className="w-6 h-6 text-white " />
+            <FiMessageSquare className="w-6 h-6 text-white" />
           </div>
-          <p className="text-[#4A5565]">Today’s total Messages</p>
-          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">5</h2>
-          <p className="text-[#4A5565]">3 new</p>
+          <p className="text-[#4A5565]">Today’s Messages</p>
+          <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">
+            {stats.messages.today}
+          </h2>
+          <p className="text-[#4A5565]">
+            {stats.messages.unread} unread
+          </p>
         </div>
 
-        <div className="col-span-12  bg-white  p-6 rounded-lg border-2 border-[#E5E7EB]">
-          <div className="flex justify-between  pb-4">
-            <span className="text-xl text-[#0A0A0A]">Subscription Status</span>
+        {/* Subscription */}
+        <div className="col-span-12 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
+          <div className="flex justify-between pb-4">
+            <span className="text-xl text-[#0A0A0A]">
+              Subscription Status
+            </span>
             <span className="text-[#00A63E]">
               <FaArrowTrendUp />
             </span>
           </div>
 
-          <div className="flex justify-between  py-3">
-            <span className="text-[#4A5565] text-base">Current Plan</span>
-            <span className="font-normal text-base text-[#00A63E] bg-[#DCFCE7] py-1 px-2 rounded">
-              Professional
+          <div className="flex justify-between py-3">
+            <span className="text-[#4A5565]">Current Plan</span>
+            <span className="font-normal text-[#00A63E] bg-[#DCFCE7] py-1 px-2 rounded">
+              {subscription.plan}
             </span>
           </div>
 
-          <div className="flex justify-between  py-3">
-            <span className="text-[#4A5565] text-base">Employee Count</span>
-            <span className="font-normal text-base text-[#4A5565]">24/50</span>
+          <div className="flex justify-between py-3">
+            <span className="text-[#4A5565]">Employee Count</span>
+            <span className="text-[#4A5565]">
+              {subscription.currentEmployees}/
+              {subscription.employeeLimit}
+            </span>
           </div>
 
-          <div className="flex justify-between  py-3">
-            <span className="text-[#4A5565] text-base">Next Billing Date</span>
-            <span className="font-normal text-base text-[#4A5565]">
-              February 15,2026
+          <div className="flex justify-between py-3">
+            <span className="text-[#4A5565]">
+              Next Billing Date
+            </span>
+            <span className="text-[#4A5565]">
+              {formatDate(subscription.nextBillingDate)}
             </span>
           </div>
 
           <div className="border-t border-[#E5E7EB] mt-4 pt-4">
             <p className="text-[#4A5565] flex items-center gap-2">
               <MdOutlineErrorOutline />
-              26 employees remaining in your plan
+              {subscription.remainingEmployees} employees remaining in your plan
             </p>
           </div>
         </div>
 
+        {/* Quick Actions */}
         <div className="col-span-12  bg-[#F6A62D]  p-6 rounded-lg ">
           <p className="text-[#ffffff] text-xl">Quick Actions</p>
           <div className="grid grid-cols-12 gap-6 ">
