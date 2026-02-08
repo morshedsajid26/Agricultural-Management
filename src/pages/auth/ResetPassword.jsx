@@ -19,7 +19,7 @@ const ResetPassword = () => {
     onSuccess: () => {
       toast.success("OTP sent to your email");
 
-      // 🔥 Save email temporarily
+      //   Save email temporarily
       sessionStorage.setItem("resetEmail", email);
 
       navigate("/auth/verify/otp");

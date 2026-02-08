@@ -22,7 +22,7 @@ function FarmCard({ farm }) {
   const badgeClass =
     statusConfig[farm.status] ?? "bg-gray-100 text-gray-600";
 
-  // 🔥 Status Toggle Mutation
+  //   Status Toggle Mutation
  const statusMutation = useMutation({
   mutationFn: async () => {
 

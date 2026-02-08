@@ -21,7 +21,7 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // 🔥 GET USERS
+  //   GET USERS
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["farmUsers"],
     queryFn: async () => {
@@ -30,7 +30,7 @@ const UserManagement = () => {
     },
   });
 
-  // 🔥 DELETE USER
+  //   DELETE USER
  const deleteMutation = useMutation({
   mutationFn: async (id) => {
     return await axiosSecure.delete(`/farm-admin/users/${id}`);
@@ -38,7 +38,7 @@ const UserManagement = () => {
   onSuccess: () => {
     toast.success("User deleted successfully");
     queryClient.invalidateQueries(["farmUsers"]);
-    setDeleteUserId(null); // 🔥 modal close
+    setDeleteUserId(null); //   modal close
   },
   onError: () => {
     toast.error("Failed to delete user");
@@ -46,7 +46,7 @@ const UserManagement = () => {
 });
 
 
-  // 🔥 STATUS TOGGLE
+  //   STATUS TOGGLE
   const statusMutation = useMutation({
     mutationFn: async ({ id, currentStatus }) => {
       const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
@@ -201,19 +201,19 @@ const UserManagement = () => {
       <div className="grid grid-cols-12 gap-4 mt-6">
         <div className="col-span-12 md:col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Total Users</p>
-          <p className="text-xl font-semibold text-[#0A0A0A]">{users.length}</p>
+          <p className="text-xl font-semibold text-[#0A0A0A] mt-1">{users.length}</p>
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Active Users</p>
-          <p className="text-xl font-semibold text-green-600">
+          <p className="text-xl font-semibold text-green-600 mt-1">
             {users.filter((u) => u.status === "ACTIVE").length}
           </p>
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white p-6 rounded-lg border-2 border-[#E5E7EB]">
           <p className="text-[#4A5565]">Managers</p>
-          <p className="text-xl font-semibold text-blue-600">
+          <p className="text-xl font-semibold text-blue-600 mt-1">
             {users.filter((u) => u.role === "MANAGER").length}
           </p>
         </div>

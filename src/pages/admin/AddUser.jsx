@@ -12,7 +12,7 @@ import { HiH3 } from "react-icons/hi2";
 
 const AddUser = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // 🔥 check edit mode
+  const { id } = useParams(); //   check edit mode
   const location = useLocation();
   const initialUserData = location.state?.user;
   const axiosSecure = useAxiosSecure();
@@ -24,7 +24,7 @@ const AddUser = () => {
   const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
 
-  // 🔥 Fetch user if edit mode
+  //   Fetch user if edit mode
   const { data: userData, isLoading } = useQuery({
     queryKey: ["userDetails", id],
     queryFn: async () => {
@@ -35,7 +35,7 @@ const AddUser = () => {
     initialData: initialUserData, 
   });
 
-  // 🔥 Prefill form
+  //   Prefill form
   useEffect(() => {
     if (userData) {
       setName(userData.name);
@@ -44,7 +44,7 @@ const AddUser = () => {
     }
   }, [userData]);
 
-  // 🔥 Create User
+  //   Create User
   const createUserMutation = useMutation({
     mutationFn: async (userData) => {
       return await axiosSecure.post("/farm-admin/users", userData);
@@ -58,7 +58,7 @@ const AddUser = () => {
     },
   });
 
-  // 🔥 Update User
+  //   Update User
   const updateUserMutation = useMutation({
     mutationFn: async (userData) => {
       return await axiosSecure.patch(

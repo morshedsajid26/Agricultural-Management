@@ -19,7 +19,7 @@ const FarmManagement = () => {
     queryKey: ["farms"],
     queryFn: async () => {
       const res = await axiosSecure.get("/system-owner/farm");
-      return res.data.data.farms; // 🔥 correct response path
+      return res.data.data.farms; //   correct response path
     },
   });
 
