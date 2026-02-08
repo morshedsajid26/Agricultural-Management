@@ -8,7 +8,7 @@ const MessageList = ({ messages, setMessages }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // 🔍 search filter
+  //    search filter
   const filteredMessages = useMemo(() => {
     return messages.filter(
       (m) =>
@@ -23,7 +23,7 @@ const MessageList = ({ messages, setMessages }) => {
     setMessages((prev) => prev.filter((m) => m.id !== id));
   };
 
-  // ❌ clear all
+  //  clear all
   const clearAll = () => {
     setMessages([]);
   };
@@ -37,7 +37,7 @@ const MessageList = ({ messages, setMessages }) => {
 
   return (
     <>
-      {/* 🔍 SEARCH + CLEAR */}
+      {/*    SEARCH + CLEAR */}
       <div className="grid grid-cols-12 gap-6 mt-6">
         <div className="relative col-span-8">
           <FaSearch className="absolute top-1/2 -translate-y-1/2 left-3 text-[#99A1AF]" />

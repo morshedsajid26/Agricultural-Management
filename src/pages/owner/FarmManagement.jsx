@@ -25,7 +25,6 @@ const FarmManagement = () => {
 
   const handleStatusChange = (id) => {
     console.log("Status change clicked for:", id);
-    // Backend integration করলে এখানে mutation হবে
   };
 
   const filteredFarms = farms.filter((farm) => {

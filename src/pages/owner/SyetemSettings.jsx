@@ -29,7 +29,7 @@ const SystemSettings = () => {
     setError("");
     setLogo(URL.createObjectURL(file));
 
-    // 🔌 API hook (later)
+    //  API hook (later)
     // uploadLogoToServer(file)
   };
 

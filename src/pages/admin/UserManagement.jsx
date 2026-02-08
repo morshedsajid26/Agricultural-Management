@@ -64,7 +64,7 @@ const UserManagement = () => {
     },
   });
 
-  // 🔍 FILTER
+  //    FILTER
   const filteredData = users.filter(
     (u) =>
       u.name?.toLowerCase().includes(search.toLowerCase()) ||
