@@ -32,7 +32,7 @@ const normalizeAlign = (align) => {
   return "left"; // start, justify, initial, undefined
 };
 
-const RichTextEditor = ({ onChange }) => {
+const RichTextEditor = ({ value, onChange }) => {
   const editorRef = useRef(null);
   const fileInputRef = useRef(null);
   const savedRange = useRef(null);
@@ -139,6 +139,7 @@ const RichTextEditor = ({ onChange }) => {
     const imgs = editorRef.current.querySelectorAll("img");
     imgs.forEach((img) => {
       img.style.maxWidth = "100%";
+      img.style.height = "auto";
       img.style.resize = "both";
       img.style.overflow = "auto";
       img.setAttribute("contenteditable", "false");
@@ -163,13 +164,29 @@ const RichTextEditor = ({ onChange }) => {
     editor.addEventListener("mouseup", updateActive);
     editor.addEventListener("keyup", updateActive);
 
+    // Initialize content
+    if (value && editor.innerHTML !== value) {
+        editor.innerHTML = value;
+        bindImages();
+    }
+
+
     return () => {
       editor.removeEventListener("mouseup", saveSelection);
       editor.removeEventListener("keyup", saveSelection);
       editor.removeEventListener("mouseup", updateActive);
       editor.removeEventListener("keyup", updateActive);
     };
-  }, []);
+  }, []); // Run once on mount
+
+  // Watch for external value changes (e.g. from parent when editing)
+  useEffect(() => {
+    const editor = editorRef.current;
+    if (value && editor.innerHTML !== value && document.activeElement !== editor) {
+        editor.innerHTML = value;
+        bindImages();
+    }
+  }, [value]);
 
   const AlignIcon = ALIGN_ICON[active.align] || FiAlignLeft;
 

@@ -109,7 +109,7 @@ const SopManagement = () => {
     {
       Title: "Document",
       key: "document",
-      width: "20%",
+      width: "25%",
       render: (row) => (
         <div className="flex items-center justify-center gap-2">
           <FaFilePdf className="text-red-500" />
@@ -125,25 +125,25 @@ const SopManagement = () => {
     {
       Title: "Upload Date",
       key: "createdAt",
-      width: "15%",
+      width: "20%",
       render: (row) =>
         new Date(row.createdAt).toISOString().split("T")[0],
     },
 
-    {
-      Title: "Details",
-      key: "details",
-      width: "15%",
-      render: () => <span>—</span>,
-    },
+    // {
+    //   Title: "Details",
+    //   key: "details",
+    //   width: "15%",
+    //   render: () => <span>—</span>,
+    // },
 
     {
       Title: "Actions",
       key: "actions",
-      width: "10%",
+      width: "15%",
       render: (row) => (
         <div className="flex items-center justify-center gap-4">
-          <Link to={`/admin/sop/management/upload/sop/${row.id} `}>
+          <Link to={`/admin/sop/management/edit/sop/${row.id}`}>
             <FiEdit className="text-blue-600 cursor-pointer" />
           </Link>
 

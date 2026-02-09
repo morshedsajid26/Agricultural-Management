@@ -12,9 +12,11 @@ import toast from "react-hot-toast";
 
 const AddSOP = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // edit support
+  const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
+
+  const isEdit = !!id;
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
@@ -22,13 +24,14 @@ const AddSOP = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [digitalContent, setDigitalContent] = useState("");
 
-  // ================= EDIT MODE FETCH =================
-  const { data: editData } = useQuery({
-    queryKey: ["editSop", id],
-    enabled: !!id,
+  // ================== FETCH SINGLE SOP (EDIT MODE) ==================
+  const { data: editData, isLoading } = useQuery({
+    queryKey: ["singleSop", id],
+    enabled: isEdit,
     queryFn: async () => {
-      const res = await axiosSecure.get(`/farm-admin/sops/${id}`);
-      return res.data.data;
+      const res = await axiosSecure.get("/farm-admin/sops");
+      const all = res.data.data || [];
+      return all.find((item) => item.id === id);
     },
   });
 
@@ -39,12 +42,12 @@ const AddSOP = () => {
     }
   }, [editData]);
 
-  // ================= CREATE DIGITAL =================
+  // ================== CREATE DIGITAL ==================
   const createMutation = useMutation({
     mutationFn: async () => {
       return await axiosSecure.post("/farm-admin/sops/create", {
         title,
-        category,
+        category: category.toUpperCase(),
         content: digitalContent,
       });
     },
@@ -53,26 +56,24 @@ const AddSOP = () => {
       queryClient.invalidateQueries(["farmSops"]);
       navigate("/admin/sop/management");
     },
-    onError: () => {
-      toast.error("Failed to create SOP");
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Create failed");
     },
   });
 
-  // ================= UPLOAD PDF =================
+  // ================== UPLOAD PDF ==================
   const uploadMutation = useMutation({
     mutationFn: async () => {
       const formData = new FormData();
       formData.append("title", title);
-      formData.append("category", category);
+      formData.append("category", category.toUpperCase());
       formData.append("file", selectedFile);
 
       return await axiosSecure.post(
         "/farm-admin/sops/upload",
         formData,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
     },
@@ -81,15 +82,65 @@ const AddSOP = () => {
       queryClient.invalidateQueries(["farmSops"]);
       navigate("/admin/sop/management");
     },
-    onError: () => {
-      toast.error("Upload failed");
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Upload failed");
     },
   });
 
-  // ================= SUBMIT =================
+  // ================== UPDATE SOP ==================
+  const updateMutation = useMutation({
+    mutationFn: async () => {
+      // ---- FILE UPDATE ----
+      if (activeTab === "upload" && selectedFile) {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("category", category.toUpperCase());
+        formData.append("file", selectedFile);
+
+        return await axiosSecure.patch(
+          `/farm-admin/sops/${id}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+      }
+
+      // ---- DIGITAL UPDATE ----
+      const payload = {
+        title,
+        category: category.toUpperCase(),
+      };
+
+      if (activeTab === "create") {
+        payload.content = digitalContent;
+      }
+
+      return await axiosSecure.patch(
+        `/farm-admin/sops/${id}`,
+        payload
+      );
+    },
+    onSuccess: () => {
+      toast.success("SOP updated successfully");
+      queryClient.invalidateQueries(["farmSops"]);
+      navigate("/admin/sop/management");
+    },
+    onError: (error) => {
+      console.log(error.response?.data);
+      toast.error(error.response?.data?.message || "Update failed");
+    },
+  });
+
+  // ================== SUBMIT ==================
   const handleSubmit = () => {
     if (!title || !category) {
       return toast.error("Title & Category required");
+    }
+
+    if (isEdit) {
+      updateMutation.mutate();
+      return;
     }
 
     if (activeTab === "upload") {
@@ -105,6 +156,10 @@ const AddSOP = () => {
     }
   };
 
+  if (isEdit && isLoading) {
+    return <div className="p-10">Loading SOP...</div>;
+  }
+
   return (
     <div>
       <div
@@ -118,7 +173,7 @@ const AddSOP = () => {
       <div className="mt-4">
         <Breadcrumb />
         <p className="text-[#4A5565] text-sm mt-1.5">
-          {id ? "Edit SOP" : "Add a new standard operating procedure document"}
+          {isEdit ? "Edit SOP" : "Add a new standard operating procedure"}
         </p>
       </div>
 
@@ -136,7 +191,7 @@ const AddSOP = () => {
           />
 
           <Dropdown
-            placeholder="Category/Area"
+            placeholder="Category"
             options={[
               "Milking",
               "Feeding",
@@ -176,7 +231,6 @@ const AddSOP = () => {
             </button>
           </div>
 
-          {/* Content */}
           <div className="mt-6 col-span-12">
             {activeTab === "upload" && (
               <UploadPDF onFileSelect={(file) => setSelectedFile(file)} />
@@ -185,23 +239,26 @@ const AddSOP = () => {
             {activeTab === "create" && (
               <CreateDigitalModule
                 value={digitalContent}
-                onChange={(val) => setDigitalContent(val)}
+                onChange={setDigitalContent}
               />
             )}
           </div>
 
-          {/* Buttons */}
           <div className="col-span-12 flex gap-3 mt-6">
             <button
               onClick={handleSubmit}
               disabled={
-                createMutation.isPending || uploadMutation.isPending
+                createMutation.isPending ||
+                uploadMutation.isPending ||
+                updateMutation.isPending
               }
               className="py-3 px-5 bg-[#F6A62D] text-white rounded-lg"
             >
-              {createMutation.isPending || uploadMutation.isPending
+              {createMutation.isPending ||
+              uploadMutation.isPending ||
+              updateMutation.isPending
                 ? "Processing..."
-                : id
+                : isEdit
                 ? "Update SOP"
                 : "Create SOP"}
             </button>

@@ -119,7 +119,7 @@ const Subscription = () => {
       </div>
 
       {/* Payment Method */}
-      <div className="mt-12">
+      {/* <div className="mt-12">
         <p className="text-xl text-[#0A0A0A]">
           Payment Method
         </p>
@@ -145,7 +145,7 @@ const Subscription = () => {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
