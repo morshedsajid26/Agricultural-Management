@@ -53,16 +53,19 @@ export default function Inbox() {
     queryKey: ["inboxConversations"],
     queryFn: async () => {
       const res = await axiosSecure.get("/farm-admin/messages/inbox");
+      const raw = res.data.data || [];
 
-      return (res.data.data || []).map((item) => ({
-        id: item.userId,
-        name: item.name,
-        role: item.jobTitle || "User",
-        avatar: item.name?.charAt(0),
-        unread: item.unreadCount > 0,
-        lastMessage: item.lastMessage,
-        lastMessageAt: item.lastMessageAt,
-      }));
+      return raw
+        .map((item) => ({
+          id: item.userId,
+          name: item.name,
+          role: item.jobTitle || "User",
+          avatar: item.name?.charAt(0),
+          unread: item.unreadCount > 0,
+          lastMessage: item.lastMessage,
+          lastMessageAt: item.lastMessageAt,
+        }))
+        .sort((a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt));
     },
   });
 
@@ -74,7 +77,9 @@ export default function Inbox() {
     queryFn: async () => {
         if (!selectedId) return [];
         const res = await axiosSecure.get(`/farm-admin/messages/history/${selectedId}`);
-        return res.data.data || []; 
+        const data = res.data.data || [];
+        // Sort messages: Oldest first (ASC) for chat view
+        return data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     },
     enabled: !!selectedId, 
   });
@@ -294,6 +299,7 @@ export default function Inbox() {
                 )
             })
         )}
+        <div ref={messagesEndRef} />
       </div>
 
       {currentUserRole === "admin" && (

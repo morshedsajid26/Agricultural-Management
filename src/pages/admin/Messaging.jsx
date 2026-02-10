@@ -40,6 +40,9 @@ const Messaging = () => {
           return !senderRole.includes("admin");
       });
 
+      // Sort by creation time descending (newest first)
+      filteredData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
       // Map backend data to frontend structure
       return filteredData.map((msg) => ({
         id: msg.id,
