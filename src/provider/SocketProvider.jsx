@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import io from "socket.io-client";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import useAuth from "../hooks/useAuth";
 import { BASE_URL } from "../config/api";
 
@@ -11,54 +10,77 @@ export const useSocket = () => {
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
-  const { user } = useAuth(); // Assuming useAuth provides the current user
+  const [error, setError] = useState(null);
+  const { user } = useAuth();
+  const reconnectTimeoutRef = useRef(null);
+  const socketRef = useRef(null);
 
   useEffect(() => {
-    // Only connect if user exists and has an ID
-    if (user?.id) {
-      // Prevent multiple connections if user reference changes but ID is same
-      if (socket && socket.connected) return;
+    const connectSocket = () => {
+      // Only connect if user exists and has an ID
+      if (!user?.id) return;
 
-      console.log("Initializing socket for user:", user.id);
+      // Construct WS URL
+      // Ensure we don't have double slashes if BASE_URL ends with /
+      const baseUrl = BASE_URL.endsWith("/") ? BASE_URL.slice(0, -1) : BASE_URL;
+      const wsUrl = baseUrl.replace(/^http/, "ws") + `?userId=${user.id}`;
+      
+      console.log("Initializing WebSocket to:", wsUrl);
 
-      const newSocket = io(BASE_URL, {
-        query: { userId: user.id },
-        transports: ["websocket"],
-        reconnection: true,             // Enable reconnection
-        reconnectionAttempts: 5,        // Limit attempts to avoid infinite spam
-        reconnectionDelay: 1000,
-      });
+      try {
+          const ws = new WebSocket(wsUrl);
 
-      setSocket(newSocket);
+          ws.onopen = () => {
+            console.log("WebSocket connected");
+            setSocket(ws);
+            setError(null);
+          };
 
-      newSocket.on("connect", () => {
-        console.log("Socket connected:", newSocket.id);
-      });
+          ws.onclose = (event) => {
+            console.warn("WebSocket disconnected:", event.code, event.reason);
+            setSocket(null);
+            socketRef.current = null;
+            
+            // Reconnect logic
+            if (user?.id) {
+                 clearTimeout(reconnectTimeoutRef.current);
+                 reconnectTimeoutRef.current = setTimeout(() => {
+                     console.log("Attempting to reconnect WebSocket...");
+                     connectSocket();
+                 }, 3000);
+            }
+          };
 
-      newSocket.on("disconnect", (reason) => {
-        console.warn("Socket disconnected:", reason);
-      });
+          ws.onerror = (err) => {
+            console.error("WebSocket error:", err);
+            setError(`Connection Failed to ${wsUrl}`);
+            ws.close();
+          };
 
-      newSocket.on("connect_error", (err) => {
-        console.error("Socket connection error:", err.message);
-      });
+          socketRef.current = ws;
 
-      return () => {
-        console.log("Cleaning up socket connection");
-        newSocket.close();
-      };
-    } else {
-      // If no user, ensure socket is closed
-      if (socket) {
-        socket.close();
-        setSocket(null);
+      } catch (e) {
+          console.error("WebSocket setup error:", e);
+          setError(e.message);
       }
+    };
+
+    if (user?.id && !socketRef.current) {
+        connectSocket();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]); // Depend on user.id instead of user object to avoid loops
+
+    return () => {
+      if (socketRef.current) {
+        console.log("Cleaning up WebSocket connection");
+        socketRef.current.close();
+        socketRef.current = null;
+      }
+      clearTimeout(reconnectTimeoutRef.current);
+    };
+  }, [user?.id]);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket, error }}>
       {children}
     </SocketContext.Provider>
   );

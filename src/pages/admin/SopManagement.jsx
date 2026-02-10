@@ -100,8 +100,21 @@ const SopManagement = () => {
       key: "category",
       width: "15%",
       render: (row) => (
-        <span className="px-3 py-1 rounded-md text-sm font-medium bg-[#FFF4E5] text-[#B54708]">
+         <span
+          className={`px-3 py-1 rounded-md text-sm font-medium ${
+             row.category === "MILKING"
+              ? "bg-[#E6F4EA] text-[#137333]"
+              : row.category === "FEEDING"
+                ? "bg-[#E6F4EA] text-[#137333]"
+                  : row.category === "CALVES"
+                ? "bg-[#F3E8FF] text-[#8200DB]"
+                : row.category === "HEALTH"
+                ? "bg-[#F3E8FF] text-[#8200DB]"
+                : "bg-[#FFF4E5] text-[#B54708]"
+          }`}
+        >
           {row.category}
+          
         </span>
       ),
     },

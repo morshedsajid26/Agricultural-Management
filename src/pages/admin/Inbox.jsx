@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AiFillPicture } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa6";
@@ -14,7 +14,7 @@ import { useSearchParams } from "react-router-dom";
 export default function Inbox() {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
-  const { socket } = useSocket();
+  const { socket, error } = useSocket();
   const currentUserRole = "admin";
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,10 +31,20 @@ export default function Inbox() {
   };
 
   const [newMessage, setNewMessage] = useState("");
-
   const [imagePreview, setImagePreview] = useState(null);
   const [search, setSearch] = useState("");
-  // Removed local messages state to avoid duplication and loops
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  // Ref for the bottom of the message list
+  const messagesEndRef = useRef(null);
+
+  // Helper: Scroll to bottom
+  const scrollToBottom = (behavior = "smooth") => {
+    // Timeout ensures images/DOM are rendered before scrolling
+    setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: behavior, block: "end" });
+    }, 100);
+  };
 
   // =========================
   // 📥 GET CONVERSATIONS
@@ -70,48 +80,50 @@ export default function Inbox() {
   });
 
   // =========================
-  // 🔌 SOCKET LISTENERS
+  // 🔌 SOCKET LISTENERS & AUTO SCROLL
   // =========================
+  
+  // 1. Scroll instantly when conversation changes (or loads)
+  useEffect(() => {
+      scrollToBottom("auto");
+  }, [selectedId, messages.length]); 
+
+  // 2. WebSocket Listener
   useEffect(() => {
     if (!socket) return;
 
-    // Listen for new messages
-    socket.on("receive_message", (newMessage) => {
-        console.log("New message received:", newMessage);
+    const handleMessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            console.log("WebSocket Receive:", new Date().toLocaleTimeString(), data);
+            
+            const newMessage = data; 
 
-        // Check if the message belongs to the currently selected conversation
-        // Case 1: Message is FROM the selected user (Incoming) -> newMessage.senderId === selectedId
-        // Case 2: Message is TO the selected user (Outgoing from another tab) -> newMessage.receiverId === selectedId
-        const isRelatedToCurrentChat = selectedId && (newMessage.senderId === selectedId || newMessage.receiverId === selectedId);
+            const isRelatedToCurrentChat = selectedId && (newMessage.senderId === selectedId || newMessage.receiverId === selectedId);
+    
+            if (isRelatedToCurrentChat) {
+                queryClient.setQueryData(["conversationMessages", selectedId], (oldMessages = []) => {
+                    const isDuplicate = oldMessages.some(m => m.id === newMessage.id);
+                    if (isDuplicate) return oldMessages;
+                    return [...oldMessages, newMessage];
+                });
+                // Smooth scroll for new incoming message
+                scrollToBottom("smooth");
+            }
+            
+            queryClient.invalidateQueries(["inboxConversations"]);
 
-        if (isRelatedToCurrentChat) {
-            queryClient.setQueryData(["conversationMessages", selectedId], (oldMessages = []) => {
-                // Prevent duplicates if socket fires multiple times
-                const isDuplicate = oldMessages.some(m => m.id === newMessage.id);
-                if (isDuplicate) return oldMessages;
-                return [...oldMessages, newMessage];
-            });
+        } catch (err) {
+            console.error("Failed to parse WebSocket message:", err);
         }
-        
-        // Refresh conversation list to show new last message/unread count
-        queryClient.invalidateQueries(["inboxConversations"]);
-    });
+    };
+
+    socket.addEventListener("message", handleMessage);
 
     return () => {
-      socket.off("receive_message");
+      socket.removeEventListener("message", handleMessage);
     };
   }, [socket, selectedId, queryClient]);
-
-
-  // =========================
-  // ✉ SEND MESSAGE
-  // =========================
-  /* ===== MEDIA UPLOAD STATE ===== */
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  // =========================
-  // ✉ SEND MESSAGE
-  // =========================
   const sendMutation = useMutation({
     mutationFn: async () => {
       // If we have a file, use FormData
@@ -170,7 +182,17 @@ export default function Inbox() {
 
         <div className="bg-white border rounded-lg">
           <div className="px-4 py-5 border-b border-[#0a0a0a]/10 text-[#0A0A0A] flex items-center gap-2">
-            <FiMessageSquare className="w-6 h-6" />
+            <div className="flex items-center gap-2">
+                 {/* Connection Status Dot */}
+                 <div 
+                    className={`w-3 h-3 rounded-full ${socket?.readyState === 1 ? "bg-green-500" : "bg-red-500"}`} 
+                    title={socket?.readyState === 1 ? "Connected" : (error || "Disconnected")}
+                 />
+                 {/* Debug Error Message (Visible on Hover or if Error) */}
+                 {error && <span className="text-xs text-red-500 max-w-[150px] truncate" title={error}>{error}</span>}
+                 
+                 <FiMessageSquare className="w-6 h-6" />
+            </div>
             <h3 className="text-xl font-semibold">Inbox</h3>
           </div>
 
