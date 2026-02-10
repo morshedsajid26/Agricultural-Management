@@ -33,10 +33,11 @@ const Messaging = () => {
       );
       const rawData = res.data?.data || [];
       
-      // Filter out messages sent by ADMIN
+      // Filter out messages sent by ADMIN (including 'farm admin', 'admin', etc.)
       const filteredData = rawData.filter(msg => {
           const senderRole = msg.sender?.role?.toLowerCase() || "";
-          return senderRole !== "admin";
+          // Check for exact "admin", or "farm admin", or "farm_admin"
+          return !senderRole.includes("admin");
       });
 
       // Map backend data to frontend structure
