@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Breadcrumb from "../../components/Bredcumb";
 import { Link } from "react-router-dom";
-import { FaPlus, FaFilePdf, FaSearch } from "react-icons/fa";
+import { FaPlus, FaFilePdf, FaSearch, FaEye } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { HiOutlineDocumentDownload } from "react-icons/hi";
@@ -15,14 +15,13 @@ const SopManagement = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
 
-  const [categoryFilter, setCategoryFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [deleteId, setDeleteId] = useState(null);
+  const [viewData, setViewData] = useState(null);
 
   const itemsPerPage = 10;
 
-  // ================= FETCH SOP =================
+  // ================= FETCH =================
   const { data: sopData = [], isLoading } = useQuery({
     queryKey: ["farmSops"],
     queryFn: async () => {
@@ -31,22 +30,24 @@ const SopManagement = () => {
     },
   });
 
-  // ================= DELETE SOP =================
+  // ================= DELETE =================
   const deleteMutation = useMutation({
-    mutationFn: async (id) => {
-      return await axiosSecure.delete(`/farm-admin/sops/${id}`);
-    },
+    mutationFn: async (id) =>
+      await axiosSecure.delete(`/farm-admin/sops/${id}`),
     onSuccess: () => {
       toast.success("SOP deleted successfully");
       queryClient.invalidateQueries(["farmSops"]);
-      setDeleteId(null);
     },
-    onError: () => {
-      toast.error("Failed to delete SOP");
-    },
+    onError: () => toast.error("Delete failed"),
   });
 
-  // ================= DOWNLOAD SOP =================
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this SOP?")) {
+      deleteMutation.mutate(id);
+    }
+  };
+
+  // ================= DOWNLOAD =================
   const handleDownload = async (id, fileName) => {
     try {
       const res = await axiosSecure.get(
@@ -54,34 +55,22 @@ const SopManagement = () => {
         { responseType: "blob" }
       );
 
-      const blob = new Blob([res.data]);
-      const url = window.URL.createObjectURL(blob);
-
+      const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.download = fileName || "document";
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
-
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
+    } catch {
       toast.error("Download failed");
     }
   };
 
   // ================= FILTER =================
-  const filteredData = sopData.filter((item) => {
-    const matchesSearch =
-      item.title?.toLowerCase().includes(search.toLowerCase()) ||
-      item.category?.toLowerCase().includes(search.toLowerCase());
-
-    const matchesCategory =
-      categoryFilter === "all" ||
-      item.category?.toLowerCase() === categoryFilter;
-
-    return matchesSearch && matchesCategory;
-  });
+  const filteredData = sopData.filter((item) =>
+    item.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   // ================= PAGINATION =================
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -91,65 +80,54 @@ const SopManagement = () => {
     startIndex + itemsPerPage
   );
 
-  // ================= TABLE HEADS =================
+  // ================= TABLE =================
   const TableHeads = [
     { Title: "SOP Title", key: "title", width: "25%" },
-
-    {
-      Title: "Category",
-      key: "category",
-      width: "15%",
-      render: (row) => (
-         <span
-          className={`px-3 py-1 rounded-md text-sm font-medium ${
-             row.category === "MILKING"
-              ? "bg-[#E6F4EA] text-[#137333]"
-              : row.category === "FEEDING"
-                ? "bg-[#E6F4EA] text-[#137333]"
-                  : row.category === "CALVES"
-                ? "bg-[#F3E8FF] text-[#8200DB]"
-                : row.category === "HEALTH"
-                ? "bg-[#F3E8FF] text-[#8200DB]"
-                : "bg-[#FFF4E5] text-[#B54708]"
-          }`}
-        >
-          {row.category}
-          
-        </span>
-      ),
-    },
-
+    { Title: "Category", key: "category", width: "15%" },
     {
       Title: "Document",
       key: "document",
-      width: "25%",
+      width: "20%",
       render: (row) => (
         <div className="flex items-center justify-center gap-2">
-          <FaFilePdf className="text-red-500" />
-          <span className="text-sm">{row.fileName}</span>
-          <HiOutlineDocumentDownload
-            className="cursor-pointer"
-            onClick={() => handleDownload(row.id, row.fileName)}
-          />
+          {/* {row.fileName ? (
+            <>
+              <FaFilePdf className="text-red-500" />
+              <span className="text-sm">{row.fileName}</span>
+              <HiOutlineDocumentDownload
+                className="cursor-pointer"
+                onClick={() => handleDownload(row.id, row.fileName)}
+              />
+            </>
+          ) : (
+            <>
+              <FaEye className="text-blue-500" />
+              <span
+                onClick={() => setViewData(row)}
+                className="cursor-pointer text-blue-600"
+              >
+                View
+              </span>
+            </>
+          )} */}
+          <>
+              <FaFilePdf className="text-red-500" />
+              <span className="text-sm">{row.fileName}</span>
+              <HiOutlineDocumentDownload
+                className="cursor-pointer"
+                onClick={() => handleDownload(row.id, row.fileName)}
+              />
+            </>
         </div>
       ),
     },
-
     {
       Title: "Upload Date",
       key: "createdAt",
-      width: "20%",
+      width: "15%",
       render: (row) =>
         new Date(row.createdAt).toISOString().split("T")[0],
     },
-
-    // {
-    //   Title: "Details",
-    //   key: "details",
-    //   width: "15%",
-    //   render: () => <span>—</span>,
-    // },
-
     {
       Title: "Actions",
       key: "actions",
@@ -162,20 +140,17 @@ const SopManagement = () => {
 
           <RiDeleteBinLine
             className="text-red-600 cursor-pointer"
-            onClick={() => setDeleteId(row.id)}
+            onClick={() => handleDelete(row.id)}
           />
         </div>
       ),
     },
   ];
 
-  if (isLoading) {
-    return <div className="p-10">Loading SOPs...</div>;
-  }
+  if (isLoading) return <div className="p-10">Loading SOPs...</div>;
 
   return (
     <div>
-      {/* HEADER */}
       <div className="flex items-center justify-between">
         <div>
           <Breadcrumb />
@@ -184,7 +159,7 @@ const SopManagement = () => {
           </p>
         </div>
 
-        <Link to="/admin/sop/management/upload/sop">
+        <Link to="upload/sop">
           <button className="bg-[#F6A62D] text-white px-4 py-2 rounded-md flex items-center gap-2">
             <FaPlus />
             Upload New SOP
@@ -192,55 +167,21 @@ const SopManagement = () => {
         </Link>
       </div>
 
-      {/* CATEGORY FILTER */}
-      <div className="flex my-6 gap-4 overflow-x-auto">
-        {[
-          "all",
-          "milking",
-          "feeding",
-          "health",
-          "calves",
-          "maintenance",
-          "emergencies",
-          // "safety",
-        ].map((cat) => (
-          <button
-            key={cat}
-            onClick={() =>
-              setCategoryFilter(categoryFilter === cat ? "all" : cat)
-            }
-            className={`border px-4 py-2 rounded-lg text-sm ${
-              categoryFilter === cat
-                ? "bg-[#F6A62D] text-white"
-                : "border-black/10 text-[#0A0A0A]"
-            }`}
-          >
-            {cat.toUpperCase()}
-          </button>
-        ))}
-      </div>
-
-      {/* SEARCH */}
-      <div className="relative">
+      <div className="relative mt-6">
         <FaSearch className="absolute top-1/2 -translate-y-1/2 left-3 text-[#99A1AF]" />
         <input
           type="text"
           placeholder="Search SOP..."
           value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="w-full md:w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#99A1AF] placeholder:text-[#99A1AF]"
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full md:w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none"
         />
       </div>
 
-      {/* TABLE */}
       <div className="bg-white rounded-lg border-2 border-[#E5E7EB] mt-6 overflow-x-scroll md:overflow-hidden">
         <Table TableHeads={TableHeads} TableRows={paginatedData} />
       </div>
 
-      {/* PAGINATION */}
       <div className="flex justify-center mt-4">
         <Pagination
           totalPages={totalPages}
@@ -249,40 +190,76 @@ const SopManagement = () => {
         />
       </div>
 
-      {/* DELETE MODAL */}
-      {deleteId && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-[90%] max-w-md p-6">
-            <h3 className="text-xl font-semibold text-[#0A0A0A]">Delete SOP</h3>
-
-            <p className="mt-2 text-[#4A5565]">
-              Are you sure you want to delete this SOP?
-              This action cannot be undone.
-            </p>
-
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                onClick={() => setDeleteId(null)}
-                className="px-4 py-2 rounded-md bg-gray-200 text-[#0A0A0A]"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={() => deleteMutation.mutate(deleteId)}
-                disabled={deleteMutation.isPending}
-                className="px-4 py-2 rounded-md bg-red-600 text-white"
-              >
-                {deleteMutation.isPending
-                  ? "Deleting..."
-                  : "Delete"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* {viewData && (
+        <SopViewModal
+          sop={viewData}
+          onClose={() => setViewData(null)}
+        />
+      )} */}
     </div>
   );
 };
+
+// ================= MODAL =================
+
+// const SopViewModal = ({ sop, onClose }) => {
+//   const content = sop.content;
+
+//   return (
+//     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+//       <div className="bg-white w-[600px] max-h-[80vh] overflow-y-auto p-6 rounded-lg">
+//         <h2 className="text-xl font-semibold mb-4">{sop.title}</h2>
+//         <p className="text-gray-600 mb-4">
+//           Category: {sop.category}
+//         </p>
+
+//         <div className="border p-4 rounded-md whitespace-pre-wrap max-h-[60vh] overflow-y-auto">
+//           {(() => {
+//             if (!content) {
+//               return (
+//                 <span className="text-gray-400 italic">
+//                   No content available
+//                 </span>
+//               );
+//             }
+
+//             try {
+//               const parsed =
+//                 typeof content === "string"
+//                   ? JSON.parse(content)
+//                   : content;
+
+//               if (parsed.sections) {
+//                 return parsed.sections.map((sec, i) => (
+//                   <div key={i} className="mb-6">
+//                     <h3 className="font-semibold text-lg mb-2">
+//                       {sec.title}
+//                     </h3>
+//                     <ul className="list-decimal pl-5 space-y-2">
+//                       {sec.steps?.map((step, j) => (
+//                         <li key={j}>{step}</li>
+//                       ))}
+//                     </ul>
+//                   </div>
+//                 ));
+//               }
+
+//               return JSON.stringify(parsed, null, 2);
+//             } catch {
+//               return content;
+//             }
+//           })()}
+//         </div>
+
+//         <button
+//           onClick={onClose}
+//           className="mt-6 bg-[#F6A62D] text-white px-4 py-2 rounded-md"
+//         >
+//           Close
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default SopManagement;

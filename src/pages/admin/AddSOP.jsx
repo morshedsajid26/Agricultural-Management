@@ -24,7 +24,7 @@ const AddSOP = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [digitalContent, setDigitalContent] = useState("");
 
-  // ================== FETCH SINGLE SOP (EDIT MODE) ==================
+  // ================= FETCH SINGLE SOP (EDIT) =================
   const { data: editData, isLoading } = useQuery({
     queryKey: ["singleSop", id],
     enabled: isEdit,
@@ -42,13 +42,24 @@ const AddSOP = () => {
     }
   }, [editData]);
 
-  // ================== CREATE DIGITAL ==================
+  // ================= CREATE DIGITAL SOP =================
   const createMutation = useMutation({
     mutationFn: async () => {
+      const structuredContent = {
+        sections: [
+          {
+            title: "Main Section",
+            steps: digitalContent
+              ? digitalContent.split("\n").filter(Boolean)
+              : [],
+          },
+        ],
+      };
+
       return await axiosSecure.post("/farm-admin/sops/create", {
         title,
         category: category.toUpperCase(),
-        content: digitalContent,
+        content: JSON.stringify(structuredContent),
       });
     },
     onSuccess: () => {
@@ -57,11 +68,12 @@ const AddSOP = () => {
       navigate("/admin/sop/management");
     },
     onError: (error) => {
+      console.log(error.response?.data);
       toast.error(error.response?.data?.message || "Create failed");
     },
   });
 
-  // ================== UPLOAD PDF ==================
+  // ================= UPLOAD PDF =================
   const uploadMutation = useMutation({
     mutationFn: async () => {
       const formData = new FormData();
@@ -87,10 +99,10 @@ const AddSOP = () => {
     },
   });
 
-  // ================== UPDATE SOP ==================
+  // ================= UPDATE SOP =================
   const updateMutation = useMutation({
     mutationFn: async () => {
-      // ---- FILE UPDATE ----
+      // 🔹 FILE UPDATE
       if (activeTab === "upload" && selectedFile) {
         const formData = new FormData();
         formData.append("title", title);
@@ -106,20 +118,23 @@ const AddSOP = () => {
         );
       }
 
-      // ---- DIGITAL UPDATE ----
-      const payload = {
-        title,
-        category: category.toUpperCase(),
+      // 🔹 DIGITAL UPDATE
+      const structuredContent = {
+        sections: [
+          {
+            title: "Main Section",
+            steps: digitalContent
+              ? digitalContent.split("\n").filter(Boolean)
+              : [],
+          },
+        ],
       };
 
-      if (activeTab === "create") {
-        payload.content = digitalContent;
-      }
-
-      return await axiosSecure.patch(
-        `/farm-admin/sops/${id}`,
-        payload
-      );
+      return await axiosSecure.patch(`/farm-admin/sops/${id}`, {
+        title,
+        category: category.toUpperCase(),
+        content: JSON.stringify(structuredContent),
+      });
     },
     onSuccess: () => {
       toast.success("SOP updated successfully");
@@ -132,7 +147,7 @@ const AddSOP = () => {
     },
   });
 
-  // ================== SUBMIT ==================
+  // ================= SUBMIT =================
   const handleSubmit = () => {
     if (!title || !category) {
       return toast.error("Title & Category required");
@@ -206,7 +221,6 @@ const AddSOP = () => {
             className="col-span-12"
           />
 
-          {/* Toggle */}
           <div className="flex bg-[#FFF4E5] rounded-lg p-1.5 w-fit mt-6 col-span-12">
             <button
               onClick={() => setActiveTab("upload")}
@@ -269,6 +283,7 @@ const AddSOP = () => {
             >
               Cancel
             </button>
+
           </div>
 
         </div>
