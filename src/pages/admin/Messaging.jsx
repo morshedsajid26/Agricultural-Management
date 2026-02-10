@@ -1,149 +1,141 @@
-import React, { useMemo, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Breadcrumb from "../../components/Bredcumb";
-import { FaSearch } from "react-icons/fa";
-import { FiTrash2 } from "react-icons/fi";
-import { FaTrash } from "react-icons/fa6";
-import Pagination from "../../components/Pagination";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 import MessageList from "./MessageList";
 import Inbox from "./Inbox";
 
-const initialMessages = [
-  {
-    id: 1,
-    from: "Sarah Johnson",
-    fromRole: "Employee",
-    to: "Tom Wilson",
-    toRole: "Manager",
-    text: "Equipment maintenance completed as requested.",
-    time: "2026-01-07 14:30",
-    unread: false,
-  },
-  {
-    id: 2,
-    from: "Tom Wilson",
-    fromRole: "Manager",
-    to: "Jan de Vries",
-    toRole: "Employee",
-    text: "Please check the irrigation system in sector B.",
-    time: "2026-01-07 13:15",
-    unread: false,
-  },
-  {
-    id: 3,
-    from: "Jan de Vries",
-    fromRole: "Employee",
-    to: "Tom Wilson",
-    toRole: "Manager",
-    text: "I need clarification on the new safety SOP.",
-    time: "2026-01-07 10:45",
-    unread: true,
-  },
-  {
-    id: 4,
-    from: "Tom Wilson",
-    fromRole: "Manager",
-    to: "Sarah Johnson",
-    toRole: "Employee",
-    text: "Great work on the weekly report!",
-    time: "2026-01-06 16:20",
-    unread: false,
-  },
-  {
-    id: 5,
-    from: "Sarah Johnson",
-    fromRole: "Employee",
-    to: "Tom Wilson",
-    toRole: "Manager",
-    text: "Equipment maintenance completed as requested.",
-    time: "2026-01-07 14:30",
-    unread: false,
-  },
-  {
-    id: 6,
-    from: "Tom Wilson",
-    fromRole: "Manager",
-    to: "Jan de Vries",
-    toRole: "Employee",
-    text: "Please check the irrigation system in sector B.",
-    time: "2026-01-07 13:15",
-    unread: false,
-  },
-  {
-    id: 7,
-    from: "Jan de Vries",
-    fromRole: "Employee",
-    to: "Tom Wilson",
-    toRole: "Manager",
-    text: "I need clarification on the new safety SOP.",
-    time: "2026-01-07 10:45",
-    unread: true,
-  },
-  {
-    id: 8,
-    from: "Tom Wilson",
-    fromRole: "Manager",
-    to: "Sarah Johnson",
-    toRole: "Employee",
-    text: "Great work on the weekly report!",
-    time: "2026-01-06 16:20",
-    unread: false,
-  },
-  {
-    id: 9,
-    from: "Sarah Johnson",
-    fromRole: "Employee",
-    to: "Tom Wilson",
-    toRole: "Manager",
-    text: "Equipment maintenance completed as requested.",
-    time: "2026-01-07 14:30",
-    unread: false,
-  },
-  {
-    id: 10,
-    from: "Tom Wilson",
-    fromRole: "Manager",
-    to: "Jan de Vries",
-    toRole: "Employee",
-    text: "Please check the irrigation system in sector B.",
-    time: "2026-01-07 13:15",
-    unread: false,
-  },
-  {
-    id: 11,
-    from: "Jan de Vries",
-    fromRole: "Employee",
-    to: "Tom Wilson",
-    toRole: "Manager",
-    text: "I need clarification on the new safety SOP.",
-    time: "2026-01-07 10:45",
-    unread: true,
-  },
-  {
-    id: 12,
-    from: "Tom Wilson",
-    fromRole: "Manager",
-    to: "Sarah Johnson",
-    toRole: "Employee",
-    text: "Great work on the weekly report!",
-    time: "2026-01-06 16:20",
-    unread: false,
-  },
-];
-
 const Messaging = () => {
-  const [enabled, setEnabled] = useState(true);
-  const [messages, setMessages] = useState(initialMessages);
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
-  // 📊 counts
-  const totalMessages = messages.length;
-  const unreadCount = messages.filter((m) => m.unread).length;
-  const [activeTab, setActiveTab] = useState("oversight");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") || "oversight";
+
+  const setActiveTab = (tab) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("tab", tab);
+    // If switching to oversight, clear conversation param to be clean
+    if (tab === "oversight") {
+        newParams.delete("conversation");
+    }
+    setSearchParams(newParams);
+  };
+
+  // ================= FETCH MESSAGES =================
+  const { data: messages = [] } = useQuery({
+    queryKey: ["oversightMessages"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        "/farm-admin/messages/oversight/messages"
+      );
+      const rawData = res.data?.data || [];
+      
+      // Filter out messages sent by ADMIN
+      const filteredData = rawData.filter(msg => {
+          const senderRole = msg.sender?.role?.toLowerCase() || "";
+          return senderRole !== "admin";
+      });
+
+      // Map backend data to frontend structure
+      return filteredData.map((msg) => ({
+        id: msg.id,
+        text: msg.content,
+        from: msg.sender?.name || "Unknown",
+        fromRole: msg.sender?.role || "",
+        to: msg.receiver?.name || "Unknown",
+        toRole: msg.receiver?.role || "",
+        unread: !msg.isRead,
+        time: new Date(msg.createdAt).toLocaleString(), // Simple formatting
+      }));
+    },
+  });
+
+  // ================= FETCH STATS =================
+  const { data: stats } = useQuery({
+    queryKey: ["messageStats"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        "/farm-admin/messages/oversight/stats"
+      );
+      // Map stats if necessary, assuming structure based on toggle response
+      const data = res.data?.data || {};
+      return {
+        total: data.totalMessages || 0, // guessing field name or defaulting
+        unread: data.unreadMessages || 0, // guessing field name or defaulting
+        enabled: data.isMessagingEnabled !== undefined ? data.isMessagingEnabled : true,
+      };
+    },
+  });
+
+  // ================= TOGGLE =================
+  const toggleMutation = useMutation({
+    mutationFn: async () => {
+      return await axiosSecure.patch(
+        "/farm-admin/messages/oversight/toggle"
+      );
+    },
+    onSuccess: () => {
+      toast.success("Messaging status updated");
+      queryClient.invalidateQueries(["messageStats"]);
+    },
+  });
+
+  // ================= CLEAR ALL =================
+  const clearAllMutation = useMutation({
+    mutationFn: async () => {
+      return await axiosSecure.delete(
+        "/farm-admin/messages/oversight/clear"
+      );
+    },
+    onSuccess: () => {
+      toast.success("All messages cleared");
+      queryClient.invalidateQueries(["oversightMessages"]);
+      queryClient.invalidateQueries(["messageStats"]);
+    },
+  });
+
+  // ================= DELETE SINGLE =================
+  const deleteMutation = useMutation({
+    mutationFn: async (id) => {
+      return await axiosSecure.delete(
+        `/farm-admin/messages/oversight/${id}`
+      );
+    },
+    onSuccess: () => {
+      toast.success("Message deleted");
+      queryClient.invalidateQueries(["oversightMessages"]);
+      queryClient.invalidateQueries(["messageStats"]);
+    },
+  });
+
+  // ================= MARK AS READ =================
+  const markAsReadMutation = useMutation({
+    mutationFn: async (id) => {
+      // Trying standard REST partial update
+      return await axiosSecure.patch(
+        `/farm-admin/messages/oversight/${id}`,
+        { isRead: true }
+      );
+    },
+    onSuccess: () => {
+      // Invalidate to update unread count and message highlighting
+      queryClient.invalidateQueries(["oversightMessages"]);
+      queryClient.invalidateQueries(["messageStats"]);
+    },
+  });
+
+  const totalMessages = stats?.total || 0;
+  const unreadCount = stats?.unread || 0;
+  const enabled = stats?.enabled ?? true;
 
   return (
     <div>
       <div>
         <Breadcrumb />
-       <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
+        <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
           Monitor communication between employees and managers
         </p>
       </div>
@@ -172,21 +164,20 @@ const Messaging = () => {
         </button>
       </div>
 
-      {/* Content */}
       <div className="mt-6 col-span-12">
         {activeTab === "oversight" && (
           <div>
             <div className="grid grid-cols-12 gap-6 mt-6">
               <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-12 md:col-span-4">
                 <p className="text-sm text-gray-500">Total Messages</p>
-                <p className={`text-2xl text-[#0A0A0A] font-semibold mt-1 `}>
+                <p className="text-2xl text-[#0A0A0A] font-semibold mt-1">
                   {totalMessages}
                 </p>
               </div>
 
               <div className=" p-6 bg-white rounded-lg border-2 border-[#E5E7EB] col-span-12 md:col-span-4">
                 <p className="text-sm text-gray-500">Unread Messages</p>
-                <p className={`text-2xl text-[#F54900] font-semibold mt-1 `}>
+                <p className="text-2xl text-[#F54900] font-semibold mt-1">
                   {unreadCount}
                 </p>
               </div>
@@ -196,7 +187,7 @@ const Messaging = () => {
                   <p className="text-sm text-gray-500">Messaging Status</p>
                   <div className="flex items-center gap-2 mt-1">
                     <button
-                      onClick={() => setEnabled(!enabled)}
+                      onClick={() => toggleMutation.mutate()}
                       className={`w-11 h-6 rounded-full flex items-center px-1 ${
                         enabled
                           ? " border-2 border-[#00A63E]"
@@ -205,7 +196,9 @@ const Messaging = () => {
                     >
                       <span
                         className={`border-2 border-[#00A63E] w-4 h-4 rounded-full transform transition ${
-                          enabled ? "translate-x-4 " : "border-red-600 border"
+                          enabled
+                            ? "translate-x-4 "
+                            : "border-red-600 border"
                         }`}
                       />
                     </button>
@@ -220,13 +213,18 @@ const Messaging = () => {
                 </div>
               </div>
             </div>
-            <MessageList messages={messages} setMessages={setMessages} />
+
+            <MessageList
+              messages={messages}
+              onDelete={(id) => deleteMutation.mutate(id)}
+              onClearAll={() => clearAllMutation.mutate()}
+              onMarkAsRead={(id) => markAsReadMutation.mutate(id)}
+            />
           </div>
         )}
+
         {activeTab === "create" && <Inbox />}
       </div>
-
-      <div></div>
     </div>
   );
 };

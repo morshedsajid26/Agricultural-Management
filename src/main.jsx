@@ -7,6 +7,7 @@ import AuthProvider from "./provider/AuthProvider.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "react-hot-toast";
+import { SocketProvider } from "./provider/SocketProvider";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +16,10 @@ createRoot(document.getElementById("root")).render(
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <RouterProvider router={router} />
-          <Toaster position="top-center" />
+          <SocketProvider>
+            <RouterProvider router={router} />
+            <Toaster position="top-center" />
+          </SocketProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>

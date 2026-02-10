@@ -193,12 +193,12 @@ const AddSOP = () => {
           <Dropdown
             placeholder="Category"
             options={[
-              "Milking",
-              "Feeding",
-              "Health",
-              "Calves",
-              "Maintenance",
-              "Emergencies",
+              "MILKING",
+              "FEEDING",
+              "HEALTH",
+              "CALVES",
+              "MAINTENANCE",
+              "EMERGENCIES",
               "SAFETY",
             ]}
             value={category}

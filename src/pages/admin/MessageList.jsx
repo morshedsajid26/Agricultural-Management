@@ -3,30 +3,21 @@ import Pagination from "../../components/Pagination";
 import { FiTrash2 } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 
-const MessageList = ({ messages, setMessages }) => {
+const MessageList = ({ messages, onDelete, onClearAll, onMarkAsRead }) => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   //    search filter
   const filteredMessages = useMemo(() => {
+    if (!Array.isArray(messages)) return [];
     return messages.filter(
       (m) =>
-        m.text.toLowerCase().includes(search.toLowerCase()) ||
-        m.from.toLowerCase().includes(search.toLowerCase()) ||
-        m.to.toLowerCase().includes(search.toLowerCase())
+        m.text?.toLowerCase().includes(search.toLowerCase()) ||
+        m.from?.toLowerCase().includes(search.toLowerCase()) ||
+        m.to?.toLowerCase().includes(search.toLowerCase())
     );
   }, [messages, search]);
-
-  // 🗑 delete single
-  const deleteMessage = (id) => {
-    setMessages((prev) => prev.filter((m) => m.id !== id));
-  };
-
-  //  clear all
-  const clearAll = () => {
-    setMessages([]);
-  };
 
   const totalPages = Math.ceil(filteredMessages.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -52,7 +43,7 @@ const MessageList = ({ messages, setMessages }) => {
 
         <div className="col-span-4 flex justify-end items-center ">
           <button
-            onClick={clearAll}
+            onClick={onClearAll}
             className="bg-[#E7000B] text-white px-4 md:py-4 py-1 rounded-lg flex items-center gap-2 cursor-pointer"
           >
             <FiTrash2 size={20} />
@@ -71,8 +62,13 @@ const MessageList = ({ messages, setMessages }) => {
           paginatedData.map((msg) => (
             <div
               key={msg.id}
-              className={`p-6 border-b border-[#E5E7EB] flex justify-between gap-4 ${
-                msg.unread ? "bg-orange-50" : "bg-white"
+              onClick={() => {
+                if (msg.unread) {
+                   onMarkAsRead(msg.id);
+                }
+              }}
+              className={`p-6 border-b border-[#E5E7EB] flex justify-between gap-4 cursor-pointer transition-colors ${
+                msg.unread ? "bg-orange-50 hover:bg-orange-100" : "bg-white hover:bg-gray-50"
               }`}
             >
               <div className="space-y-1">
@@ -90,7 +86,10 @@ const MessageList = ({ messages, setMessages }) => {
               </div>
 
               <button
-                onClick={() => deleteMessage(msg.id)}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(msg.id);
+                }}
                 className="text-red-500 hover:text-red-700 cursor-pointer"
               >
                 <FiTrash2 size={18} />

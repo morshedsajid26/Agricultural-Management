@@ -218,7 +218,7 @@ const SopManagement = () => {
             setSearch(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-full md:w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none"
+          className="w-full md:w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#99A1AF] placeholder:text-[#99A1AF]"
         />
       </div>
 
