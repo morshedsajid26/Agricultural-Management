@@ -97,63 +97,102 @@ export default function Inbox() {
   useEffect(() => {
     if (!socket) return;
 
-    const handleMessage = (event) => {
-        try {
-            const data = JSON.parse(event.data);
-            console.log("WebSocket Receive:", new Date().toLocaleTimeString(), data);
-            
-            const newMessage = data; 
+    const handleMessage = (data) => {
+      // 1. Validate data
+      if (!data) return;
+      console.log("🔔 Socket received (new_message):", data);
 
-            const isRelatedToCurrentChat = selectedId && (newMessage.senderId === selectedId || newMessage.receiverId === selectedId);
-    
-            if (isRelatedToCurrentChat) {
-                queryClient.setQueryData(["conversationMessages", selectedId], (oldMessages = []) => {
-                    const isDuplicate = oldMessages.some(m => m.id === newMessage.id);
-                    if (isDuplicate) return oldMessages;
-                    return [...oldMessages, newMessage];
-                });
-                // Smooth scroll for new incoming message
-                scrollToBottom("smooth");
-            }
-            
-            queryClient.invalidateQueries(["inboxConversations"]);
+      // 2. Extract IDs robustly (handle object with _id, id, or string)
+      const getSafeId = (userObj) => {
+        if (!userObj) return null;
+        if (typeof userObj === "string") return userObj;
+        return userObj.id || userObj._id || userObj.userId;
+      };
 
-        } catch (err) {
-            console.error("Failed to parse WebSocket message:", err);
-        }
+      const msgSenderId = getSafeId(data.sender) || data.senderId;
+      const msgReceiverId = getSafeId(data.receiverId) || data.receiver?.id || data.receiver?._id;
+
+      // 3. Normalize for Frontend (ensure senderId exists for render logic)
+      const normalizedMessage = {
+          ...data,
+          senderId: msgSenderId,     // Ensure these exist for UI logic
+          receiverId: msgReceiverId
+      };
+
+      // 4. ALWAYS update the inbox list sidebar
+      queryClient.invalidateQueries(["inboxConversations"]);
+
+      // 5. Update the ACTIVE chat only if it matches
+      const isRelated = 
+         String(msgSenderId) === String(selectedId) || 
+         String(msgReceiverId) === String(selectedId);
+
+      if (isRelated) {
+        queryClient.setQueryData(
+          ["conversationMessages", selectedId],
+          (old = []) => {
+            const exists = old.some((m) => m.id === normalizedMessage.id);
+            if (exists) return old;
+            return [...old, normalizedMessage];
+          }
+        );
+        scrollToBottom("smooth");
+      }
     };
 
-    socket.addEventListener("message", handleMessage);
+    // Listen for the correct event name from backend
+    socket.on("new_message", handleMessage);
 
     return () => {
-      socket.removeEventListener("message", handleMessage);
+      socket.off("new_message", handleMessage);
     };
   }, [socket, selectedId, queryClient]);
   const sendMutation = useMutation({
     mutationFn: async () => {
-      // If we have a file, use FormData
+      // 1. FILE UPLOAD: Use Axios (HTTP)
+      // Backend likely doesn't support binary file upload via this specific socket event yet
       if (selectedFile) {
           const formData = new FormData();
           formData.append("receiverId", selectedId);
-          formData.append("content", newMessage); // Message text is optional but good to send
-          formData.append("image", selectedFile); // Assuming backend expects "image" or "file"
+          formData.append("content", newMessage || " "); 
+          formData.append("image", selectedFile);
 
           return await axiosSecure.post("/farm-admin/messages", formData, {
               headers: { "Content-Type": "multipart/form-data" },
           });
       }
 
-      // Otherwise, standard JSON for text-only
-      return await axiosSecure.post("/farm-admin/messages", {
-        receiverId: selectedId,
-        content: newMessage,
+      // 2. TEXT MESSAGE: Use Socket (Real-time)
+      // We use socket.emit because the backend broadcasting logic is tied to the 'send_message' event
+      if (!socket) throw new Error("Socket not connected");
+
+      return new Promise((resolve) => {
+        socket.emit("send_message", {
+          content: newMessage,
+          receiverId: selectedId,
+        });
+        // We resolve immediately/optimistically or could wait for ack if backend supported it
+        resolve({ data: { success: true } });
       });
     },
-    onSuccess: (data) => {
-      // Optimistically update or rely on socket
+    onSuccess: (res) => {
+      // 1. Handle File Upload Success (HTTP)
+      // Since HTTP doesn't broadcast, we MUST manually add the message to the UI
+      const sentMessage = res?.data?.data; 
+      if (sentMessage) {
+        queryClient.setQueryData(
+          ["conversationMessages", selectedId],
+          (old = []) => [...old, sentMessage]
+        );
+        // Also update sidebar to show "sent a photo" etc
+        queryClient.invalidateQueries(["inboxConversations"]);
+      }
+
+      // 2. Clear Inputs
       setNewMessage("");
       setSelectedFile(null);
       setImagePreview(null);
+      scrollToBottom("smooth");
     },
     onError: () => {
       toast.error("Failed to send message");

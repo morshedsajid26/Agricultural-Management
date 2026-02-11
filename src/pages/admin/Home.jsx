@@ -104,9 +104,9 @@ const Home = () => {
           <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">
             {stats.messages.today}
           </h2>
-          <p className="text-[#4A5565]">
+          {/* <p className="text-[#4A5565]">
             {stats.messages.unread} unread
-          </p>
+          </p> */}
         </div>
 
         {/* Subscription */}

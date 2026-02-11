@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import io from "socket.io-client";
 import useAuth from "../hooks/useAuth";
 import { BASE_URL } from "../config/api";
 
@@ -8,76 +9,87 @@ export const useSocket = () => {
   return useContext(SocketContext);
 };
 
+// Helper to decode JWT manually since we don't have jwt-decode
+const parseJwt = (token) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};
+
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [error, setError] = useState(null);
   const { user } = useAuth();
-  const reconnectTimeoutRef = useRef(null);
-  const socketRef = useRef(null);
 
   useEffect(() => {
-    const connectSocket = () => {
-      // Only connect if user exists and has an ID
-      if (!user?.id) return;
+    // If we have a token but no explicit ID, try to decode it
+    let userId = user?.id;
+    let farmId = user?.farmId;
+    let role = user?.role;
+    let token = user?.token;
 
-      // Construct WS URL
-      // Ensure we don't have double slashes if BASE_URL ends with /
-      const baseUrl = BASE_URL.endsWith("/") ? BASE_URL.slice(0, -1) : BASE_URL;
-      const wsUrl = baseUrl.replace(/^http/, "ws") + `?userId=${user.id}`;
-      
-      console.log("Initializing WebSocket to:", wsUrl);
-
-      try {
-          const ws = new WebSocket(wsUrl);
-
-          ws.onopen = () => {
-            console.log("WebSocket connected");
-            setSocket(ws);
-            setError(null);
-          };
-
-          ws.onclose = (event) => {
-            console.warn("WebSocket disconnected:", event.code, event.reason);
-            setSocket(null);
-            socketRef.current = null;
-            
-            // Reconnect logic
-            if (user?.id) {
-                 clearTimeout(reconnectTimeoutRef.current);
-                 reconnectTimeoutRef.current = setTimeout(() => {
-                     console.log("Attempting to reconnect WebSocket...");
-                     connectSocket();
-                 }, 3000);
-            }
-          };
-
-          ws.onerror = (err) => {
-            console.error("WebSocket error:", err);
-            setError(`Connection Failed to ${wsUrl}`);
-            ws.close();
-          };
-
-          socketRef.current = ws;
-
-      } catch (e) {
-          console.error("WebSocket setup error:", e);
-          setError(e.message);
+    // If user object only has token (from AuthProvider), decode it
+    if (!userId && token) {
+      const decoded = parseJwt(token);
+      if (decoded) {
+        userId = decoded.id || decoded.userId || decoded.sub; // Try common fields
+        farmId = decoded.farmId;
+        role = decoded.role || role;
       }
-    };
-
-    if (user?.id && !socketRef.current) {
-        connectSocket();
     }
 
+    if (!userId || !BASE_URL) return;
+
+    const socketUrl = new URL(BASE_URL).origin;
+
+    console.log("🔌 Connecting socket for user:", userId);
+
+    const newSocket = io(socketUrl, {
+      query: {
+        userId: userId,
+        farmId: farmId, // Pass farmId if backend middleware needs it
+        token: token,   // Pass token for middleware auth
+      },
+      auth: {
+        userId: userId,
+        token: token,   // Standard auth field
+      },
+      transports: ["websocket", "polling"], // Allow polling fallback
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
+    });
+
+    setSocket(newSocket);
+
+    newSocket.on("connect", () => {
+      console.log("✅ Socket connected:", newSocket.id);
+      setError(null);
+
+      // Join rooms manually just in case
+      newSocket.emit("join", {
+        userId: userId,
+        farmId: farmId,
+        role: role,
+      });
+    });
+
+    newSocket.on("connect_error", (err) => {
+      console.error("❌ Socket connection error:", err);
+      setError(err.message);
+    });
+
+    newSocket.on("disconnect", (reason) => {
+      console.warn("⚠️ Socket disconnected:", reason);
+    });
+
     return () => {
-      if (socketRef.current) {
-        console.log("Cleaning up WebSocket connection");
-        socketRef.current.close();
-        socketRef.current = null;
-      }
-      clearTimeout(reconnectTimeoutRef.current);
+      newSocket.disconnect();
+      setSocket(null);
     };
-  }, [user?.id]);
+  }, [user, user?.token]); 
 
   return (
     <SocketContext.Provider value={{ socket, error }}>
