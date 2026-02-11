@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AiFillPicture } from "react-icons/ai";
+import { AiFillPicture, AiOutlineFile } from "react-icons/ai";
+import { FaFileDownload } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa6";
 import { FiMessageSquare, FiX } from "react-icons/fi";
@@ -8,6 +9,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { useSocket } from "../../provider/SocketProvider";
+import { BASE_URL } from "../../config/api";
 
 import { useSearchParams } from "react-router-dom";
 
@@ -46,6 +48,44 @@ export default function Inbox() {
     }, 100);
   };
 
+  // Helper: Get full URL
+  const getFullUrl = (path) => {
+    if (!path) return null;
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    
+    // Check if BASE_URL ends with /api and strip it for static files
+    // Assuming uploads are served from root, not /api/uploads
+    let rootUrl = BASE_URL;
+    if (rootUrl.endsWith("/api")) {
+        rootUrl = rootUrl.slice(0, -4);
+    } else if (rootUrl.endsWith("/api/")) {
+        rootUrl = rootUrl.slice(0, -5);
+    }
+
+    const cleanBase = rootUrl.replace(/\/$/, "");
+    // Replace backslashes with forward slashes for Windows paths
+    const cleanPath = path.replace(/\\/g, "/").replace(/^\//, "");
+    return `${cleanBase}/${cleanPath}`;
+  };
+
+  // Helper: Get file type
+  const getFileType = (url) => {
+    if (!url) return "unknown";
+    if (url.startsWith("blob:")) return "image"; 
+
+    try {
+        const extension = url.split(".").pop().toLowerCase();
+        const videoExts = ["mp4", "webm", "ogg", "mov"];
+        const imageExts = ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp"];
+        
+        if (videoExts.includes(extension)) return "video";
+        if (imageExts.includes(extension)) return "image";
+        return "file";
+    } catch (e) {
+        return "file";
+    }
+  };
+
   // =========================
   // 📥 GET CONVERSATIONS
   // =========================
@@ -59,7 +99,7 @@ export default function Inbox() {
         .map((item) => ({
           id: item.userId,
           name: item.name,
-          role: item.jobTitle || "User",
+          role: item.role || "User",
           avatar: item.name?.charAt(0),
           unread: item.unreadCount > 0,
           lastMessage: item.lastMessage,
@@ -79,7 +119,16 @@ export default function Inbox() {
         const res = await axiosSecure.get(`/farm-admin/messages/history/${selectedId}`);
         const data = res.data.data || [];
         // Sort messages: Oldest first (ASC) for chat view
-        return data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        return data
+          .map((msg) => {
+            const imgUrl = msg.imageUrl ? getFullUrl(msg.imageUrl) : msg.image;
+            // console.log("Mapped Message Image:", imgUrl); // Debugging
+            return {
+                ...msg,
+                image: imgUrl,
+            };
+          })
+          .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     },
     enabled: !!selectedId, 
   });
@@ -101,6 +150,7 @@ export default function Inbox() {
       // 1. Validate data
       if (!data) return;
       console.log("🔔 Socket received (new_message):", data);
+      console.log("BASE_URL:", BASE_URL); // Debugging
 
       // 2. Extract IDs robustly (handle object with _id, id, or string)
       const getSafeId = (userObj) => {
@@ -112,11 +162,15 @@ export default function Inbox() {
       const msgSenderId = getSafeId(data.sender) || data.senderId;
       const msgReceiverId = getSafeId(data.receiverId) || data.receiver?.id || data.receiver?._id;
 
+      const constructedUrl = data.imageUrl ? getFullUrl(data.imageUrl) : data.image;
+      console.log("Constructed Socket URL:", constructedUrl); // Debugging
+
       // 3. Normalize for Frontend (ensure senderId exists for render logic)
       const normalizedMessage = {
           ...data,
           senderId: msgSenderId,     // Ensure these exist for UI logic
-          receiverId: msgReceiverId
+          receiverId: msgReceiverId,
+          image: constructedUrl,
       };
 
       // 4. ALWAYS update the inbox list sidebar
@@ -157,9 +211,7 @@ export default function Inbox() {
           formData.append("content", newMessage || " "); 
           formData.append("image", selectedFile);
 
-          return await axiosSecure.post("/farm-admin/messages", formData, {
-              headers: { "Content-Type": "multipart/form-data" },
-          });
+          return await axiosSecure.post("/farm-admin/messages", formData);
       }
 
       // 2. TEXT MESSAGE: Use Socket (Real-time)
@@ -176,13 +228,18 @@ export default function Inbox() {
       });
     },
     onSuccess: (res) => {
+      console.log("✅ Message sent success:", res); // Debug log
       // 1. Handle File Upload Success (HTTP)
       // Since HTTP doesn't broadcast, we MUST manually add the message to the UI
       const sentMessage = res?.data?.data; 
       if (sentMessage) {
+        const normalizedSentMessage = {
+            ...sentMessage,
+            image: sentMessage.imageUrl ? getFullUrl(sentMessage.imageUrl) : sentMessage.image,
+        };
         queryClient.setQueryData(
           ["conversationMessages", selectedId],
-          (old = []) => [...old, sentMessage]
+          (old = []) => [...old, normalizedSentMessage]
         );
         // Also update sidebar to show "sent a photo" etc
         queryClient.invalidateQueries(["inboxConversations"]);
@@ -194,7 +251,8 @@ export default function Inbox() {
       setImagePreview(null);
       scrollToBottom("smooth");
     },
-    onError: () => {
+    onError: (err) => {
+      console.error("❌ Message send error:", err);
       toast.error("Failed to send message");
     },
   });
@@ -319,15 +377,53 @@ export default function Inbox() {
 
                 return (
                     <div key={index} className={`flex ${isRightSide ? "justify-end" : "justify-start"}`}>
-                        <div className={`max-w-[70%] ${isRightSide ? "text-right" : "text-left"}`}>
+                        <div className={`max-w-[20%] ${isRightSide ? "text-right" : "text-left"}`}>
                             <div className={`px-4 py-2 rounded-lg text-base ${isRightSide ? "bg-[#F6A62D] text-white rounded-br-none" : "bg-[#F3F4F6] text-[#101828] rounded-bl-none"}`}>
                                 {msg.image && (
                                     <div className="mb-2">
-                                        {msg.image.endsWith(".mp4") || msg.image.endsWith(".webm") ? (
-                                             <video src={msg.image} controls className="max-w-full rounded-md" />
-                                        ) : (
-                                            <img src={msg.image} alt="attachment" className="max-w-full rounded-md" />
-                                        )}
+                                        {(() => {
+                                            const fileType = getFileType(msg.image);
+                                            return (
+                                                <>
+                                                 {fileType === "video" ? (
+                                                     <video src={msg.image} controls className="max-w-full rounded-md" />
+                                                 ) : fileType === "image" ? (
+                                                     <img 
+                                                         src={msg.image} 
+                                                         alt="attachment" 
+                                                         className="max-w-full rounded-md" 
+                                                         onError={(e) => {
+                                                             e.target.style.display = 'none';
+                                                             e.target.nextSibling.style.display = 'flex';
+                                                         }}
+                                                     />
+                                                 ) : (
+                                                     <a 
+                                                         href={msg.image} 
+                                                         target="_blank" 
+                                                         rel="noopener noreferrer" 
+                                                         className="flex items-center gap-2 p-2 bg-black/10 rounded hover:bg-black/20 text-inherit no-underline"
+                                                     >
+                                                         <AiOutlineFile className="text-xl" />
+                                                         <span className="text-sm underline">Download Attachment</span>
+                                                     </a>
+                                                 )}
+                                                 {/* Fallback for broken images */}
+                                                 <div className="hidden flex-col items-center justify-center p-4 bg-black/5 rounded border border-dashed border-black/20">
+                                                     <span className="text-xs mb-1 opacity-70">Image failed to load</span>
+                                                     <a 
+                                                         href={msg.image} 
+                                                         target="_blank" 
+                                                         rel="noopener noreferrer"
+                                                         className="flex items-center gap-1 text-xs underline"
+                                                     >
+                                                         <FaFileDownload /> Download
+                                                     </a>
+                                                 </div>
+                                                </>
+                                            );
+                                        })()}
+                                         
                                     </div>
                                 )}
                                 {msg.content}
@@ -386,7 +482,7 @@ export default function Inbox() {
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  if (newMessage.trim()) sendMutation.mutate();
+                  if (newMessage.trim() || selectedFile) sendMutation.mutate();
                 }
               }}
               className="flex-1  text-[#0A0A0A] rounded-md px-3 py-3 outline-0"
@@ -395,7 +491,7 @@ export default function Inbox() {
 
             <button
               onClick={() => {
-                if (newMessage.trim()) sendMutation.mutate();
+                if (newMessage.trim() || selectedFile) sendMutation.mutate();
               }}
               className="bg-[#F6A62D] rounded-full text-white px-2 py-2 cursor-pointer"
             >
