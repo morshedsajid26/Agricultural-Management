@@ -76,14 +76,14 @@ const updateMutation = useMutation({
       </div>
 
       {/* Logo Upload */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <UploadImage
           label="Farm Logo"
           branding="Farm"
           value={logo}
           onChange={(file) => setLogo(file)}
         />
-      </div>
+      </div> */}
 
       {/* Farm Info */}
       <div className="bg-white rounded-lg border-2 border-[#E5E7EB] mt-6 p-6">

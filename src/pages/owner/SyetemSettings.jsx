@@ -48,10 +48,10 @@ const SystemSettings = () => {
       </div>
 
 
-      <div className="mt-6">
+      {/* <div className="mt-6">
       <UploadImage label={`Platform Logo`} branding={`Platform`} />
 
-      </div>
+      </div> */}
 
       <div className="mt-6">
       <LanguageSupport/>
@@ -61,7 +61,8 @@ const SystemSettings = () => {
       <div className=''>
             <button className='bg-[#F6A62D] text-white px-6 py-3 rounded-lg mt-9  flex items-center gap-2 hover:bg-[#e5942b] cursor-pointer w-full flex justify-center'>
               <LuSave className='w-6 h-6 ' />
-              Save All Settings
+              Save 
+              {/* All Settings */}
             </button>
 
             </div>
