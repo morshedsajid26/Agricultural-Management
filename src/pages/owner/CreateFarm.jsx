@@ -124,6 +124,13 @@ const CreateFarm = () => {
               }
             />
 
+              <Password
+              label="Password"
+              inputClass="rounded-lg"
+              className="col-span-12"
+              onChange={(e) => handleChange("password", e.target.value)}
+            />
+
             <InputField
               type="text"
               label="Country"
@@ -140,14 +147,7 @@ const CreateFarm = () => {
               onChange={(e) =>
                 handleChange("defaultLanguage", e.target.value)
               }
-            />
-
-            <Password
-              label="Password"
-              inputClass="rounded-lg"
-              className="col-span-12"
-              onChange={(e) => handleChange("password", e.target.value)}
-            />
+              />
           </div>
         </div>
 

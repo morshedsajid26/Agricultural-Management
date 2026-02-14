@@ -158,9 +158,9 @@ const FarmDetails = () => {
           </button>
 
           {/* Reset Placeholder */}
-          <button className="md:px-4 px-2 py-2 rounded-md border border-[#D1D5DC] text-[#0A0A0A] hover:bg-gray-50 flex items-center gap-2">
+          {/* <button className="md:px-4 px-2 py-2 rounded-md border border-[#D1D5DC] text-[#0A0A0A] hover:bg-gray-50 flex items-center gap-2">
             <MdRestartAlt /> Reset Access
-          </button>
+          </button> */}
 
           {/* Delete */}
           <button
