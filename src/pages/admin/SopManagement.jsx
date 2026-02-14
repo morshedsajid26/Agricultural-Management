@@ -14,10 +14,11 @@ import toast from "react-hot-toast";
 const SopManagement = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
-
+ const [categoryFilter, setCategoryFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [viewData, setViewData] = useState(null);
+   const [deleteId, setDeleteId] = useState(null);
 
   const itemsPerPage = 10;
 
@@ -37,15 +38,12 @@ const SopManagement = () => {
     onSuccess: () => {
       toast.success("SOP deleted successfully");
       queryClient.invalidateQueries(["farmSops"]);
+      setDeleteId(null);
     },
     onError: () => toast.error("Delete failed"),
   });
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this SOP?")) {
-      deleteMutation.mutate(id);
-    }
-  };
+
 
   // ================= DOWNLOAD =================
   const handleDownload = async (id, fileName) => {
@@ -67,10 +65,18 @@ const SopManagement = () => {
     }
   };
 
-  // ================= FILTER =================
-  const filteredData = sopData.filter((item) =>
-    item.title.toLowerCase().includes(search.toLowerCase())
-  );
+    // ================= FILTER =================
+  const filteredData = sopData.filter((item) => {
+    const matchesSearch =
+      item.title?.toLowerCase().includes(search.toLowerCase()) ||
+      item.category?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesCategory =
+      categoryFilter === "all" ||
+      item.category?.toLowerCase() === categoryFilter;
+
+    return matchesSearch && matchesCategory;
+  });
 
   // ================= PAGINATION =================
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -83,7 +89,29 @@ const SopManagement = () => {
   // ================= TABLE =================
   const TableHeads = [
     { Title: "SOP Title", key: "title", width: "25%" },
-    { Title: "Category", key: "category", width: "15%" },
+    {
+      Title: "Category",
+      key: "category",
+      width: "15%",
+      render: (row) => (
+         <span
+          className={`px-3 py-1 rounded-md text-sm font-medium ${
+             row.category === "MILKING"
+              ? "bg-[#E6F4EA] text-[#137333]"
+              : row.category === "FEEDING"
+                ? "bg-[#E6F4EA] text-[#137333]"
+                  : row.category === "CALVES"
+                ? "bg-[#F3E8FF] text-[#8200DB]"
+                : row.category === "HEALTH"
+                ? "bg-[#F3E8FF] text-[#8200DB]"
+                : "bg-[#FFF4E5] text-[#B54708]"
+          }`}
+        >
+          {row.category}
+          
+        </span>
+      ),
+    },
     {
       Title: "Document",
       key: "document",
@@ -140,7 +168,7 @@ const SopManagement = () => {
 
           <RiDeleteBinLine
             className="text-red-600 cursor-pointer"
-            onClick={() => handleDelete(row.id)}
+            onClick={() =>setDeleteId(row.id)}
           />
         </div>
       ),
@@ -167,6 +195,33 @@ const SopManagement = () => {
         </Link>
       </div>
 
+       {/* CATEGORY FILTER */}
+      <div className="flex my-6 gap-4 overflow-x-auto">
+        {[
+          "all",
+          "milking",
+          "feeding",
+          "health",
+          "calves",
+          "maintenance",
+          "emergencies",
+        ].map((cat) => (
+          <button
+            key={cat}
+            onClick={() =>
+              setCategoryFilter(categoryFilter === cat ? "all" : cat)
+            }
+            className={`border px-4 py-2 rounded-lg text-sm ${
+              categoryFilter === cat
+                ? "bg-[#F6A62D] text-white"
+                : "border-black/10 text-[#0A0A0A]"
+            }`}
+          >
+            {cat.toUpperCase()}
+          </button>
+        ))}
+      </div>
+
       <div className="relative mt-6">
         <FaSearch className="absolute top-1/2 -translate-y-1/2 left-3 text-[#99A1AF]" />
         <input
@@ -174,7 +229,7 @@ const SopManagement = () => {
           placeholder="Search SOP..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full md:w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none"
+          className="w-full md:w-[40%] pl-10 p-4 border border-[#D1D5DC] rounded-md outline-none text-[#99A1AF] placeholder:text-[#99A1AF]"
         />
       </div>
 
@@ -196,6 +251,39 @@ const SopManagement = () => {
           onClose={() => setViewData(null)}
         />
       )} */}
+
+      {/* DELETE MODAL */}
+      {deleteId && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-[90%] max-w-md p-6">
+            <h3 className="text-xl font-semibold text-[#0A0A0A]">Delete SOP</h3>
+
+            <p className="mt-2 text-[#4A5565]">
+              Are you sure you want to delete this SOP?
+              This action cannot be undone.
+            </p>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => setDeleteId(null)}
+                className="px-4 py-2 rounded-md bg-gray-200 text-[#0A0A0A]"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => deleteMutation.mutate(deleteId)}
+                disabled={deleteMutation.isPending}
+                className="px-4 py-2 rounded-md bg-red-600 text-white"
+              >
+                {deleteMutation.isPending
+                  ? "Deleting..."
+                  : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
