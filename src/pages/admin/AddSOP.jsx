@@ -214,7 +214,6 @@ const AddSOP = () => {
               "CALVES",
               "MAINTENANCE",
               "EMERGENCIES",
-              "SAFETY",
             ]}
             value={category}
             onSelect={(value) => setCategory(value)}

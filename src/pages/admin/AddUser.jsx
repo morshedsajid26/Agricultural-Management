@@ -32,7 +32,7 @@ const AddUser = () => {
       return res.data.data;
     },
     enabled: isEdit,
-    initialData: initialUserData, 
+    initialData: initialUserData,
   });
 
   //   Prefill form
@@ -61,10 +61,7 @@ const AddUser = () => {
   //   Update User
   const updateUserMutation = useMutation({
     mutationFn: async (userData) => {
-      return await axiosSecure.patch(
-        `/farm-admin/users/${id}`,
-        userData
-      );
+      return await axiosSecure.patch(`/farm-admin/users/${id}`, userData);
     },
     onSuccess: () => {
       toast.success("User updated successfully");
@@ -120,12 +117,13 @@ const AddUser = () => {
 
       <div className="mt-4">
         <div>
-          {isEdit?
-          <h3 className="text-[#0A0A0A] text-3xl whitespace-nowrap">
-            Edit {userData?.name}
+          {isEdit ? (
+            <h3 className="text-[#0A0A0A] text-3xl whitespace-nowrap">
+              Edit {userData?.name}
             </h3>
-          :
-          <Breadcrumb />}
+          ) : (
+            <Breadcrumb />
+          )}
         </div>
         <p className="text-[#4A5565] text-sm md:text-base mt-1.5">
           {isEdit
@@ -135,7 +133,6 @@ const AddUser = () => {
       </div>
 
       <div className="bg-white p-6 rounded-lg border-2 border-[#E5E7EB] flex flex-col gap-6 mt-6">
-
         <InputField
           type="text"
           inputClass="rounded-lg"
@@ -150,9 +147,16 @@ const AddUser = () => {
           label="Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-
         />
 
+        <Password
+          label="Password"
+          inputClass="rounded-lg"
+          placeholder={isEdit ? "Can keep current password" : "Enter password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        
         <Dropdown
           label="Role"
           placeholder="Select Role"
@@ -161,32 +165,19 @@ const AddUser = () => {
           selected={role}
         />
 
-        <Password
-          label="Password"
-          inputClass="rounded-lg"
-          placeholder={
-            isEdit ? "Can keep current password" : "Enter password"
-          }
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
         <button
           onClick={handleSubmit}
           disabled={
-            createUserMutation.isPending ||
-            updateUserMutation.isPending
+            createUserMutation.isPending || updateUserMutation.isPending
           }
           className="bg-[#F6A62D] text-white px-4 py-2 rounded-md hover:bg-[#e5942b] cursor-pointer mt-6"
         >
-          {createUserMutation.isPending ||
-          updateUserMutation.isPending
+          {createUserMutation.isPending || updateUserMutation.isPending
             ? "Processing..."
             : isEdit
-            ? "Update User"
-            : "Create User"}
+              ? "Update User"
+              : "Create User"}
         </button>
-
       </div>
     </div>
   );
