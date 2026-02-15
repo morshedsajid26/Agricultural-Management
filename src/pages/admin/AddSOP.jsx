@@ -102,7 +102,7 @@ const AddSOP = () => {
   // ================= UPDATE SOP =================
   const updateMutation = useMutation({
     mutationFn: async () => {
-      // 🔹 FILE UPDATE
+      //   FILE UPDATE
       if (activeTab === "upload" && selectedFile) {
         const formData = new FormData();
         formData.append("title", title);
@@ -118,7 +118,7 @@ const AddSOP = () => {
         );
       }
 
-      // 🔹 DIGITAL UPDATE
+      //   DIGITAL UPDATE
       const structuredContent = {
         sections: [
           {

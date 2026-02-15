@@ -35,14 +35,14 @@ const TaskOversight = () => {
       t.assignedTo?.name?.toLowerCase().includes(search.toLowerCase())
   );
 
-  // 🔹 Status style helper
+  //   Status style helper
   const statusStyle = {
     COMPLETED: "bg-[#DCFCE7] text-[#008236]",
     PENDING: "bg-[#FFEDD4] text-[#CA3500]",
     IN_PROGRESS: "bg-blue-100 text-blue-600",
   };
 
-  // 🔹 TableHeads
+  //   TableHeads
   const TableHeads = [
     {
       Title: "Task",

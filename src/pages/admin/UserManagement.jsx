@@ -71,7 +71,7 @@ const UserManagement = () => {
       u.email?.toLowerCase().includes(search.toLowerCase()),
   );
 
-  // 🔹 Pagination
+  //   Pagination
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = filteredData.slice(

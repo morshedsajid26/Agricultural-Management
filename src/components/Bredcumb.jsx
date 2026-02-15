@@ -5,31 +5,31 @@ const Breadcrumb = () => {
 
   const pathParts = pathname.split("/").filter(Boolean);
 
-  // ❌ remove role + ids
+  //     remove role + ids
   const cleanedParts = pathParts.filter(
     (part) =>
       !["admin", "owner"].includes(part.toLowerCase()) &&
       !/^\d+$/.test(part)
   );
 
-  // 🔁 Special route handling
+  //   Special route handling
   let titleParts = [];
 
-  // 👉 SOP Edit page
+  //   SOP Edit page
   if (
     cleanedParts.includes("edit") &&
     cleanedParts.includes("sop")
   ) {
     titleParts = ["Edit", "SOP"];
   }
-  // 👉 SOP Create page
+  //   SOP Create page
   else if (
     cleanedParts.includes("create") &&
     cleanedParts.includes("sop")
   ) {
     titleParts = ["Create", "SOP"];
   }
-  // 👉 Default: last two segments
+  //   Default: last two segments
   else {
     titleParts =
       cleanedParts.length >= 2

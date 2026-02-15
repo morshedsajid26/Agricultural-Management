@@ -87,7 +87,7 @@ export default function Inbox() {
   };
 
   // =========================
-  // 📥 GET CONVERSATIONS
+  //    GET CONVERSATIONS
   // =========================
   const { data: conversations = [] } = useQuery({
     queryKey: ["inboxConversations"],
@@ -110,7 +110,7 @@ export default function Inbox() {
   });
 
   // =========================
-  // 📥 GET MESSAGES FOR SELECTED CONVERSATION
+  //    GET MESSAGES FOR SELECTED CONVERSATION
   // =========================
   const { data: messages = [] } = useQuery({
     queryKey: ["conversationMessages", selectedId],
@@ -252,7 +252,7 @@ export default function Inbox() {
       scrollToBottom("smooth");
     },
     onError: (err) => {
-      console.error("❌ Message send error:", err);
+      console.error("    Message send error:", err);
       toast.error("Failed to send message");
     },
   });
@@ -266,7 +266,7 @@ export default function Inbox() {
   );
 
   // ===============================
-  // 📥 INBOX VIEW (DESIGN UNCHANGED)
+  //    INBOX VIEW (DESIGN UNCHANGED)
   // ===============================
   if (!selectedConversation) {
     return (

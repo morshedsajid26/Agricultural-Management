@@ -41,7 +41,7 @@ const FarmDetails = () => {
   const formatDate = (dateString) =>
     new Date(dateString).toISOString().split("T")[0];
 
-  // 🔹 Fetch Farm
+  //   Fetch Farm
   const { data: farm, isLoading, isError } = useQuery({
     queryKey: ["farmDetails", id],
     queryFn: async () => {
@@ -50,7 +50,7 @@ const FarmDetails = () => {
     },
   });
 
-  // 🔹 Status Toggle
+  //   Status Toggle
   const statusMutation = useMutation({
     mutationFn: async () => {
       const newStatus =
@@ -76,7 +76,7 @@ const FarmDetails = () => {
     },
   });
 
-  // 🔹 Delete Farm
+  //   Delete Farm
   const deleteMutation = useMutation({
     mutationFn: async () => {
       return await axiosSecure.delete(`/system-owner/farm/${id}`);
