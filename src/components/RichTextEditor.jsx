@@ -32,7 +32,9 @@ const normalizeAlign = (align) => {
   return "left"; // start, justify, initial, undefined
 };
 
-const RichTextEditor = ({ value, onChange }) => {
+import toast from "react-hot-toast";
+
+const RichTextEditor = ({ value, onChange, onImageUpload }) => {
   const editorRef = useRef(null);
   const fileInputRef = useRef(null);
   const savedRange = useRef(null);
@@ -120,14 +122,31 @@ const RichTextEditor = ({ value, onChange }) => {
   };
 
   /* ===== IMAGE ===== */
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     restoreSelection();
     editorRef.current.focus();
 
-    const url = URL.createObjectURL(file);
+    let url;
+
+    if (onImageUpload) {
+      try {
+        // Show loading placeholder or wait (simple wait for now)
+        const toastId = toast.loading("Uploading image...");
+        url = await onImageUpload(file);
+        toast.dismiss(toastId);
+        if(!url) throw new Error("Upload failed");
+      } catch (err) {
+        toast.error("Image upload failed");
+        console.error(err);
+        return;
+      }
+    } else {
+       url = URL.createObjectURL(file);
+    }
+    
     document.execCommand("insertImage", false, url);
 
     setTimeout(bindImages, 0);

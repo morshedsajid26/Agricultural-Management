@@ -24,21 +24,38 @@ const AddSOP = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [digitalContent, setDigitalContent] = useState("");
 
-  // ================= FETCH SINGLE SOP (EDIT) =================
+  // ================= FETCH SINGLE SOP =================
   const { data: editData, isLoading } = useQuery({
     queryKey: ["singleSop", id],
     enabled: isEdit,
     queryFn: async () => {
-      const res = await axiosSecure.get("/farm-admin/sops");
-      const all = res.data.data || [];
-      return all.find((item) => item.id === id);
+      const res = await axiosSecure.get(`/farm-admin/sops/${id}`);
+      console.log("SOP Edit Data:", res.data?.data);
+      return res.data?.data;
     },
   });
 
+  // ================= PREFILL EDIT DATA =================
   useEffect(() => {
     if (editData) {
-      setTitle(editData.title);
-      setCategory(editData.category);
+      setTitle(editData.title || "");
+      setCategory(editData.category || "");
+
+      // PDF SOP
+      if (editData.source === "PDF_UPLOAD") {
+        setActiveTab("upload");
+      }
+
+      // Digital SOP
+      if (editData.source === "DIGITAL_MODULE" || editData.source === "DIGITAL_EDITOR") {
+        setActiveTab("create");
+
+        if (editData.parsedContent?.sections) {
+          const steps =
+            editData.parsedContent.sections[0]?.steps || [];
+          setDigitalContent(steps.join(""));
+        }
+      }
     }
   }, [editData]);
 
@@ -49,9 +66,7 @@ const AddSOP = () => {
         sections: [
           {
             title: "Main Section",
-            steps: digitalContent
-              ? digitalContent.split("\n").filter(Boolean)
-              : [],
+            steps: digitalContent ? [digitalContent] : [],
           },
         ],
       };
@@ -60,6 +75,7 @@ const AddSOP = () => {
         title,
         category: category.toUpperCase(),
         content: JSON.stringify(structuredContent),
+        source: "DIGITAL_EDITOR",
       });
     },
     onSuccess: () => {
@@ -68,7 +84,6 @@ const AddSOP = () => {
       navigate("/admin/sop/management");
     },
     onError: (error) => {
-      console.log(error.response?.data);
       toast.error(error.response?.data?.message || "Create failed");
     },
   });
@@ -80,14 +95,9 @@ const AddSOP = () => {
       formData.append("title", title);
       formData.append("category", category.toUpperCase());
       formData.append("file", selectedFile);
+      formData.append("source", "PDF_UPLOAD");
 
-      return await axiosSecure.post(
-        "/farm-admin/sops/upload",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      return await axiosSecure.post("/farm-admin/sops/upload", formData);
     },
     onSuccess: () => {
       toast.success("SOP uploaded successfully");
@@ -102,47 +112,62 @@ const AddSOP = () => {
   // ================= UPDATE SOP =================
   const updateMutation = useMutation({
     mutationFn: async () => {
-      //   FILE UPDATE
-      if (activeTab === "upload" && selectedFile) {
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("category", category.toUpperCase());
-        formData.append("file", selectedFile);
+      console.log("Update initiated. Active Tab:", activeTab);
 
-        return await axiosSecure.patch(
-          `/farm-admin/sops/${id}`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+      // PDF UPDATE
+      if (activeTab === "upload") {
+        if (selectedFile) {
+          console.log("Updating PDF with new file...");
+          const formData = new FormData();
+          formData.append("title", title);
+          formData.append("category", category.toUpperCase());
+          formData.append("file", selectedFile);
+          formData.append("source", "PDF_UPLOAD");
+
+          return await axiosSecure.patch(`/farm-admin/sops/${id}`, formData);
+        }
+
+        // If no new file selected, just update title/category
+        console.log("Updating PDF params (no new file)...");
+        return await axiosSecure.patch(`/farm-admin/sops/${id}`, {
+          title,
+          category: category.toUpperCase(),
+          source: "PDF_UPLOAD",
+        });
       }
 
-      //   DIGITAL UPDATE
+      // DIGITAL UPDATE
+      console.log("Updating Digital SOP...");
+      console.log("Content:", digitalContent);
+      
       const structuredContent = {
         sections: [
           {
             title: "Main Section",
-            steps: digitalContent
-              ? digitalContent.split("\n").filter(Boolean)
-              : [],
+            steps: digitalContent ? [digitalContent] : [],
           },
         ],
       };
 
-      return await axiosSecure.patch(`/farm-admin/sops/${id}`, {
+      const payload = {
         title,
         category: category.toUpperCase(),
         content: JSON.stringify(structuredContent),
-      });
+        source: "DIGITAL_EDITOR",
+      };
+      
+      console.log("Digital Update Payload:", payload);
+      return await axiosSecure.patch(`/farm-admin/sops/${id}`, payload);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("Update Success:", data);
       toast.success("SOP updated successfully");
       queryClient.invalidateQueries(["farmSops"]);
+      queryClient.invalidateQueries(["singleSop", id]); // Invalidate specific SOP
       navigate("/admin/sop/management");
     },
     onError: (error) => {
-      console.log(error.response?.data);
+      console.error("Update Error:", error);
       toast.error(error.response?.data?.message || "Update failed");
     },
   });
@@ -169,6 +194,19 @@ const AddSOP = () => {
       }
       createMutation.mutate();
     }
+  };
+
+  // ================= IMAGE UPLOAD FOR DIGITAL MODULE =================
+  const handleImageUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    // Endpoint assumed based on standard patterns. 
+    // If specific SOP media endpoint exists, update here.
+    const res = await axiosSecure.post("/farm-admin/upload/image", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data.data.url; // Adjust based on actual response structure
   };
 
   if (isEdit && isLoading) {
@@ -246,13 +284,18 @@ const AddSOP = () => {
 
           <div className="mt-6 col-span-12">
             {activeTab === "upload" && (
-              <UploadPDF onFileSelect={(file) => setSelectedFile(file)} />
+              <UploadPDF 
+                onFileSelect={(file) => setSelectedFile(file)} 
+                existingPdf={editData?.fileUrl}
+                existingFileName={editData?.fileName}
+              />
             )}
 
             {activeTab === "create" && (
               <CreateDigitalModule
                 value={digitalContent}
                 onChange={setDigitalContent}
+                onImageUpload={handleImageUpload}
               />
             )}
           </div>
@@ -282,7 +325,6 @@ const AddSOP = () => {
             >
               Cancel
             </button>
-
           </div>
 
         </div>

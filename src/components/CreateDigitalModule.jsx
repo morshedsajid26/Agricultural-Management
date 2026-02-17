@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import RichTextEditor from "./RichTextEditor";
 
-const CreateDigitalModule = ({ value, onChange }) => {
+const CreateDigitalModule = ({ value, onChange, onImageUpload }) => {
   return (
     <div>
-      <RichTextEditor value={value} onChange={onChange} />
+      <RichTextEditor 
+        value={value} 
+        onChange={onChange} 
+        onImageUpload={onImageUpload}
+      />
     </div>
   );
 };

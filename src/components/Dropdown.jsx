@@ -12,9 +12,16 @@ const Dropdown = ({
   spanClass,
   optionClass,
   labelClass,
-  icon
+  icon,
+  value
 }) => {
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(value || "");
+
+  useEffect(() => {
+    if (value) {
+      setSelected(value);
+    }
+  }, [value]);
   const [show, setShow] = useState(false);
   const dropdownRef = useRef(null);
 

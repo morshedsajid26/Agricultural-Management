@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { FiUploadCloud } from "react-icons/fi";
 
-const UploadPDF = ({ onFileSelect }) => {
+const UploadPDF = ({ onFileSelect, existingPdf, existingFileName }) => {
   const inputRef = useRef(null);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState("");
@@ -65,6 +65,22 @@ const UploadPDF = ({ onFileSelect }) => {
       <p className="text-xs text-[#9CA3AF] mt-1">
         PDF files only (Max 10MB)
       </p>
+
+      {/* Show existing file if no new file selected */}
+      {!fileName && existingPdf && (
+           <div className="mt-3">
+             <p className="text-sm text-[#4A5565]">Current File:</p>
+             <a 
+               href={existingPdf} 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="text-[#F6A62D] hover:underline text-sm break-all"
+               onClick={(e) => e.stopPropagation()} // Prevent triggering upload click
+             >
+               {existingFileName || existingPdf.split('/').pop()}
+             </a>
+           </div>
+      )}
 
       {fileName && (
         <p className="mt-3 text-sm text-green-600">
