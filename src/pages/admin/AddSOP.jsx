@@ -50,11 +50,28 @@ const AddSOP = () => {
       if (editData.source === "DIGITAL_MODULE" || editData.source === "DIGITAL_EDITOR") {
         setActiveTab("create");
 
+        let content = "";
+        
+        // 1. Try parsedContent first
         if (editData.parsedContent?.sections) {
-          const steps =
-            editData.parsedContent.sections[0]?.steps || [];
-          setDigitalContent(steps.join(""));
+          content = editData.parsedContent.sections[0]?.steps?.join("") || "";
         }
+        
+        // 2. Fallback to raw content parsing if parsedContent is empty/missing
+        if (!content && editData.content) {
+            try {
+                // If content is a JSON string
+                const parsed = JSON.parse(editData.content);
+                if (parsed.sections) {
+                    content = parsed.sections[0]?.steps?.join("") || "";
+                }
+            } catch (e) {
+                // If content is just a plain HTML string
+                content = editData.content;
+            }
+        }
+        
+        setDigitalContent(content);
       }
     }
   }, [editData]);
@@ -197,16 +214,47 @@ const AddSOP = () => {
   };
 
   // ================= IMAGE UPLOAD FOR DIGITAL MODULE =================
+  // ================= IMAGE UPLOAD (COMPRESSED BASE64) =================
   const handleImageUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("image", file);
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
 
-    // Endpoint assumed based on standard patterns. 
-    // If specific SOP media endpoint exists, update here.
-    const res = await axiosSecure.post("/farm-admin/upload/image", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+          // Resize logic (Max width 600px - aggressive compression for DB limits)
+          const MAX_WIDTH = 600;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Compress to JPEG with 0.5 quality to significantly reduce size
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.5);
+          resolve(dataUrl);
+        };
+        img.onerror = (error) => {
+             console.error("Image Load Error:", error);
+             reject(error);
+        }
+      };
+      reader.onerror = (error) => {
+        console.error("FileReader Error:", error);
+        toast.error("Failed to read image file");
+        reject(error);
+      };
     });
-    return res.data.data.url; // Adjust based on actual response structure
   };
 
   if (isEdit && isLoading) {
