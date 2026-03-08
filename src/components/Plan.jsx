@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import ToggleButton from "./ToggleButton";
 
 const Card = ({
+  id,
   name,
   price,
   isAnnual,
@@ -11,10 +12,12 @@ const Card = ({
   yearlyPrice,
   monthlyPrice,
   trialDays,
+  features,
+  onSubscribe
 }) => {
   return (
     <div className="bg-white rounded-lg border-2 border-[#E5E7EB] py-8 px-6 flex flex-col hover:shadow-lg transition-all duration-300 col-span-12 md:col-span-4">
-      
+
       {/* Plan Name */}
       <div>
         <p className="text-2xl text-[#0A0A0A]">{name}</p>
@@ -47,7 +50,7 @@ const Card = ({
       </div>
 
       {/* Placeholder Features */}
-      <ul className="space-y-4 mb-14 mt-8">
+      {/* <ul className="space-y-4 mb-14 mt-8">
         <li className="flex items-start">
           <span className="text-[#00A63E] text-lg mr-2">✔</span>
           <span className="text-[#364153]">
@@ -66,12 +69,30 @@ const Card = ({
             SOP Management
           </span>
         </li>
-      </ul>
+      </ul> */}
+
+      {/* Features */}
+      {features && features.length > 0 ? (
+        <ul className="space-y-4 mb-14 mt-8">
+          {features.map((feature, idx) => (
+            <li key={idx} className="flex items-start">
+              {feature.active && (
+                <span className="text-[#00A63E] text-lg mr-2">✔</span>
+              )}
+              <span className="text-[#364153]">{feature.name}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="mb-14 mt-8">
+          <p className="text-sm text-[#4A5565] italic">No features listed.</p>
+        </div>
+      )}
     </div>
   );
 };
 
-const Plan = ({ plans }) => {
+const Plan = ({ plans, onSubscribe }) => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   return (
@@ -94,6 +115,7 @@ const Plan = ({ plans }) => {
         {plans.map((plan) => (
           <Card
             key={plan.id}
+            id={plan.id}
             name={plan.name}
             employees={plan.employeeLimit}
             price={
@@ -105,6 +127,8 @@ const Plan = ({ plans }) => {
             monthlyPrice={plan.priceMonthly}
             yearlyPrice={plan.priceYearly}
             trialDays={plan.trialDays}
+            features={plan.features}
+            onSubscribe={onSubscribe}
           />
         ))}
       </div>
