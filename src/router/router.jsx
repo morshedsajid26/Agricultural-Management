@@ -46,7 +46,7 @@ const router = createBrowserRouter([
 
   //  DASHBOARD ROUTES
   {
-    path: "/admin",
+    path: "/",
     element: <DashboardLayout />,
     children: [
       // admin
