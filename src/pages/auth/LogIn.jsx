@@ -27,7 +27,7 @@ const LogIn = () => {
     SYSTEM_OWNER: {
       title: "System Owner",
       Subtitle: "Secure access to farm management platform",
-      redirect: "/",
+      redirect: "/owner/dashboard",
     },
   };
 
@@ -57,7 +57,7 @@ const LogIn = () => {
       // Redirect based on backend role
       setTimeout(() => {
         if (userRole === "SYSTEM_OWNER") {
-          navigate("/");
+          navigate("/owner/dashboard");
         } else if (userRole === "FARM_ADMIN") {
           navigate("/admin/home");
         }

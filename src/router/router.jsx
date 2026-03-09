@@ -28,6 +28,7 @@ import ResetPassword from "../pages/auth/ResetPassword";
 import NewPassword from "../pages/auth/NewPassword";
 import Success from "../pages/auth/Success";
 import OTP from "../pages/auth/OTP";
+import LandingPageLayout from "../layout/LandingPageLayout";
 
 const router = createBrowserRouter([
   //  AUTH ROUTES
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
 
   //  DASHBOARD ROUTES
   {
-    path: "/",
+    path: "/admin",
     element: <DashboardLayout />,
     children: [
       // admin
@@ -62,13 +63,19 @@ const router = createBrowserRouter([
       { path: "admin/subscription/billing", element: <Subscription /> },
 
       // owner
-      { path: "/", element: <Dashboard /> },
+      { path: "owner/dashboard", element: <Dashboard /> },
       { path: "owner/farm/management", element: <FarmManagement /> },
       { path: "owner/farm/management/details/:id", element: <FarmDetails /> },
       { path: "owner/farm/management/create/farm", element: <CreateFarm /> },
       { path: "owner/subscription/plans", element: <SubscriptionPlans /> },
       { path: "owner/system/settings", element: <SystemSettings /> },
     ],
+  },
+
+  //Landing page route
+  {
+    path: "/",
+    element: <LandingPageLayout />,
   },
 ]);
 

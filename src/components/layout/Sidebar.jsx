@@ -63,7 +63,7 @@ export default function Sidebar({ isOpen, onClose }) {
     SYSTEM_OWNER: [
       {
         name: "Dashboard",
-        path: "/",
+        path: "/owner/dashboard",
         icon: "material-symbols:dashboard-outline",
       },
       {
