@@ -2,17 +2,17 @@ import React from "react";
 import { FiAlertCircle } from "react-icons/fi";
 
 const alertStyles = {
-  warning: {
+  SUBSCRIPTION_EXPIRING: {
     border: "border-[#FFF085]",
     bg: "bg-[#FEFCE8]",
     icon: "text-[#D08700]",
   },
-  error: {
+  PAYMENT_FAILED: {
     border: "border-[#FFC9C9]",
     bg: "bg-[#FEF2F2]",
     icon: "text-[#E7000B]",
   },
-  info: {
+  SYSTEM: {
     border: "border-[#BEDBFF]",
     bg: "bg-[#EFF6FF]",
     icon: "text-[#155DFC]",
