@@ -81,13 +81,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1">
+          {/* <div className="flex items-center gap-1.5 mt-1">
             <FaArrowTrendUp className="text-[#00A63E]" />
             <p className="text-[#00A63E]">
               +12%
               <span className="text-[#6A7282]"> vs last month</span>
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
@@ -102,13 +102,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1">
+          {/* <div className="flex items-center gap-1.5 mt-1">
             <FaArrowTrendUp className="text-[#00A63E]" />
             <p className="text-[#00A63E]">
               +8%
               <span className="text-[#6A7282]"> vs last month</span>
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
@@ -123,13 +123,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1">
+          {/* <div className="flex items-center gap-1.5 mt-1">
             <FaArrowTrendUp className="text-[#00A63E]" />
             <p className="text-[#00A63E]">
               +3%
               <span className="text-[#6A7282]"> vs last month</span>
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
@@ -144,13 +144,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1">
+          {/* <div className="flex items-center gap-1.5 mt-1">
             <FaArrowTrendUp className="text-[#00A63E]" />
             <p className="text-[#00A63E]">
               +156%
               <span className="text-[#6A7282]"> vs last month</span>
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
@@ -165,13 +165,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1">
+          {/* <div className="flex items-center gap-1.5 mt-1">
             <FaArrowTrendUp className="text-[#00A63E]" />
             <p className="text-[#00A63E]">
               +15%
               <span className="text-[#6A7282]"> vs last month</span>
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-12 md:col-span-4 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6">
@@ -186,13 +186,13 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1">
+          {/* <div className="flex items-center gap-1.5 mt-1">
             <FaArrowTrendDown className="text-[#E7000B]" />
             <p className="text-[#E7000B]">
               -2%
               <span className="text-[#6A7282]"> vs last month</span>
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="col-span-12 md:col-span-8 bg-white rounded-xl border-2 border-[#E5E7EB]  p-6 overflow-x-scroll hide-scrollbar">
