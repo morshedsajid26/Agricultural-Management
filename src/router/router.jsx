@@ -51,16 +51,16 @@ const router = createBrowserRouter([
     children: [
       // admin
       { path: "/admin/home", element: <Home /> },
-      { path: "admin/sop/management", element: <SopManagement /> },
-      { path: "admin/user/management", element: <UserManagement /> },
-      { path: "admin/user/management/add/user", element: <AddUser /> },
-      { path: "admin/user/management/edit/user/:id", element: <AddUser /> },
-      { path: "admin/task/oversight", element: <TaskOversight /> },
-      { path: "admin/sop/management/upload/sop", element: <AddSOP /> },
-      { path: "admin/sop/management/edit/sop/:id", element: <AddSOP /> },
-      { path: "admin/messaging/oversight", element: <Messaging /> },
-      { path: "admin/farm/settings", element: <Settings /> },
-      { path: "admin/subscription/billing", element: <Subscription /> },
+      { path: "/admin/sop/management", element: <SopManagement /> },
+      { path: "/admin/user/management", element: <UserManagement /> },
+      { path: "/admin/user/management/add/user", element: <AddUser /> },
+      { path: "/admin/user/management/edit/user/:id", element: <AddUser /> },
+      { path: "/admin/task/oversight", element: <TaskOversight /> },
+      { path: "/admin/sop/management/upload/sop", element: <AddSOP /> },
+      { path: "/admin/sop/management/edit/sop/:id", element: <AddSOP /> },
+      { path: "/admin/messaging/oversight", element: <Messaging /> },
+      { path: "/admin/farm/settings", element: <Settings /> },
+      { path: "/admin/subscription/billing", element: <Subscription /> },
 
      
     ],
@@ -72,12 +72,12 @@ const router = createBrowserRouter([
     element: <DashboardLayout />,
     children: [
        // owner
-      { path: "owner/dashboard", element: <Dashboard /> },
-      { path: "owner/farm/management", element: <FarmManagement /> },
-      { path: "owner/farm/management/details/:id", element: <FarmDetails /> },
-      { path: "owner/farm/management/create/farm", element: <CreateFarm /> },
-      { path: "owner/subscription/plans", element: <SubscriptionPlans /> },
-      { path: "owner/system/settings", element: <SystemSettings /> },
+      { path: "/owner/dashboard", element: <Dashboard /> },
+      { path: "/owner/farm/management", element: <FarmManagement /> },
+      { path: "/owner/farm/management/details/:id", element: <FarmDetails /> },
+      { path: "/owner/farm/management/create/farm", element: <CreateFarm /> },
+      { path: "/owner/subscription/plans", element: <SubscriptionPlans /> },
+      { path: "/owner/system/settings", element: <SystemSettings /> },
     ],
   },
 
