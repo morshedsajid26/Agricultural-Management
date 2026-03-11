@@ -1,17 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import Container from "./Container";
+import Container from "../Container";
 import { FiX, FiMenu } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import Image from "./Image";
+import Image from "../Image";
 import logo from "/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navitems = [
-  { name: "Home" ,href:"/" },
-  { name: "Featured", href:"#feature" },
-  { name: "Offer", href:"#offer" },
-  { name: "About us" , href:"#aboutUs" },
+  { name: "Home", href: "/" },
+  { name: "Featured", href: "#feature" },
+  { name: "Offer", href: "#offer" },
+  { name: "About us", href: "#aboutUs" },
 ];
 
 const Navbar = () => {
@@ -20,13 +20,12 @@ const Navbar = () => {
   return (
     <div className="py-6 relative z-[100]">
       <Container>
-        <motion.div 
+        <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
           className="md:bg-white/80 md:backdrop-blur-md py-3 rounded-2xl shadow-sm md:border md:border-black/5 flex items-center justify-between px-6"
         >
-
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-3xl cursor-pointer p-2 rounded-xl hover:bg-slate-100 transition-colors"
@@ -36,11 +35,8 @@ const Navbar = () => {
           </button>
 
           <Link to="/">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Image src={logo} alt='logo' className="h-10 md:h-12 w-auto" />
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Image src={logo} alt="logo" className="h-10 md:h-12 w-auto" />
             </motion.div>
           </Link>
 
@@ -82,8 +78,8 @@ const Navbar = () => {
             >
               <ul className="flex flex-col items-start gap-2 p-6">
                 {navitems.map((item, index) => (
-                  <motion.li 
-                    key={index} 
+                  <motion.li
+                    key={index}
                     className="w-full"
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -99,7 +95,7 @@ const Navbar = () => {
                   </motion.li>
                 ))}
 
-                <motion.div 
+                <motion.div
                   className="w-full pt-4 mt-2 border-t border-slate-100"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
