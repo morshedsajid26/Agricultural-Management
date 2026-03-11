@@ -49,61 +49,88 @@ const Subscription = () => {
     ? checkoutMutation.variables?.planId
     : null;
 
-  // ===== STATIC BILLING TABLE (unchanged) =====
-  const TableRows = [
-    {
-      id: 1,
-      billingDate: "2026-01-01",
-      plan: "Basic",
-      pricing: "$99 / month",
-      status: "paid",
-      expireDate: "2026-02-01",
+  // ===== BILLING HISTORY API =====
+  const { data: billingHistory = [], isLoading: billingLoading } = useQuery({
+    queryKey: ["billingHistory"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/farm-admin/subscription/billing-history");
+      return res.data.data || [];
     },
-    {
-      id: 2,
-      billingDate: "2025-12-01",
-      plan: "Professional",
-      pricing: "$499 / month",
-      status: "unpaid",
-      expireDate: "2026-01-01",
-    },
-  ];
+  });
+
+  
+  const formatDate = (dateStr) =>
+    dateStr ? dateStr.split("T")[0].split("-").reverse().join("-") : "—";
 
   const TableHeads = [
-    { Title: "Billing Date", key: "billingDate", width: "25%" },
-    { Title: "Plan", key: "plan", width: "15%" },
-    { Title: "Subscription Pricing", key: "pricing", width: "20%" },
+    {
+      Title: "Billing Date",
+      key: "billingDate",
+      width: "20%",
+      render: (row) => formatDate(row.billingDate),
+    },
+    { Title: "Plan", key: "planName", width: "15%" },
+    {
+      Title: "Amount",
+      key: "amount",
+      width: "18%",
+      render: (row) => `€${row.amount} / ${row.priceType}`,
+    },
     {
       Title: "Status",
       key: "status",
       width: "15%",
-      render: (row) => (
-        <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${row.status === "paid"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
+      render: (row) => {
+        const isPaid = row.status?.toLowerCase() === "paid";
+        return (
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-medium ${
+              isPaid
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
             }`}
-        >
-          {row.status}
-        </span>
-      ),
+          >
+            {row.status}
+          </span>
+        );
+      },
     },
-    { Title: "Expire Date", key: "expireDate", width: "15%" },
+    {
+      Title: "Expire Date",
+      key: "endDate",
+      width: "17%",
+      render: (row) => formatDate(row.endDate),
+    },
     {
       Title: "Actions",
       key: "actions",
-      width: "10%",
-      render: (row) => (
-        <div className="flex justify-center">
-          {row.status === "unpaid" ? (
-            <button className="text-[#0A0A0A] cursor-pointer border border-[#0A0A0A]/10 rounded-lg px-4 py-2">
-              Renew now
-            </button>
-          ) : (
-            <span className="text-gray-400">—</span>
-          )}
-        </div>
-      ),
+      width: "15%",
+      render: (row) => {
+        const isUnpaid = row.status?.toLowerCase() !== "paid";
+        const isRenewing =
+          checkoutMutation.isPending &&
+          checkoutMutation.variables?.planId === row.planId;
+        return (
+          <div className="flex justify-center">
+            {isUnpaid ? (
+              <button
+                onClick={() =>
+                  checkoutMutation.mutate({
+                    planId: row.planId,
+                    priceType: row.priceType,
+                  })
+                }
+                disabled={isRenewing}
+                className="text-[#0A0A0A] cursor-pointer border border-[#0A0A0A]/10 rounded-lg px-4 py-2 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isRenewing ? "Processing…" : "Renew now"}
+              </button>
+            ) : (
+              <span className="text-gray-400">—</span>
+            )}
+          </div>
+        );
+      },
     },
   ];
 
@@ -145,10 +172,16 @@ const Subscription = () => {
         </h3>
 
         <div className="bg-white rounded-lg border-2 border-[#E5E7EB] overflow-x-scroll md:overflow-x-hidden">
-          <Table
-            TableHeads={TableHeads}
-            TableRows={TableRows}
-          />
+          {billingLoading ? (
+            <p className="p-6 text-[#4A5565]">Loading billing history...</p>
+          ) : billingHistory.length === 0 ? (
+            <p className="p-6 text-[#4A5565]">No billing history found.</p>
+          ) : (
+            <Table
+              TableHeads={TableHeads}
+              TableRows={billingHistory}
+            />
+          )}
         </div>
       </div>
 
