@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Breadcrumb from "../../components/Bredcumb";
 import Plan from "../../components/Plan";
 import { BsWallet2 } from "react-icons/bs";
@@ -13,12 +13,40 @@ const Subscription = () => {
   const { data: plans = [], isLoading } = useQuery({
     queryKey: ["subscriptionPlans"],
     queryFn: async () => {
-      const res = await axiosSecure.get(
-        "/farm-admin/subscription/plans"
-      );
+      const res = await axiosSecure.get("/farm-admin/subscription/plans");
       return res.data.data || [];
     },
   });
+
+  // GET CURRENT ACTIVE PLAN
+  const { data: currentPlan } = useQuery({
+    queryKey: ["currentPlan"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/farm-admin/subscription/current");
+      return res.data.data || null;
+    },
+  });
+
+  // HANDLE UPGRADE / SUBSCRIBE
+  const [loadingPlanId, setLoadingPlanId] = useState(null);
+
+  const handleSubscribe = async (planId, priceType) => {
+    try {
+      setLoadingPlanId(planId);
+      const res = await axiosSecure.post("/farm-admin/payment/checkout", {
+        planId,
+        priceType,
+      });
+      const link = res.data?.data?.url || res.data?.data?.link || res.data?.url;
+      if (link) {
+        window.location.href = link;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+    } finally {
+      setLoadingPlanId(null);
+    }
+  };
 
   // ===== STATIC BILLING TABLE (unchanged) =====
   const TableRows = [
@@ -50,11 +78,10 @@ const Subscription = () => {
       width: "15%",
       render: (row) => (
         <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
-            row.status === "paid"
+          className={`px-3 py-1 rounded-full text-sm font-medium ${row.status === "paid"
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
-          }`}
+            }`}
         >
           {row.status}
         </span>
@@ -96,13 +123,19 @@ const Subscription = () => {
 
         <div className="bg-[#FFF6E9] w-max p-2">
           <p className="text-[#0A0A0A]">
-            Next renewal date : 26-01-2026
+            Next renewal date : {currentPlan?.endDate.split("T")[0].split("-").reverse().join("-")}
           </p>
         </div>
       </div>
 
       {/*  Dynamic Plan Component */}
-      <Plan plans={plans} />
+      <Plan
+        plans={plans}
+        currentPlanId={currentPlan?.planId}
+        currentBillingCycle={currentPlan?.priceType ?? "monthly"}
+        onSubscribe={handleSubscribe}
+        loadingPlanId={loadingPlanId}
+      />
 
       {/* Billing History */}
       <div>

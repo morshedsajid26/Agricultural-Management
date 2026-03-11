@@ -60,10 +60,10 @@ const Home = () => {
           </div>
           <p className="text-[#4A5565]">Total Employees</p>
           <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">
-            {stats.employees.total}
+            {stats.users.total}
           </h2>
           <p className="text-[#4A5565]">
-            +{stats.employees.addedThisMonth} this month
+            +{stats.users.addedThisMonth} this month
           </p>
         </div>
 
@@ -104,9 +104,9 @@ const Home = () => {
           <h2 className="text-xl font-semibold text-[#0A0A0A] my-1">
             {stats.messages.today}
           </h2>
-          {/* <p className="text-[#4A5565]">
+          <p className="text-[#4A5565]">
             {stats.messages.unread} unread
-          </p> */}
+          </p>
         </div>
 
         {/* Subscription */}
@@ -130,7 +130,7 @@ const Home = () => {
           <div className="flex justify-between py-3">
             <span className="text-[#4A5565]">Employee Count</span>
             <span className="text-[#4A5565]">
-              {subscription.currentEmployees}/
+              {subscription.currentUsers}/
               {subscription.employeeLimit}
             </span>
           </div>
@@ -147,7 +147,7 @@ const Home = () => {
           <div className="border-t border-[#E5E7EB] mt-4 pt-4">
             <p className="text-[#4A5565] flex items-center gap-2">
               <MdOutlineErrorOutline />
-              {subscription.remainingEmployees} employees remaining in your plan
+              {subscription.remainingUsers} employees remaining in your plan
             </p>
           </div>
         </div>

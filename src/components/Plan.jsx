@@ -13,67 +13,53 @@ const Card = ({
   monthlyPrice,
   trialDays,
   features,
-  onSubscribe
+  isCurrent,
+  canUpgrade,
+  onSubscribe,
+  loadingPlanId,
 }) => {
+  const isLoading = loadingPlanId === id;
   return (
-    <div className="bg-white rounded-lg border-2 border-[#E5E7EB] py-8 px-6 flex flex-col hover:shadow-lg transition-all duration-300 col-span-12 md:col-span-4">
+    <div
+      className={`relative bg-white rounded-lg border-2 py-8 px-6 flex flex-col hover:shadow-lg transition-all duration-300 col-span-12 md:col-span-4 ${isCurrent ? "border-[#F6A62D]" : "border-[#E5E7EB]"
+        }`}
+    >
+      {/* Current Badge — top-right */}
+      {isCurrent && (
+        <span className="absolute top-3 right-3 bg-[#F6A62D] text-white text-xs font-semibold px-3 py-1 rounded-full">
+          Current
+        </span>
+      )}
 
       {/* Plan Name */}
       <div>
         <p className="text-2xl text-[#0A0A0A]">{name}</p>
-        <p className="text-[#4A5565] mt-1">
-          Up to {employees} employees
-        </p>
+        <p className="text-[#4A5565] mt-1">Up to {employees} employees</p>
       </div>
 
       {/* Price */}
       <div className="flex flex-col my-4">
         <div className="flex items-end">
-          <p className="text-4xl text-[#0A0A0A]">${price}</p>
+          <p className="text-4xl text-[#0A0A0A]">€{price}</p>
           <span className="text-[#4A5565] ml-1">
             /{isAnnual ? "Year" : "Month"}
           </span>
         </div>
-
         {isAnnual && (
           <p className="text-[#4A5565] mt-1">
-            save ${yearlyPrice - monthlyPrice * 12}
+            save €{yearlyPrice - monthlyPrice * 12}
           </p>
         )}
       </div>
 
       {/* Trial */}
       <div className="bg-[#EFF6FF] p-3 rounded-lg">
-        <p className="text-[#1447E6]">
-          {trialDays} days free trial
-        </p>
+        <p className="text-[#1447E6]">{trialDays} days free trial</p>
       </div>
-
-      {/* Placeholder Features */}
-      {/* <ul className="space-y-4 mb-14 mt-8">
-        <li className="flex items-start">
-          <span className="text-[#00A63E] text-lg mr-2">✔</span>
-          <span className="text-[#364153]">
-            Up to {employees} employees
-          </span>
-        </li>
-        <li className="flex items-start">
-          <span className="text-[#00A63E] text-lg mr-2">✔</span>
-          <span className="text-[#364153]">
-            Task Management
-          </span>
-        </li>
-        <li className="flex items-start">
-          <span className="text-[#00A63E] text-lg mr-2">✔</span>
-          <span className="text-[#364153]">
-            SOP Management
-          </span>
-        </li>
-      </ul> */}
 
       {/* Features */}
       {features && features.length > 0 ? (
-        <ul className="space-y-4 mb-14 mt-8">
+        <ul className="space-y-4 mt-8 mb-6">
           {features.map((feature, idx) => (
             <li key={idx} className="flex items-start">
               {feature.active && (
@@ -84,15 +70,26 @@ const Card = ({
           ))}
         </ul>
       ) : (
-        <div className="mb-14 mt-8">
+        <div className="mt-8 mb-6">
           <p className="text-sm text-[#4A5565] italic">No features listed.</p>
         </div>
+      )}
+
+      {/* Upgrade Button */}
+      {canUpgrade && (
+        <button
+          onClick={() => !isLoading && onSubscribe && onSubscribe(id, isAnnual ? "yearly" : "monthly")}
+          disabled={isLoading}
+          className="mt-auto w-full py-2.5 rounded-lg bg-[#F6A62D] text-white font-medium hover:bg-[#F6A62D]/90 transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {isLoading ? "Processing…" : `Upgrade`}
+        </button>
       )}
     </div>
   );
 };
 
-const Plan = ({ plans, onSubscribe }) => {
+const Plan = ({ plans, currentPlanId, currentBillingCycle = "monthly", onSubscribe, loadingPlanId }) => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   return (
@@ -128,7 +125,13 @@ const Plan = ({ plans, onSubscribe }) => {
             yearlyPrice={plan.priceYearly}
             trialDays={plan.trialDays}
             features={plan.features}
+            isCurrent={currentPlanId === plan.id}
+            canUpgrade={
+              currentPlanId !== plan.id ||
+              currentBillingCycle !== (isAnnual ? "yearly" : "monthly")
+            }
             onSubscribe={onSubscribe}
+            loadingPlanId={loadingPlanId}
           />
         ))}
       </div>
