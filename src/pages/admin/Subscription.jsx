@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Breadcrumb from "../../components/Bredcumb";
 import Plan from "../../components/Plan";
 import { BsWallet2 } from "react-icons/bs";
 import Table from "../../components/Table";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Subscription = () => {
@@ -28,25 +28,26 @@ const Subscription = () => {
   });
 
   // HANDLE UPGRADE / SUBSCRIBE
-  const [loadingPlanId, setLoadingPlanId] = useState(null);
-
-  const handleSubscribe = async (planId, priceType) => {
-    try {
-      setLoadingPlanId(planId);
-      const res = await axiosSecure.post("/farm-admin/payment/checkout", {
-        planId,
-        priceType,
-      });
+  const checkoutMutation = useMutation({
+    mutationFn: ({ planId, priceType }) =>
+      axiosSecure.post("/farm-admin/payment/checkout", { planId, priceType }),
+    onSuccess: (res) => {
       const link = res.data?.data?.url || res.data?.data?.link || res.data?.url;
-      if (link) {
-        window.location.href = link;
-      }
-    } catch (err) {
+      if (link) window.location.href = link;
+    },
+    onError: (err) => {
       console.error("Checkout error:", err);
-    } finally {
-      setLoadingPlanId(null);
-    }
+    },
+  });
+
+  const handleSubscribe = (planId, priceType) => {
+    checkoutMutation.mutate({ planId, priceType });
   };
+
+  // loading plan id — only the plan currently being checked out
+  const loadingPlanId = checkoutMutation.isPending
+    ? checkoutMutation.variables?.planId
+    : null;
 
   // ===== STATIC BILLING TABLE (unchanged) =====
   const TableRows = [
@@ -151,34 +152,6 @@ const Subscription = () => {
         </div>
       </div>
 
-      {/* Payment Method */}
-      {/* <div className="mt-12">
-        <p className="text-xl text-[#0A0A0A]">
-          Payment Method
-        </p>
-
-        <div className="bg-white rounded-lg border-2 border-[#E5E7EB] mt-4 p-6 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <div className="bg-[#FFF6E9] p-3 rounded-lg">
-              <BsWallet2 className="text-[#F6A62D] w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-[#101828]">
-                Visa ending in 1234
-              </p>
-              <p className="text-[#6A7282]">
-                Expires 12/2027
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-[#FFF6E9] w-max p-2 rounded-lg">
-            <p className="text-[#F6A62D] cursor-pointer">
-              Update
-            </p>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };
