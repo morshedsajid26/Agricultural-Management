@@ -48,9 +48,7 @@ const Banner = () => {
               Get Started
             </motion.button>
             
-            <button className="text-slate-600 font-semibold px-6 py-4 hover:text-[#F6A62D] transition-colors">
-              Watch Demo
-            </button>
+           
           </motion.div>
         </motion.div>
 
