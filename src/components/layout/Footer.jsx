@@ -26,8 +26,8 @@ const Footer = () => {
           <h4 className='text-white font-semibold text-lg mb-4'>Product</h4>
           <ul className='space-y-2'>
               
-            <li><a href="#" className='text-[#90A1B9] hover:text-white'>Features</a></li>
-            <li><a href="#" className='text-[#90A1B9] hover:text-white'>Pricing</a></li>
+            <li><a href="#feature" className='text-[#90A1B9] hover:text-white'>Features</a></li>
+            <li><a href="#pricing" className='text-[#90A1B9] hover:text-white'>Pricing</a></li>
           </ul>
 
         </div>
@@ -36,8 +36,8 @@ const Footer = () => {
           <h4 className='text-white font-semibold text-lg mb-4'>Company</h4>
           <ul className='space-y-2'>
               
-            <li><a href="#" className='text-[#90A1B9] hover:text-white'>About Us</a></li>
-            <li><a href="#" className='text-[#90A1B9] hover:text-white'>Contact</a></li>
+            <li><a href="#aboutUs" className='text-[#90A1B9] hover:text-white'>About Us</a></li>
+            <li><a href="#contact" className='text-[#90A1B9] hover:text-white'>Contact</a></li>
           </ul>
 
         </div>

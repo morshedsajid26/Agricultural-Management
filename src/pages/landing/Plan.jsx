@@ -39,7 +39,7 @@ const Plan = () => {
   }
 
   return (
-    <div id="offer" className="py-20 bg-white">
+    <div id="pricing" className="py-20 bg-white">
       <Container>
         <motion.div
            initial={{ opacity: 0, y: 20 }}

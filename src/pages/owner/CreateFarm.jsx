@@ -150,22 +150,22 @@ const CreateFarm = () => {
               />
           </div>
         </div>
-
+{/* 
         <div>
           <h3 className="text-xl text-[#0A0A0A] mt-6">Subscription Details</h3>
           <div className=" gap-4 border-b border-[#E5E7EB] py-4">
-            {/* <InputField
+            <InputField
               inputClass={`rounded-lg`}
               label={`Status `}
               placeholder={``}
               className={`col-span-6`}
-            /> */}
-            {/* <InputField
+            />
+            <InputField
           inputClass={`rounded-lg`}
           label={`Plan`}
           placeholder={``}
           className={`col-span-6`}
-        /> */}
+        />
             <Dropdown
               label={`Plan`}
               placeholder={`Select Plan`}
@@ -173,14 +173,14 @@ const CreateFarm = () => {
               onSelect={(value) => console.log(value)}
               className={``}
             />
-            {/* <InputField
+            <InputField
               inputClass={`rounded-lg`}
               label={`Employee Limit`}
               placeholder={``}
               className={`col-span-12`}
-            /> */}
+            />
           </div>
-        </div>
+        </div> */}
 
         {/* Buttons */}
         <div className="grid grid-cols-12 gap-4 mt-4">
