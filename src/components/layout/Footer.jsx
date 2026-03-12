@@ -27,7 +27,7 @@ const listItem = {
 const Footer = () => {
   return (
     <div className='bg-[#0F172B]'>
-      <Container className={`py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4`}>
+      <Container className={`py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10`}>
 
         {/* Brand column */}
         <motion.div
