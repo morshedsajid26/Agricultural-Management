@@ -13,7 +13,7 @@ import Footer from "../components/layout/Footer";
 
 const LandingPageLayout = () => {
   return (
-    <div>
+    <div className="pt-24">
       <Navbar />
       <Banner />
       <Features/>

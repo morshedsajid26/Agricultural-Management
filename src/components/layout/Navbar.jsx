@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Container from "../Container";
 import { FiX, FiMenu } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Image from "../Image";
 import logo from "/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,23 +17,34 @@ const navitems = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const scrollToSection = (id, closeMenu = false) => {
+    const doScroll = () => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
     if (closeMenu) setOpen(false);
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(doScroll, 500);
+    } else {
+      // wait for mobile menu close animation before scrolling
+      setTimeout(doScroll, closeMenu ? 350 : 0);
     }
   };
 
   return (
-    <div className="py-6 relative z-[100]">
+    <div className="fixed top-0 left-0 right-0 z-[100] bg-transparent py-4">
       <Container>
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
-          className="md:bg-white/80 md:backdrop-blur-md py-3 rounded-2xl shadow-sm md:border md:border-black/5 flex items-center justify-between px-6"
+          className="bg-white/90 py-3 rounded-2xl shadow-sm md:border md:border-black/5 flex items-center justify-between px-6"
         >
           {/* Mobile Menu Button */}
           <button
