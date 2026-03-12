@@ -8,6 +8,7 @@ import TrustPart from "../pages/landing/TrustPart";
 import AppFeature from "../pages/landing/AppFeature";
 import DownloadApp from "../pages/landing/DownloadApp";
 import Plan from "../pages/landing/Plan";
+import Contact from "../pages/landing/Contact";
 import Footer from "../components/layout/Footer";
 
 const LandingPageLayout = () => {
@@ -21,6 +22,7 @@ const LandingPageLayout = () => {
       <TrustPart />
       <Plan />
       <AppFeature/>
+      <Contact />
       <DownloadApp/>
       <Footer />
     </div>

@@ -12,6 +12,7 @@ const navitems = [
   { name: "Featured", href: "#feature" },
   { name: "Offer", href: "#offer" },
   { name: "About us", href: "#aboutUs" },
+  { name: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
