@@ -30,6 +30,9 @@ import NewPassword from "../pages/auth/NewPassword";
 import Success from "../pages/auth/Success";
 import OTP from "../pages/auth/OTP";
 import LandingPageLayout from "../layout/LandingPageLayout";
+import AboutUs from "../pages/landing/AboutUs";
+import PrivacyPolicy from "../pages/landing/PrivacyPolicy";
+import TermsService from "../pages/landing/TermsService";
 
 const router = createBrowserRouter([
   //  AUTH ROUTES
@@ -88,6 +91,11 @@ const router = createBrowserRouter([
     path: "/",
     element: <LandingPageLayout />,
   },
+
+  // Static info pages
+  { path: "/about-us", element: <AboutUs /> },
+  { path: "/privacy-policy", element: <PrivacyPolicy /> },
+  { path: "/terms-of-service", element: <TermsService /> },
 ]);
 
 export default router;

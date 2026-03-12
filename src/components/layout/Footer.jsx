@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Container from '../Container'
 import Image from '../Image'
@@ -71,7 +72,7 @@ const Footer = () => {
         >
           <h4 className='text-white font-semibold text-lg mb-4'>Company</h4>
           <motion.ul className='space-y-2' variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: false }}>
-            <motion.li variants={listItem}><a href="#aboutUs" className='text-[#90A1B9] hover:text-white transition-colors'>About Us</a></motion.li>
+            <motion.li variants={listItem}><Link to="/about-us" className='text-[#90A1B9] hover:text-white transition-colors'>About Us</Link></motion.li>
             <motion.li variants={listItem}><a href="#contact" className='text-[#90A1B9] hover:text-white transition-colors'>Contact</a></motion.li>
           </motion.ul>
         </motion.div>
@@ -86,8 +87,8 @@ const Footer = () => {
         >
           <h4 className='text-white font-semibold text-lg mb-4'>Legal</h4>
           <motion.ul className='space-y-2' variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: false }}>
-            <motion.li variants={listItem}><a href="#" className='text-[#90A1B9] hover:text-white transition-colors'>Privacy Policy</a></motion.li>
-            <motion.li variants={listItem}><a href="#" className='text-[#90A1B9] hover:text-white transition-colors'>Terms of Service</a></motion.li>
+            <motion.li variants={listItem}><Link to="/privacy-policy" className='text-[#90A1B9] hover:text-white transition-colors'>Privacy Policy</Link></motion.li>
+            <motion.li variants={listItem}><Link to="/terms-of-service" className='text-[#90A1B9] hover:text-white transition-colors'>Terms of Service</Link></motion.li>
           </motion.ul>
         </motion.div>
 
