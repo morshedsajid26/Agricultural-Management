@@ -8,15 +8,23 @@ import logo from "/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navitems = [
-  { name: "Home", href: "/" },
-  { name: "Featured", href: "#feature" },
-  { name: "Offer", href: "#pricing" },
-  { name: "About us", href: "#aboutUs" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/", isRoute: true },
+  { name: "Featured", href: "feature" },
+  { name: "Offer", href: "pricing" },
+  // { name: "About us", href: "aboutUs" },
+  { name: "Contact", href: "contact" },
 ];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+
+  const scrollToSection = (id, closeMenu = false) => {
+    if (closeMenu) setOpen(false);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <div className="py-6 relative z-[100]">
@@ -45,12 +53,21 @@ const Navbar = () => {
           <ul className="hidden md:flex items-center justify-end gap-1 ">
             {navitems.map((item, index) => (
               <motion.li key={index} whileHover={{ y: -2 }}>
-                <Link
-                  to={item.href}
-                  className="py-2 px-4 font-inter text-lg font-medium text-slate-600 hover:text-[#F6A62D] transition-colors rounded-lg"
-                >
-                  {item.name}
-                </Link>
+                {item.isRoute ? (
+                  <Link
+                    to={item.href}
+                    className="py-2 px-4 font-inter text-lg font-medium text-slate-600 hover:text-[#F6A62D] transition-colors rounded-lg"
+                  >
+                    {item.name}
+                  </Link>
+                ) : (
+                  <button
+                    onClick={() => scrollToSection(item.href)}
+                    className="py-2 px-4 font-inter text-lg font-medium text-slate-600 hover:text-[#F6A62D] transition-colors rounded-lg cursor-pointer"
+                  >
+                    {item.name}
+                  </button>
+                )}
               </motion.li>
             ))}
           </ul>
@@ -86,13 +103,22 @@ const Navbar = () => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <Link
-                      to={item.href}
-                      onClick={() => setOpen(false)}
-                      className="py-3 px-4 font-inter text-lg font-medium text-slate-700 hover:bg-orange-50 hover:text-[#F6A62D] block rounded-xl transition-all"
-                    >
-                      {item.name}
-                    </Link>
+                    {item.isRoute ? (
+                      <Link
+                        to={item.href}
+                        onClick={() => setOpen(false)}
+                        className="py-3 px-4 font-inter text-lg font-medium text-slate-700 hover:bg-orange-50 hover:text-[#F6A62D] block rounded-xl transition-all"
+                      >
+                        {item.name}
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => scrollToSection(item.href, true)}
+                        className="py-3 px-4 font-inter text-lg font-medium text-slate-700 hover:bg-orange-50 hover:text-[#F6A62D] block rounded-xl transition-all w-full text-left"
+                      >
+                        {item.name}
+                      </button>
+                    )}
                   </motion.li>
                 ))}
 
