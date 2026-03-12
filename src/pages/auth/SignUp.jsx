@@ -25,7 +25,7 @@ const SignUp = () => {
 
   const signUpMutation = useMutation({
     mutationFn: async (data) => {
-      const res = await axios.post(`${BASE_URL}/user/register`, data);
+      const res = await axios.post(`${BASE_URL}/farm-admin/auth/register`, data);
       return res.data;
     },
     onSuccess: () => {
@@ -54,7 +54,7 @@ const SignUp = () => {
     signUpMutation.mutate({
       name: form.name,
       email: form.email,
-      businessName: form.businessName,
+      businessName: form.farmName,
       password: form.password,
     });
   };
