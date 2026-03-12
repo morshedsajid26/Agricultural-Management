@@ -24,6 +24,7 @@ import CreateFarm from "../pages/owner/CreateFarm";
 
 // auth
 import LogIn from "../pages/auth/LogIn";
+import SignUp from "../pages/auth/SignUp";
 import ResetPassword from "../pages/auth/ResetPassword";
 import NewPassword from "../pages/auth/NewPassword";
 import Success from "../pages/auth/Success";
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
     element: <AuthLayout />,
     children: [
       { path: "login", element: <LogIn /> },
+      { path: "signup", element: <SignUp /> },
       { path: "reset/password", element: <ResetPassword /> },
       { path: "verify/otp", element: <OTP /> },
       { path: "new/password", element: <NewPassword /> },
