@@ -6,7 +6,7 @@ import Image from "../../components/Image";
 
 const Banner = () => {
   return (
-    <div className="overflow-hidden">
+    <div id="/" className="overflow-hidden">
       <Container className="md:border border-black/5 md:bg-[#F8FAFC] rounded-3xl md:flex items-center justify-between px-4 py-8 md:p-12 mt-6 shadow-sm">
         {/* Left Side (Text content) */}
         <motion.div
