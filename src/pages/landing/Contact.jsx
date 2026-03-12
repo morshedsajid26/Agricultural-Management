@@ -44,10 +44,10 @@ const Contact = () => {
                 <div className="flex items-center gap-6 group">
                   <FiMail className="w-6 h-6 text-white" />
                   <a
-                    href="mailto:Farmcheck.app@gmail.com"
+                    href="mailto:farmcheck.app@gmail.com"
                     className="text-white text-lg hover:text-[#F6A62D] transition-colors"
                   >
-                    Farmcheck.app@gmail.com
+                    farmcheck.app@gmail.com
                   </a>
                 </div>
 
