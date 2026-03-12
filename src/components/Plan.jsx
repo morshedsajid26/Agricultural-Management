@@ -80,16 +80,16 @@ const Card = ({
         <button
           onClick={() => !isLoading && onSubscribe && onSubscribe(id, isAnnual ? "yearly" : "monthly")}
           disabled={isLoading}
-          className="mt-auto w-full py-2.5 rounded-lg bg-[#F6A62D] text-white font-medium hover:bg-[#F6A62D]/90 transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+          className="mt-auto w-full py-2.5 rounded-lg border border-[#F6A62D] text-[#F6A62D] hover:text-white  font-medium hover:bg-[#F6A62D]/90 transition-all duration-400 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Processing…" : `Upgrade`}
+          {isLoading ? "Processing…" : `Upgrade Plan`}
         </button>
       )}
     </div>
   );
 };
 
-const Plan = ({ plans, currentPlanId, currentBillingCycle = "monthly", onSubscribe, loadingPlanId }) => {
+const Plan = ({ plans = [], currentPlanId, currentBillingCycle = "monthly", onSubscribe, loadingPlanId }) => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   return (
@@ -99,7 +99,7 @@ const Plan = ({ plans, currentPlanId, currentBillingCycle = "monthly", onSubscri
         <ToggleButton isAnnual={isAnnual} setIsAnnual={setIsAnnual} />
 
         <div className="bg-[#FFF6E9] w-max p-1 rounded-lg">
-          <p className="text-[#F6A62D]">Save 17%</p>
+          {/* <p className="text-[#F6A62D]">Save 17%</p> */}
         </div>
       </div>
 
@@ -109,7 +109,7 @@ const Plan = ({ plans, currentPlanId, currentBillingCycle = "monthly", onSubscri
 
       {/* Cards */}
       <div className="grid grid-cols-12 gap-6">
-        {plans.map((plan) => (
+        {Array.isArray(plans) && plans.map((plan) => (
           <Card
             key={plan.id}
             id={plan.id}

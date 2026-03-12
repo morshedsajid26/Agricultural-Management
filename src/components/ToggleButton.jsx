@@ -17,7 +17,7 @@ export default function ToggleButton({ isAnnual, setIsAnnual }) {
       <button
         onClick={() => setIsAnnual(!isAnnual)}
         className={`relative w-13 h-7 flex items-center rounded-full transition-colors duration-300 cursor-pointer ${
-          isAnnual ? "bg-[#00A63E]" : "bg-[#D1D5DC]"
+          isAnnual ? "bg-[#F6A62D]" : "bg-[#D1D5DC]"
         }`}
       >
         <span
