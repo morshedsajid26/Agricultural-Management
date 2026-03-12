@@ -114,23 +114,23 @@ const LogIn = () => {
           inputClass="rounded-lg"
         />
 
-       <div className="flex justify-between w-full">
+        <div className="flex justify-between w-full">
 
-        {role === "FARM_ADMIN" && (
-          <Link to='/auth/signup'>
-            <span className="text-[#F6A62D] text-sm">
-              Don't have an account? Sign Up
-            </span>
+          {role === "FARM_ADMIN" && (
+            <Link to='/auth/signup'>
+              <span className="text-[#F6A62D] text-sm">
+                Don't have an account? Sign Up
+              </span>
+            </Link>
+          )}
+
+          <Link
+            to="/auth/reset/password"
+            className="text-[#F6A62D] self-end text-sm ml-auto"
+          >
+            Forgot Password?
           </Link>
-        )}
-
-         <Link
-          to="/auth/reset/password"
-          className="text-[#F6A62D] self-end text-sm ml-auto"
-        >
-          Forgot Password?
-        </Link>
-       </div>
+        </div>
 
         {/* ROLE SWITCH (UI Only) */}
         <div className="flex gap-5 w-full">
@@ -139,11 +139,10 @@ const LogIn = () => {
               key={r}
               type="button"
               onClick={() => setRole(r)}
-              className={`flex-1 py-2 rounded-lg ${
-                role === r
+              className={`flex-1 py-2 rounded-lg ${role === r
                   ? "bg-[#F6A62D] text-white"
                   : "bg-[#F1F5F9]"
-              }`}
+                }`}
             >
               {r}
             </button>
