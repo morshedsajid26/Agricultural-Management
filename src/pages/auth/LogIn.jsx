@@ -44,6 +44,11 @@ const LogIn = () => {
       const userData = response.data;
       const userRole = userData.user.role;
 
+      if (userRole !== role) {
+        toast.error(`Access denied! You are not logging in as a ${role.replace("_", " ")}.`);
+        return;
+      }
+
       // Save tokens
       Cookies.set("token", userData.accessToken);
       Cookies.set("refreshToken", userData.refreshToken);
