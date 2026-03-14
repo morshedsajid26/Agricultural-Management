@@ -6,7 +6,7 @@ import Image from "../../components/Image";
 
 const Banner = () => {
   return (
-    <div id="/" className="overflow-hidden">
+    <div id="home" className="overflow-hidden">
       <Container className="md:border border-black/5 md:bg-[#F8FAFC] rounded-3xl md:flex items-center justify-between px-4 py-8 md:p-12 mt-6 shadow-sm">
         {/* Left Side (Text content) */}
         <motion.div
@@ -40,9 +40,14 @@ const Banner = () => {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 md:gap-6"
           >
+
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                const el = document.getElementById("pricing");
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
               className="bg-[#F6A62D] text-white font-bold px-10 py-4 rounded-2xl cursor-pointer shadow-lg shadow-orange-500/30 transition-shadow hover:shadow-orange-500/40 w-full sm:w-auto text-lg"
             >
               Get Started

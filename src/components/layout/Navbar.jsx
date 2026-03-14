@@ -8,7 +8,7 @@ import logo from "/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navitems = [
-  { name: "Home", href: "/", isRoute: true },
+  { name: "Home", href: "home" },
   { name: "Featured", href: "feature" },
   { name: "Offer", href: "pricing" },
   // { name: "About us", href: "aboutUs" },
@@ -54,9 +54,14 @@ const Navbar = () => {
             {open ? <FiX /> : <FiMenu />}
           </button>
 
-          <Link to="/">
+          <Link to="/"  onClick={() => scrollToSection("home")}>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Image src={logo} alt="logo" className="h-10 md:h-12 w-auto" />
+              <Image
+               
+                src={logo}
+                alt="FarmCheck Logo"
+                className="h-10"
+              />
             </motion.div>
           </Link>
 
