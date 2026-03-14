@@ -15,7 +15,7 @@ const SignUp = () => {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    businessName: "",
+    farmName: "",
     password: "",
     confirmPassword: "",
   });
@@ -42,7 +42,7 @@ const SignUp = () => {
     if (
       !form.name ||
       !form.email ||
-      !form.businessName ||
+      !form.farmName ||
       !form.password ||
       !form.confirmPassword
     ) {
@@ -54,7 +54,7 @@ const SignUp = () => {
     signUpMutation.mutate({
       name: form.name,
       email: form.email,
-      businessName: form.farmName,
+      farmName: form.farmName,
       password: form.password,
     });
   };
@@ -103,9 +103,9 @@ const SignUp = () => {
             <InputField
               label="Business Name"
               type="text"
-              placeholder="Enter your business name"
-              value={form.businessName}
-              onChange={handleChange("businessName")}
+              placeholder="Enter your farm name"
+              value={form.farmName}
+              onChange={handleChange("farmName")}
               inputClass="rounded-xl border-2 border-[#5D5D5D]"
             />
 
