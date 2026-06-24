@@ -5,9 +5,10 @@ import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import InputField from "../../components/InputField";
 import { useNavigate } from "react-router-dom";
 import Password from "../../components/Password";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import Dropdown from "../../components/Dropdown";
 
 const CreateFarm = () => {
   const navigate = useNavigate();
@@ -21,6 +22,17 @@ const CreateFarm = () => {
     password: "",
     country: "",
     defaultLanguage: "",
+    plan: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  const { data: plans = [] } = useQuery({
+    queryKey: ["plans"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/system-owner/plan");
+      return res.data.data.plans;
+    },
   });
 
   const handleChange = (field, value) => {
@@ -33,7 +45,11 @@ const CreateFarm = () => {
   //   Create Farm Mutation
   const createFarmMutation = useMutation({
     mutationFn: async () => {
-      return await axiosSecure.post("/system-owner/farm", formData);
+      // Send proper date ISO strings
+      const payload = { ...formData };
+      if (payload.startDate) payload.startDate = new Date(payload.startDate).toISOString();
+      if (payload.endDate) payload.endDate = new Date(payload.endDate).toISOString();
+      return await axiosSecure.post("/system-owner/farm", payload);
     },
     onSuccess: () => {
       toast.success("Farm created successfully");
@@ -48,7 +64,7 @@ const CreateFarm = () => {
   });
 
   const handleSubmit = () => {
-    const { name, adminName, adminEmail, password, country, defaultLanguage } =
+    const { name, adminName, adminEmail, password, country, defaultLanguage, plan, startDate, endDate } =
       formData;
 
     if (
@@ -57,7 +73,10 @@ const CreateFarm = () => {
       !adminEmail ||
       !password ||
       !country ||
-      !defaultLanguage
+      !defaultLanguage ||
+      !plan ||
+      !startDate ||
+      !endDate
     ) {
       return toast.error("All fields are required");
     }
@@ -149,37 +168,38 @@ const CreateFarm = () => {
               />
           </div>
         </div>
-{/* 
+
         <div>
           <h3 className="text-xl text-[#0A0A0A] mt-6">Subscription Details</h3>
-          <div className=" gap-4 border-b border-[#E5E7EB] py-4">
-            <InputField
-              inputClass={`rounded-lg`}
-              label={`Status `}
-              placeholder={``}
-              className={`col-span-6`}
-            />
-            <InputField
-          inputClass={`rounded-lg`}
-          label={`Plan`}
-          placeholder={``}
-          className={`col-span-6`}
-        />
+          <div className="grid grid-cols-12 gap-4 border-b border-[#E5E7EB] py-4">
             <Dropdown
               label={`Plan`}
               placeholder={`Select Plan`}
-              options={["Basic", "Professional", "Enterprise "]}
-              onSelect={(value) => console.log(value)}
-              className={``}
-            />
-            <InputField
-              inputClass={`rounded-lg`}
-              label={`Employee Limit`}
-              placeholder={``}
+              options={plans.map(p => p.name)}
+              onSelect={(value) => {
+                const selectedPlan = plans.find((p) => p.name === value);
+                if (selectedPlan) {
+                  handleChange("plan", selectedPlan._id || selectedPlan.id);
+                }
+              }}
               className={`col-span-12`}
             />
+            <InputField
+              type="date"
+              label="Start Date"
+              inputClass="rounded-lg"
+              className="col-span-12 md:col-span-6"
+              onChange={(e) => handleChange("startDate", e.target.value)}
+            />
+            <InputField
+              type="date"
+              label="End Date"
+              inputClass="rounded-lg"
+              className="col-span-12 md:col-span-6"
+              onChange={(e) => handleChange("endDate", e.target.value)}
+            />
           </div>
-        </div> */}
+        </div>
 
         {/* Buttons */}
         <div className="grid grid-cols-12 gap-4 mt-4">
