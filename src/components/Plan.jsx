@@ -80,7 +80,7 @@ const Card = ({
       )}
 
       {/* Upgrade Button */}
-      {/* {canUpgrade && (
+      {canUpgrade && (
         <button
           onClick={() => !isLoading && onSubscribe && onSubscribe(id, isAnnual ? "yearly" : "monthly")}
           disabled={isLoading}
@@ -88,7 +88,7 @@ const Card = ({
         >
           {isLoading ? "Processing…" : (isCurrent && isExpired ? "Renew Plan" : "Upgrade Plan")}
         </button>
-      )} */}
+      )}
     </div>
   );
 };

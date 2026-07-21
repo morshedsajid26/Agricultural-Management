@@ -5,6 +5,7 @@ import { BsWallet2 } from "react-icons/bs";
 import Table from "../../components/Table";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const Subscription = () => {
   const axiosSecure = useAxiosSecure();
@@ -37,6 +38,7 @@ const Subscription = () => {
     },
     onError: (err) => {
       console.error("Checkout error:", err);
+      toast.error(err?.response?.data?.message || "Failed to initiate checkout");
     },
   });
 
