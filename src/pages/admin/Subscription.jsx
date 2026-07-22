@@ -51,6 +51,11 @@ const Subscription = () => {
     ? checkoutMutation.variables?.planId
     : null;
 
+  const isExpired = currentPlan
+    ? !["ACTIVE", "TRIAL"].includes(currentPlan?.status?.toUpperCase()) ||
+      (currentPlan?.endDate && new Date(currentPlan.endDate) < new Date())
+    : false;
+
   // ===== BILLING HISTORY API =====
   const { data: billingHistory = [], isLoading: billingLoading } = useQuery({
     queryKey: ["billingHistory"],
@@ -151,22 +156,21 @@ const Subscription = () => {
           </p>
         </div>
 
-        <div className={`w-max p-2 rounded ${currentPlan?.status !== "ACTIVE" || (currentPlan?.endDate && new Date(currentPlan.endDate) < new Date()) ? "bg-red-100" : "bg-[#FFF6E9]"}`}>
-          <p className={`${currentPlan?.status !== "ACTIVE" || (currentPlan?.endDate && new Date(currentPlan.endDate) < new Date()) ? "text-red-700 font-semibold" : "text-[#0A0A0A]"}`}>
-            {currentPlan?.status !== "ACTIVE" || (currentPlan?.endDate && new Date(currentPlan.endDate) < new Date()) ? "Expired on : " : "Next renewal date : "}
-            {currentPlan?.endDate?.split("T")[0].split("-").reverse().join("-") ?? "—"}
-          </p>
-        </div>
+        {currentPlan && (
+          <div className={`w-max p-2 rounded ${isExpired ? "bg-red-100" : "bg-[#FFF6E9]"}`}>
+            <p className={`${isExpired ? "text-red-700 font-semibold" : "text-[#0A0A0A]"}`}>
+              {isExpired ? "Expired on : " : "Next renewal date : "}
+              {currentPlan?.endDate?.split("T")[0].split("-").reverse().join("-") ?? "—"}
+            </p>
+          </div>
+        )}
       </div>
 
       <Plan
         plans={plans}
         features={currentPlan?.feature || []}
         currentPlanId={currentPlan?.planId}
-        isExpiredPlan={
-          currentPlan?.status !== "ACTIVE" ||
-          (currentPlan?.endDate && new Date(currentPlan.endDate) < new Date())
-        }
+        isExpiredPlan={isExpired}
         currentBillingCycle={currentPlan?.priceType ?? "monthly"}
         onSubscribe={handleSubscribe}
         loadingPlanId={loadingPlanId}
