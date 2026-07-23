@@ -39,9 +39,14 @@ const SubscriptionGuard = () => {
     );
   }
 
+  const isExpired =
+    !data ||
+    !["ACTIVE", "TRIAL"].includes(data?.status?.toUpperCase()) ||
+    (data?.endDate && new Date(data.endDate) < new Date());
+
   // No active subscription → redirect to billing
   // Skip toast on first redirect right after login
-  if (isError || data?.status !== "ACTIVE") {
+  if (isError || isExpired) {
     const isFreshLogin = sessionStorage.getItem("fresh_login") === "1";
     if (isFreshLogin) {
       // First redirect after login — clear flag, no toast
